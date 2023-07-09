@@ -16,6 +16,12 @@ module.exports = {
     extend: {
       colors: {
       },
+      gridTemplateColumns: {
+        sidebar: "300px auto",
+      },
+      gridTemplateRows: {
+        header: "64px auto",
+      },
       fontSize: {
         'hero': '2.5rem',       // 40px
         'promo': '1.875rem',    // 30px

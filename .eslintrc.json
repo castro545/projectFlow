@@ -1,3 +1,81 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "next/core-web-vitals"
+  ],
+  "plugins": [
+    "deprecation",
+    "react",
+    "tailwindcss"
+  ],
+  "rules": {
+    "tailwindcss/classnames-order": [
+      2,
+      {
+        "pattern": "^[a-z]+[-_a-z0-9]+$"
+      }
+    ],
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
+    "react/forbid-dom-props": ["error", {"forbid": ["style"]}],
+    "no-console": ["error", { "allow": ["error"] }],
+    "no-unused-vars": [
+      "error",
+      {
+        "varsIgnorePattern": "^_", // Ignora parámetros que comienzan con "_"
+        "argsIgnorePattern": "^_" // Ignora argumentos de función que comienzan con "_"
+      }
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "no-var": "error",
+    "react/jsx-wrap-multilines": "error",
+    "semi": [
+      "error",
+      "always"
+    ],
+    "no-const-assign": "warn",
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "eqeqeq": "error",
+    "space-before-blocks": "error",
+    "space-infix-ops": "error",
+    "no-use-before-define": "error",
+    "no-empty": "error",
+    "no-debugger": "error",
+    "no-plusplus": 0,
+    "react/no-unused-prop-types": 0,
+    "no-param-reassign": 0,
+    "linebreak-style": 0,
+    "padded-blocks": 0,
+    "import/prefer-default-export": 0,
+    "max-len": 0,
+    "react/no-array-index-key": 0,
+    "react/no-did-update-set-state": 0,
+    "react/no-did-mount-set-state": 0,
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".tsx"
+        ]
+      }
+    ],
+    "jsx-quotes": [
+      "error",
+      "prefer-single"
+    ],
+    "arrow-body-style": [
+      "error",
+      "as-needed",
+      {
+        "requireReturnForObjectLiteral": true
+      }
+    ],
+    "react/forbid-prop-types": 0
+  }
 }

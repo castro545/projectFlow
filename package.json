@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",
@@ -30,6 +30,11 @@
   },
   "devDependencies": {
     "@types/pg": "^8.10.2",
-    "@types/prop-types": "^15.7.5"
+    "@types/prop-types": "^15.7.5",
+    "eslint": "^8.44.0",
+    "eslint-plugin-deprecation": "^1.4.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-tailwindcss": "^3.13.0"
   }
 }

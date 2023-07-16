@@ -15,12 +15,16 @@ module.exports = {
     },
     extend: {
       colors: {
+        'custom-color-gold': '#FF9F24',
+        'custom-color-light-gold': '#F1F2A1FA',
+        'custom-color-icon-no-selected': '#FFFFFCB2',
+        'custom-color-bg-page': '#F6F7FE',
       },
       gridTemplateColumns: {
-        sidebar: "300px auto",
+        sidebar: '140px auto',
       },
       gridTemplateRows: {
-        header: "64px auto",
+        header: '98px auto',
       },
       fontSize: {
         'hero': '2.5rem',       // 40px

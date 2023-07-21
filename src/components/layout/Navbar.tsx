@@ -18,18 +18,18 @@ const Navbar = (props: Props) => (
     })}
   >
     <div className='flex w-full flex-row justify-between'>
-      <div className='flex flex-row items-center pl-4 text-[32px] font-semibold italic'>
+      <div className='flex flex-row items-center pl-4 text-[24px] font-semibold italic'>
         ProyectFlow
         <Image
           src={Logo}
           alt={'Logo ProyectFlow'}
-          width={92}
-          height={92}
+          width={74}
+          height={74}
         />
       </div>
       <div className='hidden flex-row items-center md:flex'>
         <div className='flex-col'>
-          <p className='text-right text-[24px] font-semibold'>Helmer Torres</p>
+          <p className='text-right text-[16px] font-semibold'>Helmer Torres</p>
           <p className='text-right text-[14px] italic'>Full-stack developer Flutter</p>
         </div>
         <div className='p-4'>

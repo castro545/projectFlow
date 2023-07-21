@@ -11,18 +11,18 @@ import { NavItem } from './Sidebar';
 export const defaultNavItems: NavItem[] = [
   {
     href: '/',
-    icon: <HomeIcon className='h-[2.8125rem] w-[2.8125rem]' />,
+    icon: <HomeIcon className='h-[1.875rem] w-[1.875rem]' />,
   },
   {
     href: '/team',
-    icon: <UserGroupIcon className='h-[2.8125rem] w-[2.8125rem]' />,
+    icon: <UserGroupIcon className='h-[1.875rem] w-[1.875rem]' />,
   },
   {
     href: '/projects',
-    icon: <FolderIcon className='h-[2.8125rem] w-[2.8125rem]' />,
+    icon: <FolderIcon className='h-[1.875rem] w-[1.875rem]' />,
   },
   {
     href: '/calendar',
-    icon: <CalendarIcon className='h-[2.8125rem] w-[2.8125rem]' />,
+    icon: <CalendarIcon className='h-[1.875rem] w-[1.875rem]' />,
   },
 ];

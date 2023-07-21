@@ -1,9 +1,44 @@
 
 @tailwind base;
 @tailwind components;
+
+.input-field-primary {
+  @apply h-full w-full border border-t-transparent rounded-xl px-3 py-2 outline outline-0 transition-all focus:border-2 focus:border-t-transparent focus:outline-0 placeholder-shown:border disabled:border-0 disabled:bg-gray-200
+}
+
+.input-field-primary-error {
+  @apply border-red-500 placeholder-shown:border-t-red-500
+}
+
+.input-field-primary-no-error {
+  @apply border-custom-color-light-gray placeholder-shown:border-t-custom-color-light-gray
+}
+
+.input-field-primary-match {
+  @apply border-custom-color-green placeholder-shown:border-t-custom-color-green
+}
+
+.input-field-primary-label {
+  @apply pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-custom-color-gray transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-custom-color-gray peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent
+  peer-focus:text-xs peer-focus:leading-tight peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:after:border-t-2 peer-focus:after:border-r-2  peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-gray-500
+}
+
+.input-field-primary-label-error {
+  @apply before:border-red-500 after:border-red-500 peer-focus:text-red-500 peer-focus:before:border-red-500 peer-focus:after:border-red-500
+}
+
+.input-field-primary-label-no-error {
+  @apply before:border-custom-color-light-gray after:border-custom-color-light-gray peer-focus:text-custom-color-gray peer-focus:before:border-custom-color-light-gray peer-focus:after:border-custom-color-light-gray
+}
+
+.input-field-primary-label-match {
+  @apply before:border-custom-color-green after:border-custom-color-green peer-focus:text-custom-color-green peer-focus:before:border-custom-color-green peer-focus:after:border-custom-color-green
+}
+
 @tailwind utilities;
 
 :root {
+  --max-width: 1100px;
   --border-radius: 12px;
   --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
     'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
@@ -93,9 +128,7 @@ a {
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 
-input:-webkit-autofill:active  {
-    -webkit-box-shadow: 0 0 0 30px white inset !important;
-}
+
 
 .no-autocomplete-border:-webkit-autofill,
 .no-autocomplete-border:-webkit-autofill:hover,

@@ -45,7 +45,7 @@ const Sidebar = ({ open, navItems = defaultNavItems, setOpen }: Props) => {
               <li
                 className={classNames({
                   'hover:bg-white hover:text-custom-color-gold': true, //colors
-                  'flex gap-4 items-center justify-center w-[74px] h-[74px]': true, //layout
+                  'flex gap-4 items-center justify-center w-[50px] h-[50px]': true, //layout
                   'transition-colors duration-300': true, //animation
                   'rounded-md p-2 mx-2': true, //self style
                   //'bg-white text-custom-color-gold': true
@@ -61,13 +61,13 @@ const Sidebar = ({ open, navItems = defaultNavItems, setOpen }: Props) => {
         <li
           className={classNames({
             'hover:bg-white hover:text-custom-color-gold': true, //colors
-            'flex gap-4 items-center justify-center w-[74px] h-[74px]': true, //layout
+            'flex gap-4 items-center justify-center w-[50px] h-[50px]': true, //layout
             'transition-colors duration-300': true, //animation
             'rounded-md p-2 mx-2': true, //self style
             //'bg-white text-custom-color-gold': true
           })}
         >
-          <ArrowLeftOnRectangleIcon className='h-[2.8125rem] w-[2.8125rem]' />
+          <ArrowLeftOnRectangleIcon className='h-[1.875rem] w-[1.875rem]' />
         </li>
       </Link>
     </div>

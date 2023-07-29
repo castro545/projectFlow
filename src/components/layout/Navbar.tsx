@@ -13,7 +13,7 @@ const Navbar = (props: Props) => (
     className={classNames({
       'text-zinc-500': true, // colors
       'flex items-center': true, // layout
-      'w-full fixed px-4 shadow-sm h-[6.125rem]': true, // positioning & styling
+      'w-full fixed px-4 shadow-sm h-[4.375rem] z-50': true, // positioning & styling
       'bg-gradient-to-r from-custom-color-gold to-custom-color-light-gold': true, // gradient colors
     })}
   >

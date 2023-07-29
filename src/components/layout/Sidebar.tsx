@@ -31,7 +31,7 @@ const Sidebar = ({ open, navItems = defaultNavItems, setOpen }: Props) => {
         'flex flex-col justify-between': true, // layout
         'bg-custom-color-gold text-custom-color-icon-no-selected': true, // colors
         'md:w-full md:sticky md:top-16 top-0 z-20 fixed': true, // positioning
-        'md:h-[calc(100vh_-_98px)] h-full w-[140px]': true, // for height and width
+        'md:h-[100vh] h-full w-[140px]': true, // for height and width
         'transition-transform .3s ease-in-out md:-translate-x-0': true, //animations
         '-translate-x-full ': !open, //hide sidebar to the left when closed
       })}

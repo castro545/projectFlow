@@ -37,10 +37,10 @@ module.exports = {
         'custom-color-lavender': '#BEC2FF'
       },
       gridTemplateColumns: {
-        sidebar: '140px auto',
+        sidebar: '100px auto',
       },
       gridTemplateRows: {
-        header: '98px auto',
+        header: '70px auto',
       },
       fontSize: {
         'hero': '2.5rem',       // 40px
@@ -48,6 +48,9 @@ module.exports = {
         'title': '1.5625rem',   // 25px
         'subtitle': '1.25rem',  // 20px
         'general': '1rem',      // 16px
+      },
+      boxShadow: {
+        'card': '5px 10px 30px rgba(0, 0, 0, 0.2)'
       }
     },
   },

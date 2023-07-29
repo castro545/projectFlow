@@ -11,7 +11,7 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const response = await conn.query("SELECT NOW()");
-  console.log(response.rows);
+  console.info(response.rows);
 
   res.status(200).json({ message: "Pong!", time: response.rows[0].now });
 }

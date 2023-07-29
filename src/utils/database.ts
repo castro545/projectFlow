@@ -4,11 +4,11 @@ const { Pool } = require('pg');
 
 // Configuración de la conexión a la base de datos PostgreSQL
 const pool = new Pool({
-  user: "postgres",
-  password: "root",
-  host: "localhost",
+  user: 'postgres',
+  password: 'root',
+  host: 'localhost',
   port: 5432,
-  database: "projectFlow",
+  database: 'projectFlow',
 });
 
 // Nombre del archivo SQL a ejecutar (asegúrate de que el archivo esté en la misma ubicación que este script)
@@ -24,7 +24,7 @@ async function executeSQLScript(sqlScript: string): Promise<void> {
   const client = await pool.connect();
   try {
     await client.query(sqlScript);
-    console.log('Script SQL ejecutado correctamente.');
+    console.info('Script SQL ejecutado correctamente.');
   } catch (err) {
     console.error('Error al ejecutar el script SQL:', err);
   } finally {

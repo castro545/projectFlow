@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { login } from '@/src/services/authService';
+import { createUser } from '@/src/services/user';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
@@ -10,15 +10,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   switch (method) {
     case 'POST':
       try {
-        const { email, password } = body;
+        const {full_name,email, password,role_code } = body;
         if (!email || !password) {
           return res.status(400).json({ message: 'Email and password are required' });
         }
-        const token = await login(email, password);
-        if (token) {
-          return res.status(200).json({ token, message: 'Login successfull' });
+        const user = await createUser(full_name,email, password,role_code);
+        if (user) {
+          return res.status(200).json({ user, message: 'User create successfull' });
         } else {
-          return res.status(401).json({ message: 'Invalid credentials' });
+          return res.status(401).json({ message: 'Error create user' });
         }
       } catch (error) {
         return res.status(401).json({ message: 'Invalid ', error });

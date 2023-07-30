@@ -17,6 +17,7 @@ type Props = {
   navItems?: NavItem[];
   setOpen(_open: boolean): void;
 };
+
 const Sidebar = ({ open, navItems = defaultNavItems, setOpen }: Props) => {
 
   const ref = useRef<HTMLDivElement>(null);
@@ -30,8 +31,8 @@ const Sidebar = ({ open, navItems = defaultNavItems, setOpen }: Props) => {
       className={classNames({
         'flex flex-col justify-between': true, // layout
         'bg-custom-color-gold text-custom-color-icon-no-selected': true, // colors
-        'md:w-full md:sticky md:top-16 top-0 z-20 fixed': true, // positioning
-        'md:h-[100vh] h-full w-[140px]': true, // for height and width
+        'md:w-[140px] md:fixed md:top-16 top-0 z-0 fixed': true, // positioning
+        'md:h-[100%] h-full w-[140px]': true, // for height and width
         'transition-transform .3s ease-in-out md:-translate-x-0': true, //animations
         '-translate-x-full ': !open, //hide sidebar to the left when closed
       })}
@@ -39,7 +40,7 @@ const Sidebar = ({ open, navItems = defaultNavItems, setOpen }: Props) => {
     >
       <nav className='top-0 md:sticky md:top-16'>
         {/* nav items */}
-        <ul className='flex flex-col gap-2 py-2'>
+        <ul className='mt-16 flex flex-col gap-2 py-2 md:mt-0'>
           {navItems.map((item, index) => (
             <Link key={index} href={item.href} className='flex items-center justify-around'>
               <li
@@ -57,7 +58,7 @@ const Sidebar = ({ open, navItems = defaultNavItems, setOpen }: Props) => {
           ))}
         </ul>
       </nav>
-      <Link href='/' className='flex items-center justify-around pb-20'>
+      <Link href='/login' className='flex items-center justify-around pb-20'>
         <li
           className={classNames({
             'hover:bg-white hover:text-custom-color-gold': true, //colors

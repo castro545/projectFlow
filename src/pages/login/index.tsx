@@ -14,7 +14,7 @@ const ModalLayout = ({ children }: any) => (
   <>
     <div className='relative h-screen overflow-y-auto bg-gradient-to-b from-custom-color-gold to-custom-color-light-gold'>
       <div className='flex min-h-screen flex-col items-center justify-center'>
-        <div className='mx-5 h-auto w-auto rounded-lg bg-white p-5 pt-7 shadow-lg md:m-0 md:h-[450px] md:w-[520px] md:p-0 '>
+        <div className='mx-5 my-5 h-auto w-auto rounded-lg bg-white p-5 pt-7 shadow-lg md:m-0 md:h-[450px] md:w-[520px] md:p-0 '>
           <div className='grid place-items-center'>
             {children}
           </div>

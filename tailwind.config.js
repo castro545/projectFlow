@@ -40,7 +40,7 @@ module.exports = {
         sidebar: '100px auto',
       },
       gridTemplateRows: {
-        header: '70px auto',
+        header: '0px auto',
       },
       fontSize: {
         'hero': '2.5rem',       // 40px

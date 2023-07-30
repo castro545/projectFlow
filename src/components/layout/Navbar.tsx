@@ -76,22 +76,27 @@ const Navbar = ({ onMenuButtonClick }: Props) => {
       <button className='md:hidden' onClick={onMenuButtonClick}>
         <Bars3Icon className='h-6 w-6 text-white' />
       </button>
-      {isDropdownOpen && (
-        <div className='absolute right-4 top-[4.375rem] w-[200px] rounded-md bg-white py-2 shadow-md' ref={ref}>
-          <button className='flex w-full space-x-8 px-4 py-2 text-left hover:bg-custom-color-light-gold' onClick={handleQuizarCuenta}>
-            <UserCircleIcon className='mr-4 h-[1.5rem] w-[1.5rem] cursor-pointer text-custom-color-gold' />
-            Mi cuenta
-          </button>
-          <button className='flex w-full space-x-8 px-4 py-2 text-left hover:bg-custom-color-light-gold' onClick={handleMisTareas}>
-            <RectangleStackIcon className='mr-4 h-[1.5rem] w-[1.5rem] cursor-pointer text-custom-color-gold' />
-            Mis tareas
-          </button>
-          <button className='flex w-full space-x-8 px-4 py-2 text-left hover:bg-custom-color-light-gold' onClick={handleConfiguracion}>
-            <Cog6ToothIcon className='mr-4 h-[1.5rem] w-[1.5rem] cursor-pointer text-custom-color-gold' />
-            Configuración
-          </button>
-        </div>
-      )}
+      <div className={classNames(
+        'absolute right-4 top-[4.375rem] w-[200px] rounded-md bg-white py-2 shadow-md',
+        {
+          'transition-transform .3s ease-in-out md:-translate-x-0': true, //animations
+          '-translate-x-full ': isDropdownOpen,
+          'hidden': !isDropdownOpen
+        }
+      )} ref={ref}>
+        <button className='flex w-full space-x-8 px-4 py-2 text-left hover:bg-custom-color-light-gold' onClick={handleQuizarCuenta}>
+          <UserCircleIcon className='mr-4 h-[1.5rem] w-[1.5rem] cursor-pointer text-custom-color-gold' />
+          Mi cuenta
+        </button>
+        <button className='flex w-full space-x-8 px-4 py-2 text-left hover:bg-custom-color-light-gold' onClick={handleMisTareas}>
+          <RectangleStackIcon className='mr-4 h-[1.5rem] w-[1.5rem] cursor-pointer text-custom-color-gold' />
+          Mis tareas
+        </button>
+        <button className='flex w-full space-x-8 px-4 py-2 text-left hover:bg-custom-color-light-gold' onClick={handleConfiguracion}>
+          <Cog6ToothIcon className='mr-4 h-[1.5rem] w-[1.5rem] cursor-pointer text-custom-color-gold' />
+          Configuración
+        </button>
+      </div>
     </nav>
   );
 };

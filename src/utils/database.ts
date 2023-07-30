@@ -25,6 +25,7 @@ async function executeSQLScript(sqlScript: string): Promise<void> {
   try {
     await client.query(sqlScript);
     console.info('Script SQL ejecutado correctamente.');
+
   } catch (err) {
     console.error('Error al ejecutar el script SQL:', err);
   } finally {

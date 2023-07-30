@@ -14,7 +14,7 @@ const ModalLayout = ({ children }: any) => (
   <>
     <div className='relative h-screen overflow-y-auto bg-gradient-to-b from-custom-color-gold to-custom-color-light-gold'>
       <div className='flex min-h-screen flex-col items-center justify-center'>
-        <div className='mx-5 h-auto w-auto rounded-lg bg-white p-5 pt-7 shadow-lg md:m-0 md:h-[450px] md:w-[520px] md:p-0 '>
+        <div className='mx-5 my-5 h-auto w-auto rounded-lg bg-white p-5 pt-7 shadow-lg md:m-0 md:h-[450px] md:w-[520px] md:p-0 '>
           <div className='grid place-items-center'>
             {children}
           </div>
@@ -61,7 +61,7 @@ const Login = () => {
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>Inicio Sesión</title>
       </Head>
       <ModalLayout>
         <div className='flex flex-row items-center pl-4 text-[24px] font-semibold italic'>
@@ -87,7 +87,7 @@ const Login = () => {
               />
             </div>
             <div className='relative flex flex-col'>
-              <label className='text-[16px] font-semibold italic'>Password</label>
+              <label className='text-[16px] font-semibold italic'>Contraseña</label>
               <input
                 type={showPassword ? 'text' : 'password'}
                 className='m-0 h-[35px] rounded-[15px] border-[#D9D9D9] bg-[#D9D9D9] p-3 text-gray-400 placeholder-gray-400 outline-none'
@@ -106,10 +106,10 @@ const Login = () => {
             type='submit'
             className='text-22px m-0 flex h-[35px] w-[153px] items-center justify-center rounded-[30px] bg-[#FF9F24] p-0 font-normal text-white'
           >
-            Sign In
+            Iniciar Sesión
           </button>
-          <label className='text-center text-[12px] font-semibold italic'>don{'\''}t have an account?
-            <Link href='/register' className='not-italic text-blue-500'> you can create one here</Link>
+          <label className='text-center text-[12px] font-semibold italic'>No tienes una cuenta?
+            <Link href='/register' className='not-italic text-blue-500'> puedes crear una aquí</Link>
           </label>
         </form>
 

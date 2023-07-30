@@ -48,7 +48,7 @@ const NewPage = (): JSX.Element => {
       setTask(inititalState);
       router.push("/");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     setLoading(false);
   };
@@ -69,7 +69,7 @@ const NewPage = (): JSX.Element => {
       });
       router.push("/");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

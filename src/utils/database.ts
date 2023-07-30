@@ -24,8 +24,8 @@ async function executeSQLScript(sqlScript: string): Promise<void> {
   const client = await pool.connect();
   try {
     await client.query(sqlScript);
-    // eslint-disable-next-line no-console
-    console.log('Script SQL ejecutado correctamente.');
+    console.info('Script SQL ejecutado correctamente.');
+
   } catch (err) {
     console.error('Error al ejecutar el script SQL:', err);
   } finally {

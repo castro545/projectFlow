@@ -1,5 +1,5 @@
 // src/auth/authService.ts
-//import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { getUserByUsername } from './user';
 
@@ -11,8 +11,8 @@ export async function login(email: string, password: string): Promise<string | n
     return null; // Usuario no encontrado.
   }
 
-  //const isPasswordCorrect = await bcrypt.compare(password, user.password);
-  const isPasswordCorrect =  password === user.password; // mientras que se implementa bcrypt al crear la contraseña 
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
+  //const isPasswordCorrect =  password === user.password; // mientras que se implementa bcrypt al crear la contraseña 
 
   if (!isPasswordCorrect) {
     return null; // Contraseña incorrecta.

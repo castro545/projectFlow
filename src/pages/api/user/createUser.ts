@@ -1,20 +1,24 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { createUser } from '@/src/services/user';
+import { UserDAO } from '@/src/dao/Auth';
+import { AuthInterface } from '@/src/interfaces/Auth';
+
+// Creamos una instancia del DAO
+const userDAO: AuthInterface = new UserDAO();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
     method,
     body,
-    // query: { id },
   } = req;
   switch (method) {
     case 'POST':
       try {
         const { full_name, email, password, role_code } = body;
+
         if (!email || !password) {
           return res.status(400).json({ message: 'Email and password are required' });
         }
-        const user = await createUser(full_name, email, password, role_code);
+        const user = await userDAO.createUser(full_name, email, password, role_code);
         if (user) {
           return res.status(200).json({ user, message: 'User create successfull' });
         } else {
@@ -27,4 +31,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(405).json({ message: 'Method not allowed' });
 
   }
+
+
 }

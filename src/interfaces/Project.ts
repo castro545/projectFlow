@@ -1,9 +1,7 @@
-export interface Project {
-    project_id?: string;
-    owner_code?: number;
-    shared_code: string;
-    name: string;
-    description: number;
-    start_date: Date;
-    end_date: Date;
+/* eslint-disable no-unused-vars */
+
+import { ProjectType } from '../types/Project';
+
+export interface ProjectInterface {
+  createProject(projectData: ProjectType): Promise<ProjectType | null>;
 }

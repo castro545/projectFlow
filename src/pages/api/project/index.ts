@@ -1,5 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { createProject } from '@/src/services/project';
+import { ProjectType } from '@/src/types/Project';
+import { ProjectInterface } from '@/src/interfaces/Project';
+import { ProjectDAO } from '@/src/dao/Project';
+
+// Creamos una instancia del DAO
+const projectDAO: ProjectInterface = new ProjectDAO();
 
 export default async function handler(
   req: NextApiRequest,
@@ -8,13 +13,14 @@ export default async function handler(
   const {
     method,
     body,
-    // query: { id },
   } = req;
   switch (method) {
     case 'POST':
       try {
-        const { owner_code, shared_code, name, description, start_date, end_date } = body;
-        const project = await createProject(owner_code, shared_code, name, description, start_date, end_date);
+
+        const createProjectType: ProjectType = { ...body };
+
+        const project = await projectDAO.createProject(createProjectType);
         if (project) {
           return res
             .status(200)

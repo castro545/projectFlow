@@ -1,18 +1,20 @@
 // src/auth/authService.ts
 //import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { getUserByUsername } from './user';
-
+import { UserDAO } from '@/src/dao/Auth';
+import { AuthInterface } from '@/src/interfaces/Auth';
 const JWT_SECRET = 'llavesecreta'; // Cambiar esto por una cadena de caracteres segura.
 
+// Creamos una instancia del DAO
+const userDAO: AuthInterface = new UserDAO();
+
 export async function login(email: string, password: string): Promise<string | null> {
-  const user = await getUserByUsername(email);
+  const user = await userDAO.getUserByUsername(email);
   if (!user) {
     return null; // Usuario no encontrado.
   }
 
-  //const isPasswordCorrect = await bcrypt.compare(password, user.password);
-  const isPasswordCorrect =  password === user.password; // mientras que se implementa bcrypt al crear la contraseña 
+  const isPasswordCorrect =  password === user.password; // mientras que se implementa bcrypt al crear la contraseña
 
   if (!isPasswordCorrect) {
     return null; // Contraseña incorrecta.

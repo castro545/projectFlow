@@ -1,6 +1,6 @@
 // Importamos las dependencias
-const fs = require('fs');
-const { Pool } = require('pg');
+import fs from 'fs';
+import { Pool } from 'pg';
 
 // Configuración de la conexión a la base de datos PostgreSQL
 const pool = new Pool({
@@ -10,6 +10,9 @@ const pool = new Pool({
   port: 5432,
   database: 'projectFlow',
 });
+
+// Exportamos la variable 'conn'
+export const conn = pool;
 
 // Nombre del archivo SQL a ejecutar (asegúrate de que el archivo esté en la misma ubicación que este script)
 const sqlFile = 'src/utils/projectFlowInit.sql';

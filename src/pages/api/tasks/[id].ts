@@ -1,5 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { conn } from '@/src/utils/database';
+import { TaskDAO } from '@/src/dao/Task';
+import { TaskInterface } from '@/src/interfaces/Task';
+
+const taskDAO: TaskInterface = new TaskDAO();
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -12,11 +15,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (method) {
     case 'GET':
       try {
-        const text = 'SELECT * FROM tasks WHERE id = $1';
-        const values = [id];
-        const result = await conn.query(text, values);
 
-        if (result.rowCount === 0)
+        const result = await taskDAO.selectTaskById(id);
+
+        if (result.rowCount === null)
           return res.status(404).json({ message: 'Task Not Found' });
 
         return res.json(result.rows[0]);
@@ -26,21 +28,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case 'PUT':
       try {
         const { title, description } = body;
-        const text =
-          'UPDATE tasks SET title = $1, description = $2 WHERE id = $3 RETURNING *';
-        const values = [title, description, id];
-        const result = await conn.query(text, values);
+
+        const result = await taskDAO.updateTaskById(id, title, description);
         return res.json(result.rows[0]);
       } catch (error: any) {
         return res.status(400).json({ message: error.message });
       }
     case 'DELETE':
       try {
-        const text = 'DELETE FROM tasks WHERE id = $1 RETURNING *';
-        const values = [id];
-        const result = await conn.query(text, values);
 
-        if (result.rowCount === 0)
+        const result = await taskDAO.deleteTaskById(id);
+
+        if (result.rowCount === null)
           return res.status(404).json({ message: 'Task Not Found' });
 
         return res.json(result.rows[0]);

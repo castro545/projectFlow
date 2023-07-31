@@ -21,6 +21,7 @@ export default async function handler(
         const createProjectType: ProjectType = { ...body };
 
         const project = await projectDAO.createProject(createProjectType);
+
         if (project) {
           return res
             .status(200)

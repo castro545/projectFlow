@@ -195,7 +195,7 @@ ALTER TABLE projects ADD CONSTRAINT unique_project_name_by_owner UNIQUE (name, o
 ALTER TABLE users ADD CONSTRAINT unique_user_email UNIQUE (email);
 
 -- Único admin por proyecto
-ALTER TABLE project_user ADD CONSTRAINT unique_project_admin UNIQUE (user_code, role_code);
+ALTER TABLE project_user ADD CONSTRAINT unique_project_admin UNIQUE (user_code, project_code, role_code);
 
 -- Secuencias para Ids de tablas
 
@@ -372,7 +372,36 @@ CREATE OR REPLACE FUNCTION asign_contributor(c_user_id int, c_project_code int)
 		COMMIT;
 	END;$$;
 
-    -- EJEMPLO DE USO: 	SELECT create_user('Miguel Fernandez', 'miguel@gmail.com', '123');
+    -- EJEMPLO DE USO: 	SELECT asign_contributor(1, 1);
+
+CREATE OR REPLACE FUNCTION delete_contributor(d_user_id int, d_project_code int)
+    RETURNS int
+	LANGUAGE plpgsql
+	AS $$
+	BEGIN
+        -- verify user don't have any task in progress
+        IF NOT EXISTS(
+		    SELECT FROM tasks 
+            INNER JOIN task_status ON task_status.task_status_id = tasks.status_code
+			WHERE tasks.user_code = d_user_id
+            AND tasks.project_code = d_project_code
+            AND task_status.name IN ('Nueva', 'En proceso', 'En espera')
+            AND tasks.is_active = '1'
+		 )
+		 THEN	
+            -- desactivate contributor
+            UPDATE project_user SET is_active = '0'
+                WHERE project_code = d_project_code
+                AND user_code = d_user_id;
+            
+            RETURN 1;
+            COMMIT;
+        END IF;
+
+        RETURN 0;
+	END;$$;
+
+    -- EJEMPLO DE USO: 	SELECT delete_contributor(1, 1);
 
 CREATE OR REPLACE FUNCTION task_updated(
 	t_user_code integer,

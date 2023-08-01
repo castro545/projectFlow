@@ -1,32 +1,28 @@
-import React from "react";
+import React from 'react';
 import {
   CalendarIcon,
   FolderIcon,
   HomeIcon,
   UserGroupIcon,
-} from "@heroicons/react/24/outline";
-import { NavItem } from "./Sidebar";
+} from '@heroicons/react/24/solid';
+import { NavItem } from './Sidebar';
 
 
 export const defaultNavItems: NavItem[] = [
   {
-    label: "Dashboard",
-    href: "/",
-    icon: <HomeIcon className="w-6 h-6" />,
+    href: '/',
+    icon: <HomeIcon className='h-[1.875rem] w-[1.875rem]' />,
   },
   {
-    label: "Team",
-    href: "/team",
-    icon: <UserGroupIcon className="w-6 h-6" />,
+    href: '/team',
+    icon: <UserGroupIcon className='h-[1.875rem] w-[1.875rem]' />,
   },
   {
-    label: "Projects",
-    href: "/projects",
-    icon: <FolderIcon className="w-6 h-6" />,
+    href: '/projects',
+    icon: <FolderIcon className='h-[1.875rem] w-[1.875rem]' />,
   },
   {
-    label: "Calendar",
-    href: "/calendar",
-    icon: <CalendarIcon className="w-6 h-6" />,
+    href: '/calendar',
+    icon: <CalendarIcon className='h-[1.875rem] w-[1.875rem]' />,
   },
 ];

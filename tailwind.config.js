@@ -15,12 +15,32 @@ module.exports = {
     },
     extend: {
       colors: {
+        'custom-color-gold': '#FF9F24',
+        'custom-color-light-gold': '#F1F2A1FA',
+        'custom-color-icon-no-selected': '#FFFFFCB2',
+        'custom-color-bg-page': '#F6F7FE',
+        'custom-color-dark-blue': '#0D0D51',
+        'custom-color-pink': '#ed0092',
+        'custom-color-purple': '#7700bc',
+        'custom-color-cyan': '#3fdff0',
+        'custom-color-lime': '#7ed321',
+        'custom-color-gray': '#84818A',
+        'custom-color-very-light-gray': '#E3E3E3',
+        'custom-color-light-gray': '#DCDBDD',
+        'custom-color-light-gray-disable': '#F2F2F2',
+        'custom-color-light-gray-blue': '#E5EAF7',
+        'custom-color-dark-gray': '#47464A',
+        'custom-color-background-gray': '#F7F8FB',
+        'custom-color-aqua': '#50E3C2',
+        'custom-color-black': '#202020',
+        'custom-color-green': '#009580',
+        'custom-color-lavender': '#BEC2FF'
       },
       gridTemplateColumns: {
-        sidebar: "300px auto",
+        sidebar: '100px auto',
       },
       gridTemplateRows: {
-        header: "64px auto",
+        header: '0px auto',
       },
       fontSize: {
         'hero': '2.5rem',       // 40px
@@ -28,6 +48,9 @@ module.exports = {
         'title': '1.5625rem',   // 25px
         'subtitle': '1.25rem',  // 20px
         'general': '1rem',      // 16px
+      },
+      boxShadow: {
+        'card': '5px 10px 30px rgba(0, 0, 0, 0.2)'
       }
     },
   },

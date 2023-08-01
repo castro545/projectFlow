@@ -1,20 +1,25 @@
-import React, { PropsWithChildren, useState } from "react";
-import Navbar from "./Navbar";
-import Sidebar from "./Sidebar";
+import React, { PropsWithChildren, useState } from 'react';
 
-
+import Navbar from './Navbar';
+import Sidebar from './Sidebar';
 
 const Layout = (props: PropsWithChildren) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
-    <div className="grid min-h-screen grid-rows-header bg-zinc-100 w-full">
+    <div className='grid min-h-screen w-full grid-rows-header'>
       <div>
         <Navbar onMenuButtonClick={() => setSidebarOpen((prev) => !prev)} />
       </div>
 
-      <div className="grid md:grid-cols-sidebar w-full">
+      <div className='flex w-full'>
         <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
-        {props.children}
+        <div className='mx-0 w-full md:ml-[140px]'>
+          <div className='mt-[70px] h-full w-full'>
+            <div className='h-full bg-custom-color-bg-page'>
+              {props.children}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

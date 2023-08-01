@@ -29,7 +29,8 @@
     ],
     "quotes": [
       "error",
-      "single"
+      "single",
+      { "avoidEscape": true }
     ],
     "no-var": "error",
     "react/jsx-wrap-multilines": "error",

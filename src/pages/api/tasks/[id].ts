@@ -37,12 +37,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case 'DELETE':
       try {
 
-        const result = await taskDAO.deleteTaskById(id);
+        const rowCount = await taskDAO.deleteTaskById(id);
 
-        if (result.rowCount === null)
-          return res.status(404).json({ message: 'Task Not Found' });
-
-        return res.json(result.rows[0]);
+        if (rowCount === null || rowCount === 0) {
+          return res.status(404).json({ message: 'Task Not Found or Not Updated' });
+        } else {
+          return res.json({ message: 'Task Updated Successfully' });
+        }
       } catch (error: any) {
         return res.status(400).json({ message: error.message });
       }

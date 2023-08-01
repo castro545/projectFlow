@@ -5,6 +5,25 @@ import bcrypt from 'bcrypt';
 
 export class UserDAO implements AuthInterface {
 
+  async deleteUser(id: string): Promise<Number | null> {
+
+    const query = 'UPDATE users SET state = \'INACTIVE\' WHERE id=$1;';
+
+    const values = [id];
+
+    try {
+
+      const { rowCount } = await pool.query(query, values);
+      return rowCount || null;
+
+    } catch (error) {
+
+      console.error('Error updating the user:', error);
+      return null;
+
+    }
+  }
+
   async getUserByUsername(email: string): Promise<UserType | null> {
 
     const query = 'SELECT * FROM users WHERE email = $1';

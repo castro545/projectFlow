@@ -3,16 +3,16 @@ import { TaskInterface } from '../interfaces/Task';
 
 export class TaskDAO implements TaskInterface {
 
-  async deleteTaskById(id: string[] | string | undefined): Promise<any> {
+  async deleteTaskById(id: string[] | string | undefined): Promise<Number | null> {
 
-    const query = 'DELETE FROM tasks WHERE id = $1 RETURNING *';
+    const query = 'UPDATE tasks SET state = \'INACTIVE\' WHERE id=$1;';
 
     const values = [id];
 
     try {
 
-      const { rows } = await pool.query(query, values);
-      return rows[0] || null;
+      const { rowCount } = await pool.query(query, values);
+      return rowCount || null;
 
     } catch (error) {
 

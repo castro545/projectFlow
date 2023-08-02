@@ -37,6 +37,7 @@ export class UserDAO implements AuthInterface {
       return null;
     }
   }
+
   async createUser(full_name: string, email: string, password: string): Promise<UserType | null> {
     const hashedPassword = await bcrypt.hash(password, 10);
     const query = 'SELECT * FROM public.create_user($1, $2, $3) as user_id';

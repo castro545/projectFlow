@@ -10,13 +10,12 @@ const userDAO: AuthInterface = new UserDAO();
 
 export async function login(email: string, password: string): Promise<string | null> {
   const user = await userDAO.getUserByUsername(email);
+
   if (!user) {
     return null; // Usuario no encontrado.
   }
 
-  const isPasswordCorrect = await bcrypt.compare(password, user.password);
-  //const isPasswordCorrect =  password === user.password; // mientras que se implementa bcrypt al crear la contraseña
-
+  const isPasswordCorrect = await bcrypt.compare(password, user.password!);
   if (!isPasswordCorrect) {
     return null; // Contraseña incorrecta.
   }

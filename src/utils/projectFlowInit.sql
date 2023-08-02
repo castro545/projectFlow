@@ -189,7 +189,8 @@ ALTER TABLE IF EXISTS public.tasks
     NOT VALID;
 
 -- Nombre de proyecto único por owner
-ALTER TABLE projects ADD CONSTRAINT unique_project_name_by_owner UNIQUE (name, owner_code);
+--ALTER TABLE projects ADD CONSTRAINT unique_project_name_by_owner UNIQUE (name, owner_code);
+CREATE UNIQUE INDEX unique_project_name_by_owner ON projects (name, owner_code) WHERE (is_active != '0');
 
 -- Email de sesión único
 ALTER TABLE users ADD CONSTRAINT unique_user_email UNIQUE (email);
@@ -360,15 +361,15 @@ CREATE OR REPLACE FUNCTION asign_contributor(c_user_id int, c_project_code int)
 	LANGUAGE plpgsql
 	AS $$
 		-- temp user id
-		DECLARE project_user_id int;
+		DECLARE new_project_user_id int;
 	BEGIN	
 		-- creates contributor
 		INSERT 
 			INTO project_user (project_code, user_code, role_code)
 			VALUES (c_project_code, c_user_id, (SELECT role_id FROM roles WHERE name = 'Contribuidor'))
-		RETURNING project_user_id INTO project_user_id;
+		RETURNING project_user_id INTO new_project_user_id;
 		
-        RETURN project_user_id;
+        RETURN new_project_user_id;
 		COMMIT;
 	END;$$;
 
@@ -446,7 +447,9 @@ END;$$;
 			FROM users 
             INNER JOIN project_user ON project_user.user_code = users.user_id
             INNER JOIN roles ON roles.role_id = project_user.role_code
-			WHERE users.user_id = t_project_owner_code AND roles.name = 'Administrador';
+			WHERE users.user_id = t_project_owner_code
+            AND project_user.project_code = t_project_code
+            AND roles.name = 'Administrador';
 		-- creates task
 		IF project_owner_name IS NOT NULL
 		THEN
@@ -480,7 +483,7 @@ END;$$;
 			RETURNING task_id INTO new_task_id;
 		
 			-- asign task history
-			select task_updated(t_project_owner_code, new_task_id, CONCAT('Tarea creada por: ', project_owner_name));
+			PERFORM task_updated(t_project_owner_code, new_task_id, CONCAT('Tarea creada por: ', project_owner_name));
 			
 			RETURN new_task_id;
 			COMMIT;
@@ -520,7 +523,7 @@ CREATE OR REPLACE FUNCTION delete_task(t_id int)
 			UPDATE tasks SET is_active = '0' WHERE task_id = t_id;
 
             -- asign task history
-			select task_updated(user_code, t_id, 'Tarea eliminada.');
+			PERFORM task_updated(user_code, t_id, 'Tarea eliminada.');
 
 			RETURN t_id;
 			COMMIT;
@@ -550,7 +553,7 @@ CREATE OR REPLACE FUNCTION finish_task(t_id int, user_code int)
 			UPDATE tasks SET end_date = now() WHERE task_id = t_id;
 
             -- asign task history
-			select task_updated(user_code, t_id, 'Tarea finalizada.');
+			PERFORM task_updated(user_code, t_id, 'Tarea finalizada.');
 
 			RETURN t_id;
 			COMMIT;
@@ -560,3 +563,58 @@ CREATE OR REPLACE FUNCTION finish_task(t_id int, user_code int)
 	END;$$;
 
     -- Ejemplo de uso: SELECT finish_task(1, 1);
+
+-- Crear comentarios
+
+CREATE OR REPLACE FUNCTION create_comment(c_task_id int, c_user_id int, c_description text)
+    RETURNS int
+	LANGUAGE plpgsql
+	AS $$
+		-- temp comment id
+		DECLARE new_comment_id int;
+	BEGIN	
+		-- creates comment
+		INSERT 
+			INTO comments (task_code, user_code, description, date)
+			VALUES (c_task_id, c_user_id, c_description, now())
+		RETURNING comment_id INTO new_comment_id;
+		
+        RETURN new_comment_id;
+		COMMIT;
+	END;$$;
+
+	-- Ejemplo de uso:  SELECT create_comment(5, 1, 'Nuevo comentario');
+
+-- Editar un comentario
+CREATE OR REPLACE FUNCTION edit_comment(c_comment_id int, c_description text)
+    RETURNS int
+	LANGUAGE plpgsql
+	AS $$
+	BEGIN	
+		-- creates comment
+		UPDATE comments SET description = c_description WHERE comment_id = c_comment_id;
+		
+        RETURN c_comment_id;
+		COMMIT;
+		
+		RETURN 0;
+	END;$$;
+	
+	-- Ejemplo de uso: SELECT edit_comment(2, 'Ajuste a comentario');
+
+-- Eliminar un comentario
+CREATE OR REPLACE FUNCTION delete_comment(c_comment_id int)
+    RETURNS int
+	LANGUAGE plpgsql
+	AS $$
+	BEGIN	
+		-- creates comment
+		UPDATE comments SET is_active = '0' WHERE comment_id = c_comment_id;
+		
+        RETURN c_comment_id;
+		COMMIT;
+		
+		RETURN 0;
+	END;$$;
+	
+	-- Ejemplo de uso: SELECT delete_comment(2);

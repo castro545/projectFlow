@@ -8,5 +8,6 @@ export interface TaskInterface {
   deleteTaskById(id: string[] | string | undefined): Promise<Number | null>;
 
   fetchFilterTask(users: number[], project_id: number, priorities: number[], status: number[]): Promise<TaskType[]>;
-  fetchCountTaskByProject(project_code: number | null): Promise<CountTaskInfo[]>;
+  fetchCountTaskByProject(user_code:number, project_code: number | null): Promise<CountTaskInfo[]>;
+  fetchCountTaskByUser(user_code:number): Promise<CountTaskInfo[]>;
 }

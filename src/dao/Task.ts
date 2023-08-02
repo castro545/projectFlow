@@ -4,7 +4,7 @@ import { CountTaskInfo, TaskType } from '../types/Task';
 
 export class TaskDAO implements TaskInterface {
 
-  async fetchCountTaskByProject(project_code: number | null): Promise<CountTaskInfo[]> {
+  async fetchCountTaskByProject(user_code: number, project_code: number | null): Promise<CountTaskInfo[]> {
     const query = `
       SELECT
         SUM(CASE WHEN status_code IN(1, 2, 4) THEN 1 ELSE 0 END) AS pending_tasks,
@@ -12,13 +12,42 @@ export class TaskDAO implements TaskInterface {
         SUM(CASE WHEN user_code = 17 THEN 1 ELSE 0 END) AS created_by_me
       FROM tasks
       INNER JOIN projects ON projects.project_id = tasks.project_code
-      WHERE tasks.user_code = 17
+      WHERE tasks.user_code = ${user_code}
         AND tasks.is_active = '1'
         AND projects.is_active = '1'
         and tasks.project_code = $1;
     `;
 
     const values = [project_code];
+
+    try {
+
+      const { rows } = await pool.query(query, values);
+
+      return rows || [];
+
+    } catch (error) {
+
+      console.error('Error in count the tasks:', error);
+      return [];
+
+    }
+  }
+
+  async fetchCountTaskByUser(user_code: number): Promise<CountTaskInfo[]> {
+    const query = `
+      SELECT
+        SUM(CASE WHEN status_code IN(1, 2, 4) THEN 1 ELSE 0 END) AS pending_tasks,
+        SUM(CASE WHEN status_code IN(3, 5) THEN 1 ELSE 0 END) AS completed_tasks,
+        SUM(CASE WHEN user_code = 17 THEN 1 ELSE 0 END) AS created_by_me
+      FROM tasks
+      INNER JOIN projects ON projects.project_id = tasks.project_code
+      WHERE tasks.user_code = $1
+        AND tasks.is_active = '1'
+        AND projects.is_active = '1'
+    `;
+
+    const values = [user_code];
 
     try {
 

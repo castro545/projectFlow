@@ -96,13 +96,11 @@ export class ProjectDAO implements ProjectInterface {
     const query = `
       SELECT *
       FROM projects
-      WHERE user_id = $1;
+      WHERE owner_code = ${userId}
     `;
 
-    const values = [userId];
-
     try {
-      const { rows } = await pool.query(query, values);
+      const { rows } = await pool.query(query);
       return rows;
     } catch (error) {
       console.error('Error al obtener los proyectos por usuario:', error);

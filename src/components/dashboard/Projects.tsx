@@ -13,15 +13,6 @@ const Projects = ({ projects }: ProjectProps) => {
 
   const [userId, setUserId] = useState<number>();
 
-  const project: ProjectType = {
-    project_id: '6',
-    owner_code: 17, // Código del propietario del proyecto (reemplaza con el valor correcto)
-    name: 'Mi Proyecto', // Nombre del proyecto (reemplaza con el valor correcto)
-    description: 'Descripción del proyecto', // Descripción del proyecto (reemplaza con el valor correcto)
-    start_date: new Date(1690909380000), // Fecha de inicio (timestamp convertido a objeto Date)
-    estimated_date: new Date(1690909380000), // Fecha estimada (timestamp convertido a objeto Date)
-  };
-
   const router = useRouter();
 
   const onCreatedProject = () => {
@@ -39,12 +30,10 @@ const Projects = ({ projects }: ProjectProps) => {
         {
           projects &&
           projects.map((project, index) => (
-            <div
+            <ProjectCard
               key={index}
-              className='flex h-[250px] w-auto cursor-pointer flex-row items-center justify-center rounded-lg bg-[#FFFFFC] px-4 shadow-card'
-            >
-              {project.name}
-            </div>
+              projectData={project}
+            />
           ))
         }
 
@@ -53,11 +42,6 @@ const Projects = ({ projects }: ProjectProps) => {
           <NoProject
             onCreateProject={onCreatedProject}
           />
-        }
-
-        {<ProjectCard
-          projectData={project}
-        />
         }
       </div>
     </>

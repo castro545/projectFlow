@@ -107,7 +107,7 @@ const CreateProject = ({ _tasks, countTask }: CreateProjectPosps) => {
             </div>
             <HeaderCards
               counterTask={countTask}
-             />
+            />
           </div>
           <div className='flex flex-col space-y-6 px-[60px] pt-[45px]'>
             <label className='text-[20px] font-[700]'>Filtro</label>
@@ -146,18 +146,23 @@ const CreateProject = ({ _tasks, countTask }: CreateProjectPosps) => {
 export default CreateProject;
 
 
-export const getServerSideProps = async ({ query}: any) => {
+export const getServerSideProps = async ({ query }: any) => {
 
   const { id } = query;
 
   let tasks: TaskType[] = [];
   let countTask: CountTaskInfo[] = [];
 
-  const body = {
+  const bodyFilter = {
     'users': [17],
     'project_id': id,
     'priorities': [],
     'status': []
+  };
+
+  const bodyCount = {
+    'user_code': 17,
+    'project_id': id,
   };
 
   try {
@@ -169,7 +174,7 @@ export const getServerSideProps = async ({ query}: any) => {
     const statusReq = await fetch('http://localhost:3000/api/tasks/getFilterTask', {
       method: 'POST',
       headers: headers,
-      body: JSON.stringify(body),
+      body: JSON.stringify(bodyFilter),
     });
     const response: any = await statusReq.json();
     if (response) {
@@ -180,7 +185,7 @@ export const getServerSideProps = async ({ query}: any) => {
     const statusCountTask = await fetch('http://localhost:3000/api/tasks/getCountTaskByProject', {
       method: 'POST',
       headers: headers,
-      body: JSON.stringify(body),
+      body: JSON.stringify(bodyCount),
     });
     const responseCountTask: any = await statusCountTask.json();
     if (responseCountTask) {

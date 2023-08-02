@@ -17,9 +17,9 @@ export default async function handler(
   switch (method) {
     case 'POST':
       try {
-        const {project_id, user_code  } = body;
+        const {user_code  } = body;
 
-        const countTasks: CountTaskInfo[] = await taskDAO.fetchCountTaskByProject(user_code, project_id);
+        const countTasks: CountTaskInfo[] = await taskDAO.fetchCountTaskByUser(user_code);
 
         if (countTasks) {
           return res.status(200).json(countTasks);

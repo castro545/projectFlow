@@ -40,15 +40,11 @@ const CustomSelect: React.FC = () => {
   const noOptionsMessage = () => 'No hay opciones disponibles';
 
   const onSubmit = () => {
-    // Aquí puedes realizar la acción que desees con el estado selectedOptions
-    // Por ejemplo, puedes enviar los datos seleccionados al servidor, etc.
     // eslint-disable-next-line no-console
     console.log('Opciones seleccionadas: ya se ejecuta el servicio', selectedOptions);
   };
 
   useEffect(() => {
-    // Esta función se ejecutará cuando cambie el estado selectedOptions
-    // Puedes llamar a tu función onSubmit o realizar alguna acción aquí
     onSubmit();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOptions]);

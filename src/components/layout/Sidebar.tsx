@@ -65,7 +65,6 @@ const Sidebar = ({ open, navItems = defaultNavItems, setOpen }: Props) => {
             'flex gap-4 items-center justify-center w-[50px] h-[50px]': true, //layout
             'transition-colors duration-300': true, //animation
             'rounded-md p-2 mx-2': true, //self style
-            //'bg-white text-custom-color-gold': true
           })}
         >
           <ArrowLeftOnRectangleIcon className='h-[1.875rem] w-[1.875rem]' />

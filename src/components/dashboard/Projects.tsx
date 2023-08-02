@@ -14,8 +14,8 @@ const Projects = ({ projects }: ProjectProps) => {
   const [userId, setUserId] = useState<number>();
 
   const project: ProjectType = {
-    project_id: '123',
-    owner_code: 123, // Código del propietario del proyecto (reemplaza con el valor correcto)
+    project_id: '12',
+    owner_code: 17, // Código del propietario del proyecto (reemplaza con el valor correcto)
     name: 'Mi Proyecto', // Nombre del proyecto (reemplaza con el valor correcto)
     description: 'Descripción del proyecto', // Descripción del proyecto (reemplaza con el valor correcto)
     start_date: new Date(1690909380000), // Fecha de inicio (timestamp convertido a objeto Date)

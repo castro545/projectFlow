@@ -58,7 +58,6 @@ const Navbar = ({ onMenuButtonClick }: Props) => {
         <div className='hidden flex-row items-center md:flex'>
           <div className='flex-col'>
             <p className='text-right text-[16px] font-semibold'>Helmer Torres</p>
-            <p className='text-right text-[14px] italic'>Full-stack developer Flutter</p>
           </div>
           <div className='p-4'>
             <Image

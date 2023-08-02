@@ -7,5 +7,6 @@ export interface ProjectInterface {
   getAllProjects(): Promise<ProjectType[]>;
   updateProject(project_id: number, projectData: Partial<ProjectType>): Promise<ProjectType | null>;
   deleteProject(project_id: number): Promise<boolean>;
+  finishProject(project_id: number): Promise<boolean>;
   getProjectsByUserId(userId: string[] | string | undefined): Promise<ProjectType[]>;
 }

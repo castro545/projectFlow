@@ -16,3 +16,23 @@ export type TaskType = {
   task_start_date: string;
   task_estimated_date: string;
 };
+
+export interface OptionType {
+  value: number;
+  label: string;
+  id: number;
+  type: string;
+}
+
+export interface BodyType {
+  users: number[];
+  priorities: number[];
+  status: number[];
+  project_id: number;
+}
+
+export type CountTaskInfo = {
+  pending_tasks: number;
+  completed_tasks: number;
+  created_by_me: number;
+};

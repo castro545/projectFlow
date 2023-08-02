@@ -1,35 +1,32 @@
+import { OptionType } from '@/src/types/Task';
 import React, { useEffect, useState } from 'react';
 import Select, { MultiValue } from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 const animatedComponents = makeAnimated();
 
-interface OptionType {
-  value: number;
-  label: string;
-}
-
 const optionsBySection: { [key: string]: OptionType[] } = {
   'Por prioridad': [
-    { value: 1, label: 'Alta' },
-    { value: 2, label: 'Media' },
-    { value: 3, label: 'Baja' },
+    { value: 1, label: 'Alta', id: 1, type: 'priority' },
+    { value: 2, label: 'Media', id: 2, type: 'priority' },
+    { value: 3, label: 'Baja', id: 3, type: 'priority' },
   ],
   'Por estado': [
-    { value: 1, label: 'Nueva' },
-    { value: 2, label: 'En proceso' },
-    { value: 3, label: 'Resuelta' },
-    { value: 4, label: 'En espera' },
-    { value: 5, label: 'Cancelada' },
+    { value: 4, label: 'Nueva', id: 1, type: 'state' },
+    { value: 5, label: 'En proceso', id: 2, type: 'state' },
+    { value: 6, label: 'Resuelta', id: 3, type: 'state' },
+    { value: 7, label: 'En espera', id: 4, type: 'state' },
+    { value: 8, label: 'Cancelada', id: 5, type: 'state' },
   ],
   'Por colaborador': [
-    { value: 17, label: 'Helmer Torres' },
-    { value: 13, label: 'Cesar Fernandez' },
+    { value: 9, label: 'Helmer Torres', id: 17, type: 'user' },
+    { value: 10, label: 'Cesar Fernandez', id: 13, type: 'user' },
   ],
 };
 
-const CustomSelect: React.FC = () => {
+const CustomSelect = ({ onChange }: any) => {
   const [selectedOptions, setSelectedOptions] = useState<MultiValue<OptionType>>([]);
+
   const options = Object.entries(optionsBySection).map(([section, values]) => {
     return {
       label: section,
@@ -40,8 +37,7 @@ const CustomSelect: React.FC = () => {
   const noOptionsMessage = () => 'No hay opciones disponibles';
 
   const onSubmit = () => {
-    // eslint-disable-next-line no-console
-    console.log('Opciones seleccionadas: ya se ejecuta el servicio', selectedOptions);
+    onChange(selectedOptions);
   };
 
   useEffect(() => {

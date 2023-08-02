@@ -1,9 +1,8 @@
 import React from 'react';
 import {
-  CalendarIcon,
-  FolderIcon,
-  HomeIcon,
   UserGroupIcon,
+  PencilSquareIcon,
+  HomeIcon,
 } from '@heroicons/react/24/solid';
 import { NavItem } from './Sidebar';
 
@@ -14,15 +13,11 @@ export const defaultNavItems: NavItem[] = [
     icon: <HomeIcon className='h-[1.875rem] w-[1.875rem]' />,
   },
   {
-    href: '/team',
+    href: '/createtaskgeneral',
+    icon: <PencilSquareIcon className='h-[1.875rem] w-[1.875rem]' />,
+  },
+  {
+    href: '/contributors',
     icon: <UserGroupIcon className='h-[1.875rem] w-[1.875rem]' />,
-  },
-  {
-    href: '/projects',
-    icon: <FolderIcon className='h-[1.875rem] w-[1.875rem]' />,
-  },
-  {
-    href: '/calendar',
-    icon: <CalendarIcon className='h-[1.875rem] w-[1.875rem]' />,
   },
 ];

@@ -6,14 +6,22 @@ import TaskCard from '@/src/components/project/TaskCard';
 import { ProjectType } from '@/src/types/Project';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   PlusCircleIcon,
   DocumentTextIcon
 } from '@heroicons/react/24/solid';
-import { TaskType } from '@/src/types/Task';
+import { BodyType, CountTaskInfo, OptionType, TaskType } from '@/src/types/Task';
+import { MultiValue } from 'react-select';
+import { useFetchFilterTasks } from '@/src/components/hooks/task/FetchFilterTask';
 
-const CreateProject = () => {
+type CreateProjectPosps = {
+  _tasks: TaskType[];
+  countTask: CountTaskInfo[];
+}
+
+const CreateProject = ({ _tasks, countTask }: CreateProjectPosps) => {
+  const [tasksResult, setTaskResult] = useState<TaskType[]>([]);
 
   const project: ProjectType = {
     project_id: '12',
@@ -24,7 +32,10 @@ const CreateProject = () => {
     estimated_date: new Date(1690909380000),
   };
 
+  const fetchTasks = useFetchFilterTasks();
+
   const router = useRouter();
+  const { id } = router.query;
 
   const onCreatedTask = () => {
 
@@ -38,65 +49,40 @@ const CreateProject = () => {
 
   };
 
-  const tasks: TaskType[] = [
-    {
-      task_id: 1,
-      task_parent_code: null,
-      task_parent_name: null,
-      task_name: 'nombre tarea',
-      task_description: 'description',
-      task_priority_id: 1,
-      task_priority: 'Alta',
-      task_status_id: 1,
-      task_status_name: 'Nueva',
-      user_id: 17,
-      user_full_name: 'Helmer2',
-      role_name: 'Administrador',
-      role_id: 1,
-      updated_by_user_full_name: 'Helmer2',
-      task_start_date: '2023-08-02 00:35:50.959',
-      task_estimated_date: '2023-08-02 00:35:50.959',
-    },
-    {
-      task_id: 2,
-      task_parent_code: null,
-      task_parent_name: null,
-      task_name: 'otra tarea',
-      task_description: 'otra descripción',
-      task_priority_id: 2,
-      task_priority: 'Media',
-      task_status_id: 2,
-      task_status_name: 'En progreso',
-      user_id: 23,
-      user_full_name: 'Jane Doe',
-      role_name: 'Analista',
-      role_id: 3,
-      updated_by_user_full_name: 'John Smith',
-      task_start_date: '2023-08-02 12:00:00',
-      task_estimated_date: '2023-08-03 16:30:00',
-    },
-    {
-      task_id: 3,
-      task_parent_code: null,
-      task_parent_name: null,
-      task_name: 'tarea importante',
-      task_description: 'una descripción importante',
-      task_priority_id: 3,
-      task_priority: 'Baja',
-      task_status_id: 3,
-      task_status_name: 'Completada',
-      user_id: 10,
-      user_full_name: 'Alice Johnson',
-      role_name: 'Desarrollador',
-      role_id: 2,
-      updated_by_user_full_name: 'Bob Williams',
-      task_start_date: '2023-08-01 09:15:00',
-      task_estimated_date: '2023-08-05 18:00:00',
-    },
-  ];
+  function transformFiltersToBody(filters: OptionType[]) {
+    const body = filters.reduce((acc, filter) => {
+      if (filter.type === 'user') {
+        acc.users.push(filter.id);
+      } else if (filter.type === 'priority') {
+        acc.priorities.push(filter.id);
+      } else if (filter.type === 'state') {
+        acc.status.push(filter.id);
+      }
+      return acc;
+    }, { users: [], priorities: [], status: [], project_id: id as unknown as number } as BodyType);
+
+    return body;
+  }
+
+  const handleFilter = async (filtersProp: MultiValue<OptionType>) => {
+    const mutableFilters = [...filtersProp];
 
 
-  useEffect(() => { }, []);
+    const body = transformFiltersToBody(mutableFilters);
+
+    const fetchedTasks: TaskType[] | undefined = await fetchTasks(body);
+
+    if (fetchedTasks !== undefined) {
+      const tasks: TaskType[] = fetchedTasks;
+
+      setTaskResult(tasks);
+    }
+  };
+
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -119,20 +105,24 @@ const CreateProject = () => {
                 />
               </div>
             </div>
-            <HeaderCards />
+            <HeaderCards
+              counterTask={countTask}
+             />
           </div>
           <div className='flex flex-col space-y-6 px-[60px] pt-[45px]'>
             <label className='text-[20px] font-[700]'>Filtro</label>
             <div className='w-[400px]'>
-              <CustomSelect />
+              <CustomSelect
+                onChange={handleFilter}
+              />
             </div>
           </div>
           <div className='flex flex-col space-y-6 px-[60px] pt-[45px]'>
             <label className='text-[20px] font-[700]'>Tareas</label>
             <div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
               {
-                tasks &&
-                tasks.map((task, index) => (
+                tasksResult &&
+                tasksResult.map((task, index) => (
                   <TaskCard
                     key={index}
                     task={task}
@@ -140,7 +130,7 @@ const CreateProject = () => {
                 ))
               }
               {
-                tasks.length === 0 &&
+                tasksResult.length === 0 &&
                 <NoTask
                   onCreateTask={onCreatedTask}
                 />
@@ -156,27 +146,50 @@ const CreateProject = () => {
 export default CreateProject;
 
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async ({ query}: any) => {
+
+  const { id } = query;
+
   let tasks: TaskType[] = [];
+  let countTask: CountTaskInfo[] = [];
+
+  const body = {
+    'users': [17],
+    'project_id': id,
+    'priorities': [],
+    'status': []
+  };
 
   try {
     const headers = {
       'Content-Type': 'application/json',
     };
 
-    const statusReq = await fetch('http://localhost:3000/api/project/getProjectsByUserId?id=17', {
-      method: 'GET',
+    // FetchFilterTask
+    const statusReq = await fetch('http://localhost:3000/api/tasks/getFilterTask', {
+      method: 'POST',
       headers: headers,
+      body: JSON.stringify(body),
     });
-
     const response: any = await statusReq.json();
-
     if (response) {
       tasks = response;
     }
+
+    // FetchCountTask
+    const statusCountTask = await fetch('http://localhost:3000/api/tasks/getCountTaskByProject', {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(body),
+    });
+    const responseCountTask: any = await statusCountTask.json();
+    if (responseCountTask) {
+      countTask = responseCountTask;
+    }
+
   } catch (e) {
     console.error(e);
   }
 
-  return { props: { tasks } };
+  return { props: { tasks, countTask } };
 };

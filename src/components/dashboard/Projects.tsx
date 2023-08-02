@@ -14,7 +14,7 @@ const Projects = ({ projects }: ProjectProps) => {
   const [userId, setUserId] = useState<number>();
 
   const project: ProjectType = {
-    project_id: '12',
+    project_id: '6',
     owner_code: 17, // Código del propietario del proyecto (reemplaza con el valor correcto)
     name: 'Mi Proyecto', // Nombre del proyecto (reemplaza con el valor correcto)
     description: 'Descripción del proyecto', // Descripción del proyecto (reemplaza con el valor correcto)

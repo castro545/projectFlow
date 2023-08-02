@@ -28,6 +28,7 @@ INNER JOIN priorities ON tasks.priority_code = priorities.priority_id
 INNER JOIN task_status ON tasks.status_code = task_status.task_status_id
 WHERE tasks.is_active = '1'
 AND projects.is_active = '1'
+AND project_user.is_active = '1'
 AND projects.project_id = 1
 -- Filtro por usuario
 AND users.user_id = 1
@@ -48,3 +49,20 @@ WHERE tasks.user_code = 1
 AND tasks.is_active = '1'
 AND projects.is_active = '1'
 AND tasks.project_code = 1;
+
+-- Resumen de proyecto por usuario
+SELECT 
+		projects.name project_name,
+		projects.start_date project_start_date,
+		users.full_name user_full_name,
+		SUM(CASE WHEN tasks.project_code = 1 THEN 1 ELSE 0 END) AS total_tasks
+	FROM project_user
+	INNER JOIN projects ON project_user.project_code = projects.project_id
+	INNER JOIN users ON project_user.user_code = users.user_id
+	INNER JOIN tasks ON tasks.user_code = users.user_id
+	WHERE project_user.is_active = '1'
+	AND projects.is_active = '1'
+	AND tasks.is_active = '1'
+	AND users.user_id = 1
+	AND projects.project_id = 1
+	GROUP BY(projects.name, projects.start_date, users.full_name);

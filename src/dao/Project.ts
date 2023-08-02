@@ -32,7 +32,7 @@ export class ProjectDAO implements ProjectInterface {
   }
   async getAllProjects(): Promise<ProjectType[]> {
     const query = 'SELECT * FROM projects';
-  
+
     try {
       const { rows } = await pool.query(query);
       return rows;
@@ -41,19 +41,19 @@ export class ProjectDAO implements ProjectInterface {
       return [];
     }
   }
-  
+
   async updateProject(project_id: number, projectData: Partial<ProjectType>): Promise<ProjectType | null> {
     const { name, description, start_date, estimated_date } = projectData;
-  
+
     const query = `
       UPDATE projects
       SET name = $1, description = $2, start_date = $3, estimated_date = $4
       WHERE project_id = $5
       RETURNING *;
     `;
-  
+
     const values = [name, description, start_date, estimated_date, project_id];
-  
+
     try {
       const { rows } = await pool.query(query, values);
       return rows[0] || null;
@@ -62,13 +62,13 @@ export class ProjectDAO implements ProjectInterface {
       return null;
     }
   }
-  
+
   async deleteProject(project_id: number): Promise<boolean> {
     const query = `
     SELECT delete_project($1)
     `;
     const values = [project_id];
-  
+
     try {
       const result = await pool.query(query, values);
       return result.rowCount > 0; // Retorna true si se eliminó al menos un registro.
@@ -83,7 +83,7 @@ export class ProjectDAO implements ProjectInterface {
     SELECT finish_project($1)
     `;
     const values = [project_id];
-  
+
     try {
       const result = await pool.query(query, values);
       return result.rowCount > 0; // Retorna true si se eliminó al menos un registro.
@@ -109,6 +109,6 @@ export class ProjectDAO implements ProjectInterface {
       return [];
     }
   }
-  
+
 }
 

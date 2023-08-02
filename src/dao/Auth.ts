@@ -37,18 +37,30 @@ export class UserDAO implements AuthInterface {
       return null;
     }
   }
-  async createUser(full_name: string, email: string, password: string, role_code: number): Promise<UserType | null> {
-
+  async createUser(full_name: string, email: string, password: string): Promise<UserType | null> {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const query = 'INSERT INTO users (full_name,email, password,role_code) VALUES ($1, $2, $3, $4) RETURNING *';
-    const values = [full_name, email, hashedPassword, role_code];
+    const query = 'SELECT * FROM public.create_user($1, $2, $3) as user_id';
+    const values = [full_name, email, hashedPassword];
 
     try {
       const { rows } = await pool.query(query, values);
-      return rows[0] || null;
-    } catch (error) {
-      console.error('Error al crear el usuario:', error);
+      const user = rows[0];
+      if (user) {
+        const user_id = user.user_id;
+        const createdUser: UserType = {
+          user_id,
+          error: ''
+        };
+        return createdUser;
+      }
       return null;
+    } catch (error: any) {
+      if (typeof error === 'object' && error !== null && 'code' in error && error.code === '23505') {
+        return { user_id: 0, error: 'The user already exists' };
+      } else {
+        console.error('Error al crear el usuario:', error);
+        return null;
+      }
     }
   }
 }

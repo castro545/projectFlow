@@ -13,13 +13,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   switch (method) {
     case 'POST':
       try {
-        const { full_name, email, password, role_code } = body;
+        const { full_name, email, password } = body;
 
         if (!email || !password) {
           return res.status(400).json({ message: 'Email and password are required' });
         }
-        const user = await userDAO.createUser(full_name, email, password, role_code);
+        const user = await userDAO.createUser(full_name, email, password);
         if (user) {
+          //Validación de usuario ya existente
+          if (user.error) return res.status(200).json({ user, message: user.error });
+
           return res.status(200).json({ user, message: 'User create successfull' });
         } else {
           return res.status(401).json({ message: 'Error create user' });

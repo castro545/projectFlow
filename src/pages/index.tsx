@@ -1,24 +1,48 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../components/layout/Layout';
 import HeaderCards from '../components/dashboard/HeaderCards';
 import Projects from '../components/dashboard/Projects';
 import { CountTaskInfo } from '../types/Task';
 import { ProjectType } from '../types/Project';
-import { validateTokenMiddleware } from '../utils/validateToken';
+import useGetCountTaskUser from '../components/hooks/project/fetchProjectByUser';
 
 type HomePageProps = {
-  countTask: CountTaskInfo[];
   projects: ProjectType[];
 }
 
-const HomePage: NextPage<HomePageProps> = ({ countTask, projects }) => {
+const HomePage: NextPage<HomePageProps> = ({ projects }) => {
 
-  useEffect(()=>{
-    validateTokenMiddleware
+  const [countTask, setCountTask] = useState<CountTaskInfo[]>([]);
 
-  },[]);
+  const fethProjectByUser = useGetCountTaskUser();
+
+  const getCountTask = async () => {
+    try {
+      const bodyCount = {
+        'user_code': 17
+      };
+      const reqdata: CountTaskInfo[] = await fethProjectByUser(bodyCount);
+      if (reqdata) {
+        setCountTask(reqdata);
+      }
+    } catch {
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+
+      await getCountTask();
+
+    };
+
+    fetchData();
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <Layout>
       <Head>
@@ -36,9 +60,12 @@ const HomePage: NextPage<HomePageProps> = ({ countTask, projects }) => {
         </div>
         <div className='space-y-3 px-[60px] pt-[45px]'>
           <label className='text-[20px] font-[700]'>Proyectos</label>
-          <Projects
-            projects={projects}
-          />
+          {
+            projects.length > 0 &&
+            <Projects
+              projects={projects}
+            />
+          }
         </div>
       </div>
     </Layout>
@@ -49,29 +76,12 @@ export default HomePage;
 
 export const getServerSideProps = async () => {
 
-  let countTask: CountTaskInfo[] = [];
   let projects: ProjectType[] = [];
-
-
-  const bodyCount = {
-    'user_code': 17,
-  };
 
   try {
     const headers = {
       'Content-Type': 'application/json',
     };
-
-    // FetchCountTask
-    const statusCountTask = await fetch('http://localhost:3000/api/tasks/getCountTaskByUser', {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(bodyCount),
-    });
-    const responseCountTask: any = await statusCountTask.json();
-    if (responseCountTask) {
-      countTask = responseCountTask;
-    }
 
     // FetchProjectsByUser
     const statusProjects = await fetch(`http://localhost:3000/api/project/getProjectsByUserId?id=${17}`, {
@@ -87,5 +97,7 @@ export const getServerSideProps = async () => {
     console.error(e);
   }
 
-  return { props: { countTask, projects } };
+  console.log({ projects });
+
+  return { props: {  projects } };
 };

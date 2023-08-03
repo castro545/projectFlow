@@ -132,18 +132,6 @@ const CreateProject = () => {
                 data={dataLine}
                 options={optionsLine}
               />
-              <div className='mt-14 flex flex-row justify-center space-x-6'>
-                <button
-                  type='button'
-                  className='middle none center mr-3 rounded-lg border border-custom-color-gold bg-custom-color-gold px-6 py-3 text-xs font-bold uppercase text-white transition-all hover:opacity-75 focus:ring focus:ring-custom-color-light-gold active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
-                  onClick={onBackPage}
-                >Volver</button>
-                <button
-                  type='button'
-                  className='middle none center mr-3 rounded-lg border border-custom-color-gold bg-custom-color-gold px-6 py-3 text-xs font-bold uppercase text-white transition-all hover:opacity-75 focus:ring focus:ring-custom-color-light-gold active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
-                  onClick={onBackPage}
-                >Descargar Reporte</button>
-              </div>
             </form>
           </div>
         </div>

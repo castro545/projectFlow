@@ -14,11 +14,13 @@ import {
 import { BodyType, CountTaskInfo, OptionType, TaskType } from '@/src/types/Task';
 import { MultiValue } from 'react-select';
 import { useFetchFilterTasks } from '@/src/components/hooks/task/FetchFilterTask';
-import useGetProjectByUser from '@/src/components/hooks/project/fetchProjectByUser';
+import useGetCountTaskProject from '@/src/components/hooks/project/fetchProjectByProject';
+import ModalComponent from '@/src/components/layout/Modal';
 
 const CreateProject = () => {
   const [tasksResult, setTaskResult] = useState<TaskType[]>([]);
   const [countTask, setCountTask] = useState<CountTaskInfo[]>([]);
+  const [isOpenCreateTask, setIsOpenCreateTask] = useState<boolean>(false);
 
   const project: ProjectType = {
     project_id: '12',
@@ -36,7 +38,7 @@ const CreateProject = () => {
 
   const onCreatedTask = () => {
 
-    router.push(`/${12}/createtask`);
+    setIsOpenCreateTask(!isOpenCreateTask);
 
   };
 
@@ -76,9 +78,9 @@ const CreateProject = () => {
     }
   };
 
-  const fethProjectByUser = useGetProjectByUser();
+  const fethProjectByUser = useGetCountTaskProject();
 
-  const getProjects = async () => {
+  const getCountTask = async () => {
     try {
       const bodyCount = {
         'user_code': 17,
@@ -112,6 +114,10 @@ const CreateProject = () => {
     }
   };
 
+  const handleModalCreateTask = () => {
+    setIsOpenCreateTask(!isOpenCreateTask);
+  };
+
   useEffect(() => {
     const fetchFilterTask = async () => {
 
@@ -121,18 +127,18 @@ const CreateProject = () => {
 
     fetchFilterTask();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isOpenCreateTask]);
 
   useEffect(() => {
     const fetchData = async () => {
 
-      await getProjects();
+      await getCountTask();
 
     };
 
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isOpenCreateTask]);
 
   return (
     <>
@@ -190,7 +196,13 @@ const CreateProject = () => {
             </div>
           </div>
         </div>
-      </Layout>
+        {
+          isOpenCreateTask &&
+          < ModalComponent onClose={handleModalCreateTask} maxWidth='max-w-[45.8125rem]'>
+
+          </ModalComponent>
+        }
+      </Layout >
     </>
   );
 };

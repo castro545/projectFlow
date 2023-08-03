@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
 
-const useGetCountTaskUser = (): ((_body: any) => Promise<any | undefined>) => {
+const useGetCountTaskProject = (): ((_body: any) => Promise<any | undefined>) => {
   const fetCountTask = useCallback(async (body: any) => {
     try {
       const headers = {
         'Content-Type': 'application/json',
       };
 
-      const response = await fetch('/api/tasks/getCountTaskByUser', {
+      const response = await fetch('/api/tasks/getCountTaskByProject', {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(body),
@@ -31,4 +31,4 @@ const useGetCountTaskUser = (): ((_body: any) => Promise<any | undefined>) => {
 
 
 
-export default useGetCountTaskUser;
+export default useGetCountTaskProject;

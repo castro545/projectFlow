@@ -9,5 +9,5 @@ export interface TaskInterface {
 
   fetchFilterTask(users: number[], project_id: number, priorities: number[], status: number[]): Promise<TaskType[]>;
   fetchCountTaskByProject(user_code: number, project_code: number | null): Promise<CountTaskInfo[]>;
-  fetchCountTaskByUser(user_code: number): Promise<CountTaskInfo[] | { redirectTo: string }>;
+  fetchCountTaskByUser(user_code: number): Promise<CountTaskInfo[]>;
 }

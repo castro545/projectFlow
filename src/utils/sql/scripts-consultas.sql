@@ -66,3 +66,20 @@ SELECT
 	AND users.user_id = 1
 	AND projects.project_id = 1
 	GROUP BY(projects.name, projects.start_date, users.full_name);
+
+-- Resumen de proyecto por N usuarios
+SELECT
+		projects.name project_name,
+		projects.start_date project_start_date,
+		string_agg(users.full_name, ', ') users_full_name,
+		(SELECT count(task_id) FROM tasks WHERE project_code = 1 AND is_active = '1') total_tasks
+	FROM project_user
+	INNER JOIN projects ON project_user.project_code = projects.project_id
+	INNER JOIN users ON project_user.user_code = users.user_id
+	WHERE project_user.is_active = '1'
+	AND projects.is_active = '1'
+	AND users.is_active = '1'
+	AND projects.project_id = 1
+	AND project_user.project_code = 1
+	GROUP BY(projects.name, projects.start_date);
+	

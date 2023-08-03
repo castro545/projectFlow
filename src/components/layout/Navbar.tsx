@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Bars3Icon, UserCircleIcon, RectangleStackIcon, Cog6ToothIcon } from '@heroicons/react/24/solid';
+import { Bars3Icon } from '@heroicons/react/24/solid';
 import classNames from 'classnames';
 import Image from 'next/image';
 import Logo from '../../../public/images/png/Logo_Ola.png';
@@ -23,24 +23,6 @@ const Navbar = ({ onMenuButtonClick }: Props) => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleQuizarCuenta = () => {
-    // Lógica para la acción "Quizar cuenta"
-    // ...
-    setIsDropdownOpen(false);
-  };
-
-  const handleMisTareas = () => {
-    // Lógica para la acción "Mis tareas"
-    // ...
-    setIsDropdownOpen(false);
-  };
-
-  const handleConfiguracion = () => {
-    // Lógica para la acción "Configuración"
-    // ...
-    setIsDropdownOpen(false);
-  };
-
   return (
     <nav
       className={classNames({
@@ -61,7 +43,7 @@ const Navbar = ({ onMenuButtonClick }: Props) => {
           </div>
           <div className='p-4'>
             <Image
-              className='relative inline-block h-12 w-12 cursor-pointer rounded-full object-cover object-center'
+              className='relative inline-block h-12 w-12 rounded-full object-cover object-center'
               alt='Image placeholder'
               src={Avatar}
               width={40}
@@ -75,27 +57,6 @@ const Navbar = ({ onMenuButtonClick }: Props) => {
       <button className='md:hidden' onClick={onMenuButtonClick}>
         <Bars3Icon className='h-6 w-6 text-white' />
       </button>
-      <div className={classNames(
-        'absolute right-4 top-[4.375rem] w-[200px] rounded-md bg-white py-2 shadow-md',
-        {
-          'transition-transform .3s ease-in-out md:-translate-x-0': true, //animations
-          '-translate-x-full ': isDropdownOpen,
-          'hidden': !isDropdownOpen
-        }
-      )} ref={ref}>
-        <button className='flex w-full space-x-8 px-4 py-2 text-left hover:bg-custom-color-light-gold' onClick={handleQuizarCuenta}>
-          <UserCircleIcon className='mr-4 h-[1.5rem] w-[1.5rem] cursor-pointer text-custom-color-gold' />
-          Mi cuenta
-        </button>
-        <button className='flex w-full space-x-8 px-4 py-2 text-left hover:bg-custom-color-light-gold' onClick={handleMisTareas}>
-          <RectangleStackIcon className='mr-4 h-[1.5rem] w-[1.5rem] cursor-pointer text-custom-color-gold' />
-          Mis tareas
-        </button>
-        <button className='flex w-full space-x-8 px-4 py-2 text-left hover:bg-custom-color-light-gold' onClick={handleConfiguracion}>
-          <Cog6ToothIcon className='mr-4 h-[1.5rem] w-[1.5rem] cursor-pointer text-custom-color-gold' />
-          Configuración
-        </button>
-      </div>
     </nav>
   );
 };

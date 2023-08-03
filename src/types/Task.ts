@@ -15,6 +15,7 @@ export type TaskType = {
   updated_by_user_full_name: string;
   task_start_date: string;
   task_estimated_date: string;
+  redirectTo?: string;
 };
 
 export interface OptionType {
@@ -32,7 +33,8 @@ export interface BodyType {
 }
 
 export type CountTaskInfo = {
-  pending_tasks: number;
-  completed_tasks: number;
-  created_by_me: number;
+  pending_tasks?: number;
+  completed_tasks?: number;
+  created_by_me?: number;
+  redirectTo?: string;
 };

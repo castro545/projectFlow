@@ -8,7 +8,10 @@ import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
-
+import CircularProgressIndicator from '@/src/components/CircularProgressIndicator';
+import { ToastUtils } from '@/src/utils/ToastUtils';
+import { LoginType } from '@/src/types/Login';
+import { useLogin } from '@/src/components/hooks/user/login/login';
 
 const ModalLayout = ({ children }: any) => (
   <>
@@ -39,6 +42,9 @@ const ModalLayout = ({ children }: any) => (
 const Login = () => {
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const login = useLogin();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev: boolean) => !prev); // Especificar el tipo de 'prev' como 'boolean'
@@ -47,13 +53,59 @@ const Login = () => {
   const { register, handleSubmit } = useForm({
     defaultValues: {
       email: '',
-      pass: '',
-      keepSesion: ''
+      pass: ''
     },
     shouldUseNativeValidation: false
   });
 
-  const onSubmit = async (_data: any) => {
+  const onSubmit = async (data: any) => {
+
+    setLoading(true);
+
+    const validateLoginInput = () => {
+      if (!data.email && data.email.trim() === '') {
+        ToastUtils.errorMessage('Ingresa un correo electrónico');
+        setLoading(false);
+        return false;
+      }
+      if (!data.pass && data.pass.trim() === '') {
+        ToastUtils.errorMessage('Ingresa la contraseña');
+        setLoading(false);
+        return false;
+      }
+      return true;
+    };
+
+    const validate = validateLoginInput();
+
+    if (validate) {
+      const loginUser: LoginType = {
+        email: data.email,
+        password: data.pass
+      };
+
+      const regResponse = await login(loginUser);
+
+      console.log({regResponse});
+
+      // Validación de login
+      if (regResponse === null || regResponse.message === 'Invalid credentials') {
+        setLoading(false);
+        ToastUtils.errorMessage('Credenciales incorrectas, vuelve a intentarlo');
+      }
+      else {
+        // se guarda el token en localstorage pero hay que refrescar el token cada vez que se actualice en la cookie
+        // localStorage.setItem('token', regResponse);
+
+        // setToken(regResponse);
+        // router.push('/dashboard');
+        // setLoading(false);
+
+        ToastUtils.successMessage('Login correcto, redireccion a home');
+
+        setLoading(false);
+      }
+    }
 
   };
 
@@ -106,7 +158,7 @@ const Login = () => {
             type='submit'
             className='text-22px m-0 flex h-[35px] w-[153px] items-center justify-center rounded-[30px] bg-[#FF9F24] p-0 font-normal text-white'
           >
-            Iniciar Sesión
+            {loading ? <CircularProgressIndicator /> : <h1>Iniciar Sesión</h1>}
           </button>
           <label className='text-center text-[12px] font-semibold italic'>No tienes una cuenta?
             <Link href='/register' className='not-italic text-blue-500'> puedes crear una aquí</Link>

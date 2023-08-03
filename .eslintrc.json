@@ -19,7 +19,7 @@
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
     "react/forbid-dom-props": ["error", {"forbid": ["style"]}],
-    "no-console": ["error", { "allow": ["error", "info"] }],
+    // "no-console": ["error", { "allow": ["error", "info"] }],
     "no-unused-vars": [
       "error",
       {

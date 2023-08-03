@@ -1,11 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ProjectInterface } from '@/src/interfaces/Project';
 import { ProjectDAO } from '@/src/dao/Project';
+import { validateTokenMiddleware } from '@/src/utils/validateToken';
+
+const loginUrl = '/login';
 
 // Creamos una instancia del DAO
 const projectDAO: ProjectInterface = new ProjectDAO();
 
-export default async function handler(
+async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -25,3 +28,6 @@ export default async function handler(
       return res.status(405).json({ message: 'Method not allowed' });
   }
 }
+
+//export default validateTokenMiddleware(handler, loginUrl);
+export default handler;

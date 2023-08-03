@@ -1,19 +1,21 @@
-import { BodyType, TaskType } from '@/src/types/Task';
 import { useCallback } from 'react';
 
-export function useFetchFilterTasks(): (_body: BodyType) => Promise<TaskType[] | undefined> {
-  const fetchFilterTask = useCallback(async (body: BodyType) => {
+const useGetProjectByUser = (): ((_body: any) => Promise<any | undefined>) => {
+  const fethProjectByUser = useCallback(async (body: any) => {
     try {
       const headers = {
         'Content-Type': 'application/json',
       };
 
-      const response = await fetch('/api/tasks/getFilterTask', {
+      const response = await fetch('/api/tasks/getCountTaskByProject', {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(body),
       });
+
       const resp = await response.json();
+
+      console.log({resp});
 
       if (resp.redirectTo) {
         window.location.href = resp.redirectTo;
@@ -24,5 +26,9 @@ export function useFetchFilterTasks(): (_body: BodyType) => Promise<TaskType[] |
       console.log('Error -->', e);
     }
   }, []);
-  return fetchFilterTask;
-}
+  return fethProjectByUser;
+};
+
+
+
+export default useGetProjectByUser;

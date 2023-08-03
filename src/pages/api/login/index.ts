@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { NextApiRequest, NextApiResponse } from 'next';
 import { login } from '@/src/business/Auth';
+import { renewTokenExpiration } from '@/src/utils/jwt';
+import { parse } from 'cookie';
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -18,12 +20,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   switch (method) {
     case 'POST':
       try {
-        const { email, password } = body;
+        let email: string;
+        let password: string;
+
+        // No sé porque en web viene undefined
+        if (body.email === undefined && body.password === undefined) {
+          const requestBody = JSON.parse(body);
+          email = requestBody.email;
+          password = requestBody.password;
+        } else {
+          // pero postman vienen variables separadas, seguro estoy loco
+          email = body.email;
+          password = body.password;
+        }
+
+
+
         if (!email || !password) {
           return res.status(400).json({ message: ErrorMessages.MissingEmailOrPassword });
         }
         const token = await login(email, password);
         if (token) {
+          renewTokenExpiration(res, token);
+
+          const cookies = parse(req.headers.cookie || '');
+          const tokenCokkie = cookies.token;
+
+          console.log({ cookies, tokenCokkie, token });
+
           return res.status(200).json({ token, message: 'Login successful' });
         } else {
           return res.status(401).json({ message: ErrorMessages.InvalidCredentials });

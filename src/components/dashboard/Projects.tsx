@@ -27,7 +27,7 @@ const Projects = ({ projects }: ProjectProps) => {
   return (
     <>
       <div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
-        {
+        {/* {
           projects &&
           projects.map((project, index) => (
             <ProjectCard
@@ -35,7 +35,7 @@ const Projects = ({ projects }: ProjectProps) => {
               projectData={project}
             />
           ))
-        }
+        } */}
 
         {
           !projects &&

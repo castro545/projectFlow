@@ -14,14 +14,11 @@ import {
 import { BodyType, CountTaskInfo, OptionType, TaskType } from '@/src/types/Task';
 import { MultiValue } from 'react-select';
 import { useFetchFilterTasks } from '@/src/components/hooks/task/FetchFilterTask';
+import useGetProjectByUser from '@/src/components/hooks/project/fetchProjectByUser';
 
-type CreateProjectPosps = {
-  _tasks: TaskType[];
-  countTask: CountTaskInfo[];
-}
-
-const CreateProject = ({ _tasks, countTask }: CreateProjectPosps) => {
+const CreateProject = () => {
   const [tasksResult, setTaskResult] = useState<TaskType[]>([]);
+  const [countTask, setCountTask] = useState<CountTaskInfo[]>([]);
 
   const project: ProjectType = {
     project_id: '12',
@@ -79,8 +76,61 @@ const CreateProject = ({ _tasks, countTask }: CreateProjectPosps) => {
     }
   };
 
+  const fethProjectByUser = useGetProjectByUser();
+
+  const getProjects = async () => {
+    try {
+      const bodyCount = {
+        'user_code': 17,
+        'project_id': id,
+      };
+      const reqdata: CountTaskInfo[] = await fethProjectByUser(bodyCount);
+      if (reqdata) {
+        setCountTask(reqdata);
+      }
+    } catch {
+      return false;
+    }
+  };
+
+  const getFilterTask = async () => {
+    try {
+      const bodyFilter: BodyType = {
+        'users': [17],
+        'project_id': +id!,
+        'priorities': [],
+        'status': []
+      };
+      const fetchedTasks: TaskType[] | undefined = await fetchTasks(bodyFilter);
+      if (fetchedTasks !== undefined) {
+        const tasks: TaskType[] = fetchedTasks;
+
+        setTaskResult(tasks);
+      }
+    } catch {
+      return false;
+    }
+  };
 
   useEffect(() => {
+    const fetchFilterTask = async () => {
+
+      await getFilterTask();
+
+    };
+
+    fetchFilterTask();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+
+      await getProjects();
+
+    };
+
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -105,9 +155,11 @@ const CreateProject = ({ _tasks, countTask }: CreateProjectPosps) => {
                 />
               </div>
             </div>
-            <HeaderCards
-              counterTask={countTask}
-            />
+            {
+              countTask.length > 0 &&
+              <HeaderCards
+                counterTask={countTask}
+              />}
           </div>
           <div className='flex flex-col space-y-6 px-[60px] pt-[45px]'>
             <label className='text-[20px] font-[700]'>Filtro</label>
@@ -121,7 +173,7 @@ const CreateProject = ({ _tasks, countTask }: CreateProjectPosps) => {
             <label className='text-[20px] font-[700]'>Tareas</label>
             <div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
               {
-                tasksResult &&
+                tasksResult.length > 0 &&
                 tasksResult.map((task, index) => (
                   <TaskCard
                     key={index}

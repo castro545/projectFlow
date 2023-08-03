@@ -15,7 +15,7 @@ const HeaderCards = ({ counterTask }: HeaderCardsProps) => (
       <div className='flex h-[111px] w-[300px] flex-row items-center justify-center space-x-6 rounded-lg bg-[#FFFFFC] px-4 shadow-card'>
         <div className='flex flex-col space-y-1'>
           <label className='text-[22px] font-bold'>
-            {counterTask[0].pending_tasks.toString()}
+            {counterTask[0].pending_tasks!.toString()}
           </label>
           <label className='text-[16px] font-extralight'>Tareas pendientes</label>
         </div>
@@ -29,7 +29,7 @@ const HeaderCards = ({ counterTask }: HeaderCardsProps) => (
       <div className='flex h-[111px] w-[300px] flex-row items-center justify-center space-x-6 rounded-lg bg-[#FFFFFC] px-4 shadow-card'>
         <div className='flex flex-col space-y-1'>
           <label className='text-[22px] font-bold'>
-            {counterTask[0].completed_tasks.toString()}
+            {counterTask[0].completed_tasks!.toString()}
           </label>
           <label className='text-[16px] font-extralight'>Tareas terminadas</label>
         </div>
@@ -43,7 +43,7 @@ const HeaderCards = ({ counterTask }: HeaderCardsProps) => (
       <div className='flex h-[111px] w-[300px] flex-row items-center justify-center space-x-6 rounded-lg bg-[#FFFFFC] px-4 shadow-card'>
         <div className='flex flex-col space-y-1'>
           <label className='text-[22px] font-bold'>
-            {counterTask[0].created_by_me.toString()}
+            {counterTask[0].created_by_me!.toString()}
           </label>
           <label className='text-[16px] font-extralight'>Creadas por ti</label>
         </div>

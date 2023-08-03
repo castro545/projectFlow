@@ -1,8 +1,55 @@
 import { pool } from '@/src/utils/conn';
 import { ProjectInterface } from '../interfaces/Project';
-import { ProjectType } from '../types/Project';
+import { InfoProjectHome, ProjectType } from '../types/Project';
 
 export class ProjectDAO implements ProjectInterface {
+
+  async fetchInfoProject(project_id: number): Promise<InfoProjectHome[]> {
+    const query = `
+    select
+      projects.name project_name,
+      projects.start_date project_start_date,
+      string_agg(users.full_name, ', ') users_full_name,
+      (
+      select
+        count(task_id)
+      from
+        tasks
+      where
+        project_code = 1
+        and is_active = '1') total_tasks
+    from
+      project_user
+    inner join projects on
+      project_user.project_code = projects.project_id
+    inner join users on
+      project_user.user_code = users.user_id
+    where
+      project_user.is_active = '1'
+      and projects.is_active = '1'
+      and users.is_active = '1'
+      and projects.project_id = 6
+      and project_user.project_code = 1
+    group by
+      (projects.name,
+      projects.start_date)
+    `;
+
+    const values = [project_id];
+
+    try {
+
+      const { rows } = await pool.query(query, values);
+
+      return rows || [];
+
+    } catch (error) {
+
+      console.error('Error in count the tasks:', error);
+      return [];
+
+    }
+  }
 
   async createProject(projectData: ProjectType): Promise<ProjectType | null> {
     //SELECT create_project(name, description', now()::date, now()::date, owner_code)

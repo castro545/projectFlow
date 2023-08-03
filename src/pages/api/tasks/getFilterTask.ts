@@ -37,5 +37,5 @@ async function handler(
   }
 }
 
-export default validateTokenMiddleware(handler, loginUrl);
-//export default handler;
+//export default validateTokenMiddleware(handler, loginUrl);
+export default handler;

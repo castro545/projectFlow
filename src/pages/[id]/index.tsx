@@ -171,7 +171,7 @@ const CreateProject = () => {
           </div>
           <div className='flex flex-col space-y-6 px-[60px] pt-[45px]'>
             <label className='text-[20px] font-[700]'>Tareas</label>
-            <div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
+            <div className='grid grid-cols-2 gap-6 md:grid-cols-3'>
               {
                 tasksResult.length > 0 &&
                 tasksResult.map((task, index) => (

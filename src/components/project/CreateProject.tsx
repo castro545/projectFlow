@@ -70,6 +70,11 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
   };
 
   const onSubmit = async (data: any) => {
+    if(colaborators.length === 0) {
+      setManyContributors('Debes ingresar un colaborador');
+      return;
+    }
+
     setLoading(true);
     console.log(data.startDate);
 
@@ -107,15 +112,24 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
       return;
     }
 
+    const patron = /^[\w.-]+@[\w.-]+\.\w+$/;
+
+    if(!patron.test(email)) {
+      setManyContributors('No es un email');
+      return;
+    }
+
     if (email.trim() === '') {
       return;
     }
 
     const isEmailExist = colaborators.some((colaborator) => colaborator.email === email);
     if (isEmailExist) {
+      setManyContributors('Ya está agregado');
       return;
     }
 
+    setManyContributors('');
     const newColaborator = { email };
     setColaborators([...colaborators, newColaborator]);
 
@@ -126,7 +140,7 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
 
   return (
     <>
-      <div className='w-full px-10 py-5'>
+      <div className='w-full px-10 pb-10 pt-5'>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className='space-y-10'
@@ -199,14 +213,17 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
                 </div>
               </div>
             </div>
-            <div className='flex w-1/2 flex-col items-center justify-center'>
-              <Image
-                src={CreateProjectImage}
-                alt={'Ilustración de crear proyecto'}
-                width={205}
-                height={138}
-              />
-              <div className={`${colaborators.length > 0 ? 'mt-6' : ''} `}>
+            <div className='flex w-1/2 flex-col items-center  justify-between'>
+
+              <div className='mt-8 flex flex-col items-center justify-center'>
+                <Image
+                  src={CreateProjectImage}
+                  alt={'Ilustración de crear proyecto'}
+                  width={205}
+                  height={138}
+                />
+              </div>
+              <div className={`${colaborators.length > 0 ? 'mt-6 rounded-lg border border-custom-color-gold bg-white p-3 text-center shadow-lg' : ''} `}>
                 {
                   colaborators.length > 0 &&
                   colaborators.map((colaborator, index) => (
@@ -215,6 +232,7 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
                 }
               </div>
             </div>
+
           </div>
           <button
             type='submit'

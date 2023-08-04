@@ -15,7 +15,6 @@ const Projects = ({ projects, onCreateProject, user_code }: ProjectProps) => {
 
 
   useEffect(() => {
-    console.log(projects);
   }, []);
   return (
     <>

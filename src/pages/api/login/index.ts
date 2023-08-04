@@ -41,12 +41,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         const token = await login(email, password);
         if (token) {
+
           renewTokenExpiration(res, token);
 
-          const cookies = parse(req.headers.cookie || '');
-          const tokenCokkie = cookies.token;
+          // const cookies = parse(req.headers.cookie || '');
+          // const tokenCokkie = cookies.tokenProjectFlow;
 
-          console.log({ cookies, tokenCokkie, token });
+          console.log({ token });
 
           return res.status(200).json({ token, message: 'Login successful' });
         } else {

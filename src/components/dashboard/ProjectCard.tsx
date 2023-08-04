@@ -25,7 +25,7 @@ const ProjectCard = ({ projectData }: ProjectCardProps) => {
   return (
     <>
       <div
-        className='flex h-[250px] w-auto cursor-pointer flex-row items-center justify-center rounded-lg bg-[#FFFFFC] px-4 shadow-card'
+        className='flex h-[250px] w-auto cursor-pointer flex-row items-center justify-center rounded-lg bg-[#FFFFFC] px-10 shadow-card'
         onClick={openProject}
       >
         <div className='w-full space-y-10'>

@@ -3,7 +3,7 @@ import Layout from '@/src/components/layout/Layout';
 import CustomSelect from '@/src/components/project/CustomSelect';
 import NoTask from '@/src/components/project/NoTask';
 import TaskCard from '@/src/components/project/TaskCard';
-import { ProjectType } from '@/src/types/Project';
+import { ProjectIsAdminInfo, ProjectType } from '@/src/types/Project';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -14,24 +14,25 @@ import {
 import { BodyType, CountTaskInfo, OptionType, TaskType } from '@/src/types/Task';
 import { MultiValue } from 'react-select';
 import { useFetchFilterTasks } from '@/src/components/hooks/task/FetchFilterTask';
-import useGetCountTaskProject from '@/src/components/hooks/project/fetchProjectByProject';
+import useGetCountTaskProject from '@/src/components/hooks/project/fetchCountTaskByProject';
 import ModalComponent from '@/src/components/layout/Modal';
+import CreateTask from './createtask';
+import { useFetchInfoProject } from '@/src/components/hooks/project/fetchInfoPoject';
+import { capitalize } from 'lodash';
+import { useFetchAdminInfo } from '@/src/components/hooks/project/useFetchAdminInfo';
 
 const CreateProject = () => {
   const [tasksResult, setTaskResult] = useState<TaskType[]>([]);
   const [countTask, setCountTask] = useState<CountTaskInfo[]>([]);
+  const [projectInfo, setProjectInfo] = useState<ProjectType[] | null>(null);
   const [isOpenCreateTask, setIsOpenCreateTask] = useState<boolean>(false);
+  const [projectInfoAdmin, setProjectInfoAdmin] = useState<ProjectIsAdminInfo | null>(null);
 
-  const project: ProjectType = {
-    project_id: '12',
-    owner_code: 17,
-    name: 'Mi Proyecto',
-    description: 'Descripción del proyecto',
-    start_date: new Date(1690909380000),
-    estimated_date: new Date(1690909380000),
-  };
 
+  const fethProjectByUser = useGetCountTaskProject();
   const fetchTasks = useFetchFilterTasks();
+  const fetchProject = useFetchInfoProject();
+  const fetchisAdmin = useFetchAdminInfo();
 
   const router = useRouter();
   const { id } = router.query;
@@ -78,8 +79,6 @@ const CreateProject = () => {
     }
   };
 
-  const fethProjectByUser = useGetCountTaskProject();
-
   const getCountTask = async () => {
     try {
       const bodyCount = {
@@ -87,6 +86,7 @@ const CreateProject = () => {
         'project_id': id,
       };
       const reqdata: CountTaskInfo[] = await fethProjectByUser(bodyCount);
+
       if (reqdata) {
         setCountTask(reqdata);
       }
@@ -114,9 +114,52 @@ const CreateProject = () => {
     }
   };
 
-  const handleModalCreateTask = () => {
-    setIsOpenCreateTask(!isOpenCreateTask);
+  const getInfoProject = async () => {
+
+    try {
+      const body = {
+        'project_id': +id!
+      };
+      const response: ProjectType[] | null = await fetchProject(body);
+
+      setProjectInfo(response);
+
+    } catch {
+      return false;
+    }
   };
+
+
+  const getIsAdmin = async () => {
+
+    try {
+      const body = {
+        'project_id': +id!,
+        'user_id': 17,
+      };
+      const response: ProjectIsAdminInfo | null = await fetchisAdmin(body);
+
+      if (response !== null) {
+        console.log(response);
+        setProjectInfoAdmin(response);
+      }
+
+
+    } catch {
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    const fetchIsAdmin = async () => {
+
+      await getIsAdmin();
+
+    };
+
+    fetchIsAdmin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const fetchFilterTask = async () => {
@@ -128,6 +171,17 @@ const CreateProject = () => {
     fetchFilterTask();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpenCreateTask]);
+
+  useEffect(() => {
+    const fetchProjectInfo = async () => {
+
+      await getInfoProject();
+
+    };
+
+    fetchProjectInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -143,13 +197,21 @@ const CreateProject = () => {
   return (
     <>
       <Head>
-        <title>Proyecto :: {project.name}</title>
+        {
+          projectInfo &&
+          <title>Proyecto :: {capitalize(projectInfo[0].name)} {isOpenCreateTask ? ':: Creando Tarea' : ''}</title>
+        }
       </Head>
       <Layout>
         <div className='space-y-3'>
           <div className='space-y-3 px-[60px] pt-[45px]'>
             <div className='flex w-full flex-row justify-between'>
-              <label className='text-[24px] font-[700]'>{project.name}</label>
+              <label className='text-[24px] font-[700]'>
+                {
+                  projectInfo &&
+                  capitalize(projectInfo[0].name)
+                }
+              </label>
               <div className='flex flex-row space-x-6'>
                 <PlusCircleIcon
                   className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
@@ -162,10 +224,12 @@ const CreateProject = () => {
               </div>
             </div>
             {
-              countTask.length > 0 &&
+              countTask.length > 0 && projectInfoAdmin &&
               <HeaderCards
                 counterTask={countTask}
-              />}
+                isAdmin={projectInfoAdmin.role_name === 'Administrador'}
+              />
+            }
           </div>
           <div className='flex flex-col space-y-6 px-[60px] pt-[45px]'>
             <label className='text-[20px] font-[700]'>Filtro</label>
@@ -198,8 +262,8 @@ const CreateProject = () => {
         </div>
         {
           isOpenCreateTask &&
-          < ModalComponent onClose={handleModalCreateTask} maxWidth='max-w-[45.8125rem]'>
-
+          < ModalComponent onClose={onCreatedTask} maxWidth='max-w-[45.8125rem]'>
+            <CreateTask />
           </ModalComponent>
         }
       </Layout >

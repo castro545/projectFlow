@@ -13,3 +13,10 @@ export type InfoProjectHome = {
   total_tasks: number;
   project_name: string;
 }
+
+export type ProjectIsAdminInfo = {
+  project_name: string;
+  user_full_name: string;
+  role_id: number;
+  role_name: string;
+}

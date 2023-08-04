@@ -6,7 +6,12 @@ import HeaderCards from '../components/dashboard/HeaderCards';
 import Projects from '../components/dashboard/Projects';
 import { CountTaskInfo } from '../types/Task';
 import { ProjectType } from '../types/Project';
-import useGetCountTaskUser from '../components/hooks/project/fetchProjectByUser';
+import useGetCountTaskUser from '../components/hooks/project/fetchCountTaskByUser';
+import {
+  PlusCircleIcon
+} from '@heroicons/react/24/solid';
+import ModalComponent from '../components/layout/Modal';
+import CreateProject from './[id]/createproject';
 
 type HomePageProps = {
   projects: ProjectType[];
@@ -15,6 +20,7 @@ type HomePageProps = {
 const HomePage: NextPage<HomePageProps> = ({ projects }) => {
 
   const [countTask, setCountTask] = useState<CountTaskInfo[]>([]);
+  const [isOpenCreateProject, setIsOpenCreateProject] = useState<boolean>(false);
 
   const fethProjectByUser = useGetCountTaskUser();
 
@@ -32,6 +38,12 @@ const HomePage: NextPage<HomePageProps> = ({ projects }) => {
     }
   };
 
+  const onCreatedProject = () => {
+
+    setIsOpenCreateProject(!isOpenCreateProject);
+
+  };
+
   useEffect(() => {
     const fetchData = async () => {
 
@@ -41,7 +53,7 @@ const HomePage: NextPage<HomePageProps> = ({ projects }) => {
 
     fetchData();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <Layout>
@@ -50,11 +62,20 @@ const HomePage: NextPage<HomePageProps> = ({ projects }) => {
       </Head>
       <div className='space-y-3'>
         <div className='space-y-3 px-[60px] pt-[45px]'>
-          <label className='text-[20px] font-[700]'>Inicio</label>
+          <div className='flex w-full flex-row justify-between'>
+            <label className='text-[24px] font-[700]'>Inicio</label>
+            <div className='flex flex-row space-x-6'>
+              <PlusCircleIcon
+                className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
+                onClick={onCreatedProject}
+              />
+            </div>
+          </div>
           {
             countTask.length > 0 &&
             <HeaderCards
               counterTask={countTask}
+              isAdmin={true}
             />
           }
         </div>
@@ -63,11 +84,19 @@ const HomePage: NextPage<HomePageProps> = ({ projects }) => {
           {
             projects.length > 0 &&
             <Projects
+              onCreateProject={onCreatedProject}
               projects={projects}
+              user_code={17}
             />
           }
         </div>
       </div>
+      {
+        isOpenCreateProject &&
+        < ModalComponent onClose={onCreatedProject} maxWidth='max-w-[45.8125rem]'>
+          <CreateProject />
+        </ModalComponent>
+      }
     </Layout>
   );
 };
@@ -99,5 +128,5 @@ export const getServerSideProps = async () => {
 
   console.log({ projects });
 
-  return { props: {  projects } };
+  return { props: { projects } };
 };

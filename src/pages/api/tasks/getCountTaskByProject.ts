@@ -20,12 +20,25 @@ async function handler(
   switch (method) {
     case 'POST':
       try {
-        const {project_id, user_code  } = body;
+        const { project_id, user_code } = body;
 
         const countTasks: CountTaskInfo[] = await taskDAO.fetchCountTaskByProject(user_code, project_id);
 
+        console.log(countTasks);
+
         if (countTasks) {
-          return res.status(200).json(countTasks);
+          if (countTasks[0].completed_tasks !== null) {
+            return res.status(200).json(countTasks);
+          } else {
+            const countTaskInfoNull: CountTaskInfo[] = [
+              {
+                pending_tasks: 0,
+                completed_tasks: 0,
+                created_by_me: 0
+              }
+            ];
+            return res.status(200).json(countTaskInfoNull);
+          }
         } else {
           return res.status(404).json({ message: 'Not Tasks to count' });
         }

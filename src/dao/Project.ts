@@ -1,8 +1,55 @@
 import { pool } from '@/src/utils/conn';
 import { ProjectInterface } from '../interfaces/Project';
-import { InfoProjectHome, ProjectType } from '../types/Project';
+import { InfoProjectHome, ProjectIsAdminInfo, ProjectType } from '../types/Project';
 
 export class ProjectDAO implements ProjectInterface {
+
+  async getProjectInfo(project_id: number, user_id: number): Promise<ProjectIsAdminInfo | null> {
+
+    const query = `
+      SELECT
+        projects.name project_name,
+        users.full_name user_full_name,
+      roles.role_id role_id,
+      roles.name role_name
+        FROM project_user
+        INNER JOIN projects ON project_user.project_code = projects.project_id
+        INNER JOIN users ON project_user.user_code = users.user_id
+        INNER JOIN roles ON project_user.role_code = roles.role_id
+        WHERE project_user.is_active = '1'
+        AND projects.is_active = '1'
+        AND users.user_id = ${user_id}
+        AND users.is_active = '1'
+        AND projects.project_id = ${project_id}
+    `;
+
+    try {
+      const { rows } = await pool.query(query);
+      console.log(rows);
+
+      return rows[0];
+    } catch (error) {
+      console.error('Error al obtener los proyectos por usuario:', error);
+      return null;
+    }
+  }
+
+  async getProjectById(project_id: string | string[] | undefined): Promise<ProjectType[]> {
+    const query = `
+        SELECT *
+        FROM projects
+        WHERE project_id  = ${project_id}
+    `;
+
+    try {
+      const { rows } = await pool.query(query);
+      return rows;
+    } catch (error) {
+      console.error('Error al obtener los proyectos por usuario:', error);
+      return [];
+    }
+  }
+
 
   async fetchInfoProject(project_id: number): Promise<InfoProjectHome[]> {
     const query = `

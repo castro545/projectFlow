@@ -6,23 +6,15 @@ import ProjectCard from './ProjectCard';
 
 
 type ProjectProps = {
-  projects?: ProjectType[]
+  projects?: ProjectType[],
+  onCreateProject: () => void,
+  user_code: number,
 }
 
-const Projects = ({ projects }: ProjectProps) => {
+const Projects = ({ projects, onCreateProject, user_code }: ProjectProps) => {
 
-  const [userId, setUserId] = useState<number>();
-
-  const router = useRouter();
-
-  const onCreatedProject = () => {
-
-    router.push(`/${userId}/createproject`);
-
-  };
 
   useEffect(() => {
-    setUserId(7);
   }, []);
   return (
     <>
@@ -40,7 +32,7 @@ const Projects = ({ projects }: ProjectProps) => {
         {
           !projects &&
           <NoProject
-            onCreateProject={onCreatedProject}
+            onCreateProject={onCreateProject}
           />
         }
       </div>
@@ -49,29 +41,3 @@ const Projects = ({ projects }: ProjectProps) => {
 };
 
 export default Projects;
-
-
-export const getServerSideProps = async () => {
-  let projects: ProjectType[] = [];
-
-  try {
-    const headers = {
-      'Content-Type': 'application/json',
-    };
-
-    const statusReq = await fetch('http://localhost:3000/api/project/getProjectsByUserId?id=17', {
-      method: 'GET',
-      headers: headers,
-    });
-
-    const response: any = await statusReq.json();
-
-    if (response) {
-      projects = response;
-    }
-  } catch (e) {
-    console.error(e);
-  }
-
-  return { props: { projects } };
-};

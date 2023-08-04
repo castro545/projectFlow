@@ -29,7 +29,7 @@ export function validateTokenMiddleware(
         return;
       }
 
-      if (!decodedToken.userId) {
+      if (!decodedToken.user_id) {
         res.status(401).end();
         return;
       }

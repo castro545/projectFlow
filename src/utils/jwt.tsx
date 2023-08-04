@@ -22,12 +22,10 @@ export function verifyToken(token: any): any {
 }
 
 export function renewTokenExpiration(res: any, token: string) {
-  console.log('entre');
-  console.log({res, token});
   res.setHeader('Set-Cookie', serialize('tokenProjectFlow', token, {
-    path: '/login',
+    path: '/',
     maxAge: 3600,
-    httpOnly: false,
+    httpOnly: true,
     secure: false,
     sameSite: 'strict',
   }));

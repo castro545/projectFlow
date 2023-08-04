@@ -15,7 +15,6 @@ const useGetCountTaskProject = (): ((_body: any) => Promise<any | undefined>) =>
 
       const resp = await response.json();
 
-      console.log({resp});
 
       if (resp.redirectTo) {
         window.location.href = resp.redirectTo;

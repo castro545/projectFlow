@@ -5,6 +5,8 @@ import { PlusIcon } from '@heroicons/react/24/solid';
 import CreateProjectImage from '../../../public/images/png/create_project.png';
 import { ToastUtils } from '@/src/utils/ToastUtils';
 import CircularProgressIndicator from '../CircularProgressIndicator';
+import { useCreateProject } from '../hooks/project/useCreateProject';
+import { ProjectType } from '@/src/types/Project';
 
 type ColaboratorsType = {
   email: string;
@@ -27,15 +29,6 @@ type ColaboratorData = {
   email: string;
 };
 
-type OutputData = {
-  project_name: string;
-  description: string;
-  start_date: string;
-  estimated_date: string;
-  emails: string[];
-  owner_id: number
-};
-
 const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
 
   const [colaborators, setColaborators] = useState<ColaboratorsType[]>([]);
@@ -43,6 +36,8 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<number | null>(null);
   const [estimatedDate, setEstimatedDate] = useState<number | null>(null);
+
+  const createProject = useCreateProject();
 
 
   const { register, handleSubmit, getValues, setValue } = useForm({
@@ -56,27 +51,26 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
     shouldUseNativeValidation: false
   });
 
-  const convertData = (data: InputData, colaborators: ColaboratorData[], owner_id: number): OutputData => {
+  const convertData = (data: InputData, colaborators: ColaboratorData[], owner_id: number): ProjectType => {
     const { projectName, description, startDate, estimatedDate } = data;
     const emails = colaborators.map((colaborator) => colaborator.email);
     return {
-      project_name: projectName,
+      name: projectName,
       description,
       start_date: startDate,
       estimated_date: estimatedDate,
       emails,
-      owner_id
+      owner_code: owner_id
     };
   };
 
   const onSubmit = async (data: any) => {
-    if(colaborators.length === 0) {
+    if (colaborators.length === 0) {
       setManyContributors('Debes ingresar un colaborador');
       return;
     }
 
     setLoading(true);
-    console.log(data.startDate);
 
     const startDateObject = new Date(data.startDate);
     setStartDate(startDateObject.getTime());
@@ -85,6 +79,7 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
     setEstimatedDate(estimatedDateObject.getTime());
 
 
+    // Formateo de fecha 2023/08/08 a un timestamp
     if (startDate) {
       data.startDate = new Date(startDate).toISOString();
     }
@@ -93,16 +88,18 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
       data.estimatedDate = new Date(estimatedDate).toISOString();
     }
 
-    const outputData: OutputData = convertData(data, colaborators, owner_id);
-    console.log(outputData);
+    const outputData: ProjectType = convertData(data, colaborators, owner_id);
 
-    setTimeout(() => {
-      ToastUtils.successMessage('Proyecto Creado!');
+    const response = await createProject(outputData);
 
-      //onClose();
+    if (response.project.create_project_with_contributors === -1) {
 
+      ToastUtils.infoMessage('Ya hay un Proyecto con ese nombre, intenta otro.');
+    } else {
+      ToastUtils.successMessage('¡Proyecto Creado!');
+      onClose();
       setLoading(false);
-    }, 3000);
+    }
   };
 
   const addColaborator = (email: string) => {
@@ -114,12 +111,12 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
 
     const patron = /^[\w.-]+@[\w.-]+\.\w+$/;
 
-    if(email.trim() === '') {
+    if (email.trim() === '') {
       setManyContributors('Ingresa un email');
       return;
     }
 
-    if(!patron.test(email)) {
+    if (!patron.test(email)) {
       setManyContributors('No es un email');
       return;
     }

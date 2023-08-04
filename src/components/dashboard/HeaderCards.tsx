@@ -15,7 +15,6 @@ type HeaderCardsProps = {
 const HeaderCards = ({ counterTask, isAdmin }: HeaderCardsProps) => {
 
   useEffect(() => {
-    console.log({ isAdmin });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

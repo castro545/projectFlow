@@ -15,8 +15,6 @@ const useGetCountTaskUser = (): ((_body: any) => Promise<any | undefined>) => {
 
       const resp = await response.json();
 
-      console.log({resp});
-
       if (resp.redirectTo) {
         window.location.href = resp.redirectTo;
         throw new Error('Redirigiendo a otra página...');

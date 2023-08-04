@@ -18,7 +18,6 @@ async function handler(
   } = req;
   switch (method) {
     case 'POST':
-      console.log('entro');
       try {
         const projects = await projectDAO.getProjectById(project_id);
         return res.status(200).json(projects);

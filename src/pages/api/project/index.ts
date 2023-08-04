@@ -20,6 +20,12 @@ export default async function handler(
         const createProjectType: ProjectType = { ...body };
         const project = await projectDAO.createProject(createProjectType);
 
+        if(project.create_project_with_contributors === -1) {
+          return res
+            .status(200)
+            .json({ project, message: 'The project already exists' });
+        }
+
         if (project) {
           return res
             .status(200)

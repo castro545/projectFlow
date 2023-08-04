@@ -3,8 +3,9 @@ export interface ProjectType {
   owner_code: number;
   name: string;
   description: string;
-  start_date: Date;
-  estimated_date: Date;
+  start_date: string;
+  estimated_date: string;
+  emails: string[];
 }
 
 export type InfoProjectHome = {
@@ -19,13 +20,4 @@ export type ProjectIsAdminInfo = {
   user_full_name: string;
   role_id: number;
   role_name: string;
-}
-
-export type CreateProject = {
-  project_name: string;
-  description: string;
-  start_date: string;
-  estimated_date: string;
-  owner_id: number
-  emails: string[],
 }

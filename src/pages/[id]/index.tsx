@@ -140,7 +140,6 @@ const CreateProject = () => {
       const response: ProjectIsAdminInfo | null = await fetchisAdmin(body);
 
       if (response !== null) {
-        console.log(response);
         setProjectInfoAdmin(response);
       }
 

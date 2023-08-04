@@ -4,7 +4,7 @@ import { CreateProject, InfoProjectHome, ProjectIsAdminInfo, ProjectType } from 
 
 export interface ProjectInterface {
 
-  createProject(projectData: ProjectType): Promise<ProjectType | null>;
+  createProject(projectData: ProjectType): Promise<{create_project_with_contributors:number}>;
 
   getAllProjects(): Promise<ProjectType[]>;
 
@@ -22,6 +22,5 @@ export interface ProjectInterface {
 
   fetchInfoProject(project_id: number): Promise<InfoProjectHome[]>
 
-  createProject(data_create_project: CreateProject) : Promise<>;
 
 }

@@ -86,8 +86,6 @@ const Login = () => {
 
       const regResponse = await login(loginUser);
 
-      console.log({regResponse});
-
       // Validación de login
       if (regResponse === null || regResponse.message === 'Invalid credentials') {
         setLoading(false);

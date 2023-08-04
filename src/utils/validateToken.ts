@@ -10,11 +10,8 @@ export function validateTokenMiddleware(
   return async (req: NextApiRequest, res: NextApiResponse<any>) => {
     try {
 
-      console.log(req.headers.cookie);
       const cookies = parse(req.headers.cookie || '');
       const token = cookies.tokenProjectFlow;
-
-      console.log({token, cookies});
 
       if (!token) {
         res.status(401).json({ redirectTo: redirectUrl });

@@ -1,6 +1,7 @@
 import { pool } from '@/src/utils/conn';
 import { ProjectInterface } from '../interfaces/Project';
 import { InfoProjectHome, ProjectIsAdminInfo, ProjectType } from '../types/Project';
+import { DatabaseError } from 'pg';
 
 export class ProjectDAO implements ProjectInterface {
 
@@ -25,7 +26,6 @@ export class ProjectDAO implements ProjectInterface {
 
     try {
       const { rows } = await pool.query(query);
-      console.log(rows);
 
       return rows[0];
     } catch (error) {
@@ -98,32 +98,45 @@ export class ProjectDAO implements ProjectInterface {
     }
   }
 
-  async createProject(projectData: ProjectType): Promise<ProjectType | null> {
-    //SELECT create_project(name, description', now()::date, now()::date, owner_code)
-    const query = `
-    SELECT create_project($1, $2, $3, $4, $5) AS project_id;
-  `;
+  async createProject(projectData: ProjectType): Promise<{ create_project_with_contributors: number }> {
+    const {
+      name,
+      description,
+      start_date,
+      estimated_date,
+      owner_code,
+      emails
+    } = projectData;
 
-    const values = [
-      projectData.name,
-      projectData.description,
-      projectData.start_date,
-      projectData.estimated_date,
-      projectData.owner_code,
-    ];
+    let emailsFinal = emails;
+
+    let formattedEmails;
+
+    if (emails.length === 0) {
+      emailsFinal = [''];
+      formattedEmails = emailsFinal.map(email => `'${email}'`).join(', ');
+    } else {
+      formattedEmails = emailsFinal.map(email => `'${email}'`).join(', ');
+    }
+
+    const query = `select create_project_with_contributors('${name}','${description}','${start_date}','${estimated_date}',${owner_code},array[${formattedEmails}])`;
 
     try {
+      const { rows } = await pool.query(query);
+      return rows[0];
+    } catch (error: any) {
+      if (error.detail.includes('Ya existe la llave')) {
+        return {
+          create_project_with_contributors: -1
+        };
+      }
 
-      const { rows } = await pool.query(query, values);
-      return rows[0] || null;
-
-    } catch (error) {
-
-      console.error('Error al crear el Proyecto:', error);
-      return null;
-
+      return {
+        create_project_with_contributors: 0
+      };
     }
   }
+
   async getAllProjects(): Promise<ProjectType[]> {
     const query = 'SELECT * FROM projects';
 

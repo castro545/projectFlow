@@ -102,8 +102,6 @@ export class TaskDAO implements TaskInterface {
         ${status.length > 0 ? `AND tasks.status_code IN (${status.toString().replaceAll("'", '')})` : ''}
     `;
 
-    console.log(query);
-
     try {
 
       const { rows } = await pool.query(query, [project_id]);

@@ -44,9 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
           renewTokenExpiration(res, token);
 
-          // const cookies = parse(req.headers.cookie || '');
-          // const tokenCokkie = cookies.tokenProjectFlow;
-
+          // para eliminar este console.primero hay que registrar el token en LocalStorage
           console.log({ token });
 
           return res.status(200).json({ token, message: 'Login successful' });

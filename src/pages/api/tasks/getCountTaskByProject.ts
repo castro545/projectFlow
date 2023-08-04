@@ -24,8 +24,6 @@ async function handler(
 
         const countTasks: CountTaskInfo[] = await taskDAO.fetchCountTaskByProject(user_code, project_id);
 
-        console.log(countTasks);
-
         if (countTasks) {
           if (countTasks[0].completed_tasks !== null) {
             return res.status(200).json(countTasks);

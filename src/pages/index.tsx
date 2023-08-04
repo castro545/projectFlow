@@ -12,17 +12,18 @@ import {
 } from '@heroicons/react/24/solid';
 import ModalComponent from '../components/layout/Modal';
 import CreateProject from '../components/project/CreateProject';
+import { useProjectByUser } from '../components/hooks/project/useProjectByUser';
 
-type HomePageProps = {
-  projects: ProjectType[];
-}
 
-const HomePage: NextPage<HomePageProps> = ({ projects }) => {
+
+const HomePage = () => {
 
   const [countTask, setCountTask] = useState<CountTaskInfo[]>([]);
+  const [projects, setProjects] = useState<ProjectType[]>([]);
   const [isOpenCreateProject, setIsOpenCreateProject] = useState<boolean>(false);
 
   const fethProjectByUser = useGetCountTaskUser();
+  const fetchProjectByUser = useProjectByUser();
 
   const getCountTask = async () => {
     try {
@@ -46,11 +47,36 @@ const HomePage: NextPage<HomePageProps> = ({ projects }) => {
     }
   };
 
+
+  const getProjects = async () => {
+    try {
+      const user_id = 17;
+      const reqdata: ProjectType[] = await fetchProjectByUser(user_id);
+
+      if (reqdata) {
+        setProjects(reqdata);
+      }
+    } catch {
+      return false;
+    }
+  };
+
   const onCreatedProject = () => {
 
     setIsOpenCreateProject(!isOpenCreateProject);
 
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+
+      await getProjects();
+
+    };
+
+    fetchData();c
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpenCreateProject]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -108,28 +134,28 @@ const HomePage: NextPage<HomePageProps> = ({ projects }) => {
 
 export default HomePage;
 
-export const getServerSideProps = async () => {
+// export const getServerSideProps = async () => {
 
-  let projects: ProjectType[] = [];
+//   let projects: ProjectType[] = [];
 
-  try {
-    const headers = {
-      'Content-Type': 'application/json',
-    };
+//   try {
+//     const headers = {
+//       'Content-Type': 'application/json',
+//     };
 
-    // FetchProjectsByUser
-    const statusProjects = await fetch(`http://localhost:3000/api/project/getProjectsByUserId?id=${17}`, {
-      method: 'GET',
-      headers: headers,
-    });
-    const responseProjects: any = await statusProjects.json();
-    if (responseProjects) {
-      projects = responseProjects;
-    }
+//     // FetchProjectsByUser
+//     const statusProjects = await fetch(`http://localhost:3000/api/project/getProjectsByUserId?id=${17}`, {
+//       method: 'GET',
+//       headers: headers,
+//     });
+//     const responseProjects: any = await statusProjects.json();
+//     if (responseProjects) {
+//       projects = responseProjects;
+//     }
 
-  } catch (e) {
-    console.error(e);
-  }
+//   } catch (e) {
+//     console.error(e);
+//   }
 
-  return { props: { projects } };
-};
+//   return { props: { projects } };
+// };

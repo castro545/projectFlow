@@ -47,3 +47,12 @@ CREATE OR REPLACE FUNCTION create_project_with_contributors(
 		COMMIT;
 	END;$$;
 	
+    -- Ejemplo caso de uso:
+        -- SELECT create_project_with_contributors(
+           -- 'Nuevo proyecto',
+           -- 'Descripción test',
+           -- now()::timestamp,
+           -- now()::timestamp,
+           -- 1,
+           -- array['miguel@gmail.com']
+        -- );

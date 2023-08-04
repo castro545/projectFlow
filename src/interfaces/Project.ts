@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import { CreateProject, InfoProjectHome, ProjectIsAdminInfo, ProjectType } from '../types/Project';
+import { InfoProjectHome, ProjectIsAdminInfo, ProjectType } from '../types/Project';
 
 export interface ProjectInterface {
 

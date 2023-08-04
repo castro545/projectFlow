@@ -1,7 +1,6 @@
 import { pool } from '@/src/utils/conn';
 import { ProjectInterface } from '../interfaces/Project';
 import { InfoProjectHome, ProjectIsAdminInfo, ProjectType } from '../types/Project';
-import { DatabaseError } from 'pg';
 
 export class ProjectDAO implements ProjectInterface {
 

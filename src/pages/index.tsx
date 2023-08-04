@@ -1,4 +1,3 @@
-import { NextPage } from 'next';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import Layout from '../components/layout/Layout';

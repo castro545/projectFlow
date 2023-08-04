@@ -11,7 +11,7 @@ import {
   PlusCircleIcon
 } from '@heroicons/react/24/solid';
 import ModalComponent from '../components/layout/Modal';
-import CreateProject from './[id]/createproject';
+import CreateProject from '../components/project/CreateProject';
 
 type HomePageProps = {
   projects: ProjectType[];
@@ -94,7 +94,7 @@ const HomePage: NextPage<HomePageProps> = ({ projects }) => {
       {
         isOpenCreateProject &&
         < ModalComponent onClose={onCreatedProject} maxWidth='max-w-[45.8125rem]'>
-          <CreateProject />
+          <CreateProject onClose={onCreatedProject} owner_id={17}/>
         </ModalComponent>
       }
     </Layout>

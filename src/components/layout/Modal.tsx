@@ -29,7 +29,7 @@ const ModalComponent: React.FC<ModalProps> = ({ onClose, children, maxWidth }) =
     <div>
       <div className='modal fixed inset-0 z-50 flex cursor-pointer items-center justify-center overflow-y-auto bg-black bg-opacity-10 backdrop-blur'>
         <div className='my-auto flex w-full items-center justify-center'>
-          <div className={`modal-content m-4 w-full max-w-[30rem] rounded-lg bg-white ${maxWidth ? maxWidth : 'max-w-[30rem]'} cursor-auto`} ref={ref}>
+          <div className={`modal-content m-4 w-full max-w-[30rem] rounded-[15px] border-[3px] border-[#54CFE2] bg-white ${maxWidth ? maxWidth : 'max-w-[30rem]'} cursor-auto`} ref={ref}>
             <div className='flex flex-col items-center justify-center'>
               <div className=' flex w-full justify-end pr-4 pt-4'>
                 <XMarkIcon

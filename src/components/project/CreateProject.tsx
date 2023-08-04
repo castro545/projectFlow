@@ -65,6 +65,10 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
   };
 
   const onSubmit = async (data: any) => {
+    if (colaborators.length === 0) {
+      setManyContributors('Debes ingresar un colaborador');
+      return;
+    }
 
     setLoading(true);
 

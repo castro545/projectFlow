@@ -10,8 +10,11 @@ import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import CircularProgressIndicator from '@/src/components/CircularProgressIndicator';
 import { ToastUtils } from '@/src/utils/ToastUtils';
-import { LoginType } from '@/src/types/Login';
+import { InfoUserLogin, LoginType } from '@/src/types/Login';
 import { useLogin } from '@/src/components/hooks/user/login/login';
+import Storage from '@/src/utils/storage';
+import { verifyToken } from '@/src/utils/jwt';
+import { useRouter } from 'next/router';
 
 const ModalLayout = ({ children }: any) => (
   <>
@@ -45,6 +48,8 @@ const Login = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const login = useLogin();
+
+  const router = useRouter();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev: boolean) => !prev); // Especificar el tipo de 'prev' como 'boolean'
@@ -84,7 +89,7 @@ const Login = () => {
         password: data.pass
       };
 
-      const regResponse = await login(loginUser);
+      const regResponse: { token: string, message: string } = await login(loginUser);
 
       // Validación de login
       if (regResponse === null || regResponse.message === 'Invalid credentials') {
@@ -92,16 +97,21 @@ const Login = () => {
         ToastUtils.errorMessage('Credenciales incorrectas, vuelve a intentarlo');
       }
       else {
-        // se guarda el token en localstorage pero hay que refrescar el token cada vez que se actualice en la cookie
-        // localStorage.setItem('token', regResponse);
 
-        // setToken(regResponse);
-        // router.push('/dashboard');
-        // setLoading(false);
+        let decodedToken = verifyToken(regResponse.token) as { user: {}, iat: string; exp: string };
 
-        ToastUtils.successMessage('Login correcto, redireccion a home');
+        console.log(decodedToken.user);
 
+        const infoUser: InfoUserLogin = decodedToken.user as InfoUserLogin;
+
+        // Guardado de la info de sesion a LocalStorage
+        Storage.setItem(Storage.USER_ID, infoUser.user_id.toString());
+        Storage.setItem(Storage.FULL_NAME, infoUser.full_name);
+        Storage.setItem(Storage.EMAIL, infoUser.email);
+        Storage.setItem(Storage.IS_ACTIVE, infoUser.is_active);
         setLoading(false);
+
+        router.push('/');
       }
     }
 

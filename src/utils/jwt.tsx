@@ -2,21 +2,20 @@ import jwt from 'jsonwebtoken';
 import { serialize } from 'cookie';
 
 const SECRET_KEY = 'llavesecreta';
-const EXPIRATION_TIME = '1h';
 
-export function createToken(payload: any): string {
-  return jwt.sign(payload, SECRET_KEY, { expiresIn: EXPIRATION_TIME });
-}
+export function verifyToken(token: string): any {
+  console.log(token);
 
-export function verifyToken(token: any): any {
   try {
-    return jwt.verify(token, SECRET_KEY);
+    const decodedToken = jwt.verify(token, SECRET_KEY);
+    console.log(decodedToken);
+    return decodedToken;
   } catch (error: any) {
-    if (error instanceof jwt.TokenExpiredError) {
-      console.error('El token ha expirado.');
+    if (error.message.includes('expired')) {
+      console.log('El token ha expirado.');
       return null;
     }
-    console.error('Error al verificar el token:', error.message);
+    console.log('Error al verificar el token:', error.message);
     throw error;
   }
 }

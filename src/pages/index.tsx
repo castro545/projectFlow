@@ -12,6 +12,8 @@ import {
 import ModalComponent from '../components/layout/Modal';
 import CreateProject from '../components/project/CreateProject';
 import { useProjectByUser } from '../components/hooks/project/useProjectByUser';
+import Storage from '@/src/utils/storage';
+import { InfoUserLogin } from '../types/Login';
 
 
 
@@ -65,6 +67,24 @@ const HomePage = () => {
     setIsOpenCreateProject(!isOpenCreateProject);
 
   };
+
+  useEffect(() => {
+    const user_id = Storage.getItem(Storage.USER_ID);
+    const full_name = Storage.getItem(Storage.FULL_NAME);
+    const email = Storage.getItem(Storage.EMAIL);
+    const is_active = Storage.getItem(Storage.IS_ACTIVE);
+
+    if (user_id !== '' || full_name !== '' || email !== '' || is_active !== '') {
+      const infoUser: InfoUserLogin = {
+        user_id: parseInt(user_id!),
+        full_name: full_name!,
+        email: email!,
+        is_active: is_active!
+      };
+    } else {
+      window.location.href = '/login';
+    }
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -132,29 +152,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-// export const getServerSideProps = async () => {
-
-//   let projects: ProjectType[] = [];
-
-//   try {
-//     const headers = {
-//       'Content-Type': 'application/json',
-//     };
-
-//     // FetchProjectsByUser
-//     const statusProjects = await fetch(`http://localhost:3000/api/project/getProjectsByUserId?id=${17}`, {
-//       method: 'GET',
-//       headers: headers,
-//     });
-//     const responseProjects: any = await statusProjects.json();
-//     if (responseProjects) {
-//       projects = responseProjects;
-//     }
-
-//   } catch (e) {
-//     console.error(e);
-//   }
-
-//   return { props: { projects } };
-// };

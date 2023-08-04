@@ -3,9 +3,11 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import { defaultNavItems } from './defaultNavItems';
 import { useOnClickOutside } from 'usehooks-ts';
+import Storage from '@/src/utils/storage';
 import {
   ArrowLeftOnRectangleIcon
 } from '@heroicons/react/24/solid';
+import { useRouter } from 'next/router';
 // define a NavItem prop
 export type NavItem = {
   href: string;
@@ -20,11 +22,24 @@ type Props = {
 
 const Sidebar = ({ open, navItems = defaultNavItems, setOpen }: Props) => {
 
+  const router = useRouter();
+
   const ref = useRef<HTMLDivElement>(null);
 
   useOnClickOutside(ref, (_e) => {
     setOpen(false);
   });
+
+  const logout = () => {
+
+    Storage.setItem(Storage.USER_ID, '');
+    Storage.setItem(Storage.FULL_NAME, '');
+    Storage.setItem(Storage.EMAIL, '');
+    Storage.setItem(Storage.IS_ACTIVE, '');
+
+    router.push('/login');
+
+  };
 
   return (
     <div
@@ -58,18 +73,21 @@ const Sidebar = ({ open, navItems = defaultNavItems, setOpen }: Props) => {
           ))}
         </ul>
       </nav>
-      <Link href='/login' className='flex items-center justify-around pb-20'>
+      <div className='flex items-center justify-around pb-20'>
         <li
           className={classNames({
-            'hover:bg-white hover:text-custom-color-gold': true, //colors
+            'hover:bg-white hover:text-custom-color-gold cursor-pointer': true, //colors
             'flex gap-4 items-center justify-center w-[50px] h-[50px]': true, //layout
             'transition-colors duration-300': true, //animation
             'rounded-md p-2 mx-2': true, //self style
           })}
+          onClick={logout}
         >
-          <ArrowLeftOnRectangleIcon className='h-[1.875rem] w-[1.875rem]' />
+          <ArrowLeftOnRectangleIcon className='h-[1.875rem] w-[1.875rem] cursor-pointer'
+            onClick={logout}
+          />
         </li>
-      </Link>
+      </div>
     </div>
   );
 };

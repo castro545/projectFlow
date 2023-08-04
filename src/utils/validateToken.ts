@@ -21,6 +21,7 @@ export function validateTokenMiddleware(
       let decodedToken;
       try {
         decodedToken = verifyToken(token);
+        console.log(decodedToken);
       } catch (error: any) {
         res.status(401).end();
         return;

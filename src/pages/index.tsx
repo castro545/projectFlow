@@ -27,9 +27,17 @@ const HomePage: NextPage<HomePageProps> = ({ projects }) => {
   const getCountTask = async () => {
     try {
       const bodyCount = {
-        'user_code': 17
+        'user_code': 18
       };
       const reqdata: CountTaskInfo[] = await fethProjectByUser(bodyCount);
+
+      if (reqdata[0].completed_tasks === null) {
+        reqdata[0] = {
+          pending_tasks: 0,
+          completed_tasks: 0,
+          created_by_me: 0
+        };
+      }
       if (reqdata) {
         setCountTask(reqdata);
       }
@@ -94,7 +102,7 @@ const HomePage: NextPage<HomePageProps> = ({ projects }) => {
       {
         isOpenCreateProject &&
         < ModalComponent onClose={onCreatedProject} maxWidth='max-w-[45.8125rem]'>
-          <CreateProject onClose={onCreatedProject} owner_id={17}/>
+          <CreateProject onClose={onCreatedProject} owner_id={17} />
         </ModalComponent>
       }
     </Layout>

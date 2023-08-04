@@ -99,7 +99,7 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
     setTimeout(() => {
       ToastUtils.successMessage('Proyecto Creado!');
 
-      onClose();
+      //onClose();
 
       setLoading(false);
     }, 3000);
@@ -113,6 +113,11 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
     }
 
     const patron = /^[\w.-]+@[\w.-]+\.\w+$/;
+
+    if(email.trim() === '') {
+      setManyContributors('Ingresa un email');
+      return;
+    }
 
     if(!patron.test(email)) {
       setManyContributors('No es un email');

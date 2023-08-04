@@ -83,21 +83,26 @@ export class TaskDAO implements TaskInterface {
         tasks.start_date task_start_date,
         tasks.estimated_date task_estimated_date
       FROM project_user
-        INNER JOIN projects ON project_user.project_code = projects.project_id
-        INNER JOIN users ON project_user.user_code = users.user_id
-        INNER JOIN roles ON project_user.role_code = roles.role_id
-        INNER JOIN tasks ON tasks.user_code = users.user_id
-        FULL OUTER JOIN tasks task_parent ON tasks.task_parent_code = task_parent.task_id
-        INNER JOIN users updated_by_user ON tasks.updated_by = updated_by_user.user_id
-        INNER JOIN priorities ON tasks.priority_code = priorities.priority_id
-        INNER JOIN task_status ON tasks.status_code = task_status.task_status_id
+      INNER JOIN projects ON project_user.project_code = projects.project_id
+      INNER JOIN users ON project_user.user_code = users.user_id
+      INNER JOIN roles ON project_user.role_code = roles.role_id
+      INNER JOIN tasks ON tasks.user_code = users.user_id
+      FULL OUTER JOIN tasks task_parent ON tasks.task_parent_code = task_parent.task_id
+      INNER JOIN users updated_by_user ON tasks.updated_by = updated_by_user.user_id
+      INNER JOIN priorities ON tasks.priority_code = priorities.priority_id
+      INNER JOIN task_status ON tasks.status_code = task_status.task_status_id
       WHERE tasks.is_active = '1'
         AND projects.is_active = '1'
-        AND projects.project_id = $1
+        AND project_user.is_active = '1'
+        AND users.is_active = '1'
+        AND projects.project_id =$1
+        AND tasks.project_code = $1
         ${users.length > 0 ? `AND users.user_id IN (${users.toString().replaceAll("'", '')})` : ''}
         ${priorities.length > 0 ? `AND tasks.priority_code IN (${priorities.toString().replaceAll("'", '')})` : ''}
         ${status.length > 0 ? `AND tasks.status_code IN (${status.toString().replaceAll("'", '')})` : ''}
     `;
+
+    console.log(query);
 
     try {
 

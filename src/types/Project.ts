@@ -20,3 +20,12 @@ export type ProjectIsAdminInfo = {
   role_id: number;
   role_name: string;
 }
+
+export type CreateProject = {
+  project_name: string;
+  description: string;
+  start_date: string;
+  estimated_date: string;
+  owner_id: number
+  emails: string[],
+}

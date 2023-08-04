@@ -27,7 +27,7 @@ const HomePage: NextPage<HomePageProps> = ({ projects }) => {
   const getCountTask = async () => {
     try {
       const bodyCount = {
-        'user_code': 18
+        'user_code': 17
       };
       const reqdata: CountTaskInfo[] = await fethProjectByUser(bodyCount);
 
@@ -118,7 +118,7 @@ export const getServerSideProps = async () => {
     };
 
     // FetchProjectsByUser
-    const statusProjects = await fetch(`http://localhost:3000/api/project/getProjectsByUserId?id=${18}`, {
+    const statusProjects = await fetch(`http://localhost:3000/api/project/getProjectsByUserId?id=${17}`, {
       method: 'GET',
       headers: headers,
     });
@@ -130,8 +130,6 @@ export const getServerSideProps = async () => {
   } catch (e) {
     console.error(e);
   }
-
-  console.log({ projects });
 
   return { props: { projects } };
 };

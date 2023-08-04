@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import { InfoProjectHome, ProjectIsAdminInfo, ProjectType } from '../types/Project';
+import { CreateProject, InfoProjectHome, ProjectIsAdminInfo, ProjectType } from '../types/Project';
 
 export interface ProjectInterface {
 
@@ -21,4 +21,7 @@ export interface ProjectInterface {
   getProjectInfo(project_id: number, user_id:number): Promise<ProjectIsAdminInfo | null>
 
   fetchInfoProject(project_id: number): Promise<InfoProjectHome[]>
+
+  createProject(data_create_project: CreateProject) : Promise<>;
+
 }

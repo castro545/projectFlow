@@ -17,7 +17,7 @@ async function handler(
     case 'POST':
       console.log('entro');
       try {
-        const projects = await projectDAO.getProjectById(project_id);
+        const projects = await projectDAO.createProject(project_id);
         return res.status(200).json(projects);
       } catch (error) {
         return res.status(500).json({ message: 'Error fetching projects by user id', error });

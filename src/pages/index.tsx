@@ -74,7 +74,7 @@ const HomePage = () => {
 
     };
 
-    fetchData();c
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpenCreateProject]);
 

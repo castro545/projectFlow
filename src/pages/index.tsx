@@ -89,14 +89,11 @@ const HomePage: NextPage<HomePageProps> = ({ projects }) => {
         </div>
         <div className='space-y-3 px-[60px] pt-[45px]'>
           <label className='text-[20px] font-[700]'>Proyectos</label>
-          {
-            projects.length > 0 &&
-            <Projects
-              onCreateProject={onCreatedProject}
-              projects={projects}
-              user_code={17}
-            />
-          }
+          <Projects
+            onCreateProject={onCreatedProject}
+            projects={projects}
+            user_code={17}
+          />
         </div>
       </div>
       {
@@ -121,7 +118,7 @@ export const getServerSideProps = async () => {
     };
 
     // FetchProjectsByUser
-    const statusProjects = await fetch(`http://localhost:3000/api/project/getProjectsByUserId?id=${17}`, {
+    const statusProjects = await fetch(`http://localhost:3000/api/project/getProjectsByUserId?id=${18}`, {
       method: 'GET',
       headers: headers,
     });

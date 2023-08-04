@@ -15,13 +15,14 @@ const Projects = ({ projects, onCreateProject, user_code }: ProjectProps) => {
 
 
   useEffect(() => {
+    console.log(projects);
   }, []);
   return (
     <>
       <div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
         {
-          projects &&
-          projects.map((project, index) => (
+          projects!.length > 0 &&
+          projects!.map((project, index) => (
             <ProjectCard
               key={index}
               projectData={project}
@@ -30,7 +31,7 @@ const Projects = ({ projects, onCreateProject, user_code }: ProjectProps) => {
         }
 
         {
-          !projects &&
+          projects!.length === 0 &&
           <NoProject
             onCreateProject={onCreateProject}
           />

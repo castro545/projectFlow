@@ -47,7 +47,7 @@ const Login = () => {
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [isOpenModal, setIsOpenModal] = useState<boolean>(true);
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   const login = useLogin();
 
@@ -101,8 +101,6 @@ const Login = () => {
       else {
 
         let decodedToken = verifyToken(regResponse.token) as { user: {}, iat: string; exp: string };
-
-        console.log(decodedToken.user);
 
         const infoUser: InfoUserLogin = decodedToken.user as InfoUserLogin;
 

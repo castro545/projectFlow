@@ -45,9 +45,6 @@ const RegisterUser = ({ onClose }: any) => {
 
     const response: CreateUserResponse = await createUser(dataBody);
 
-    console.log(response.user.error);
-    console.log(response);
-
     if (response.user.error !== '') {
       if (response.user.error.includes('The user already exists')) {
         ToastUtils.errorMessage('El correo ya está en uso, intenta otro');

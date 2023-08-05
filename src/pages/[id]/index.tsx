@@ -155,7 +155,7 @@ const CreateProject = () => {
     try {
       const body = {
         'project_id': +id!,
-        'user_id': 17,
+        'user_id': infoUser?.user_id,
       };
       const response: ProjectIsAdminInfo | null = await fetchisAdmin(body);
 

@@ -6,8 +6,8 @@ import { useForm } from 'react-hook-form';
 import CircularProgressIndicator from '../CircularProgressIndicator';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { CreateUserResponse, CreateUserType } from '@/src/types/Login';
-import { useCreateUser } from '../hooks/user/usecreateUser';
 import { ToastUtils } from '@/src/utils/ToastUtils';
+import { useCreateUser } from '../hooks/user/useCreateUser';
 
 const RegisterUser = ({ onClose }: any) => {
 

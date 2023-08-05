@@ -138,7 +138,9 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
     setValue('colaborator', '');
   };
 
-  useEffect(() => { }, []);
+  useEffect(() => {
+
+  }, []);
 
   return (
     <>
@@ -178,6 +180,7 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
                   className='mt-1 block w-full rounded-lg border bg-[#E9E9E9] px-4 py-3 text-[14px] text-gray-900 outline-none focus:border-custom-color-light-gray focus:ring focus:ring-custom-color-light-gray'
                   placeholder='Selecciona una fecha'
                   required={true}
+                  min={new Date().toISOString().split('T')[0]}
                   {...register('startDate')}
                 />
               </div>
@@ -189,6 +192,7 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
                   className='mt-1 block w-full rounded-lg border bg-[#E9E9E9] px-4 py-3 text-[14px] text-gray-900 outline-none focus:border-custom-color-light-gray focus:ring focus:ring-custom-color-light-gray'
                   placeholder='Selecciona una fecha'
                   required={true}
+                  min={new Date().toISOString().split('T')[0]}
                   {...register('estimatedDate')}
                 />
               </div>

@@ -311,12 +311,12 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
               {...register('description')}
             />
             <div className='flex w-full flex-row space-x-2'>
-              <div
+              <button
+                type='submit'
                 className='flex w-full cursor-pointer select-none flex-row justify-center rounded-lg bg-slate-200 p-2 text-slate-500 hover:bg-slate-300'
-                onClick={onClose}
               >
                 Guardar
-              </div>
+              </button>
               <div
                 className='flex w-full cursor-pointer select-none flex-row justify-center rounded-lg bg-slate-200 p-2 text-slate-500 hover:bg-slate-300'
                 onClick={() => setIsEdditingDesc(!isEdditingDesc)}
@@ -355,7 +355,7 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                       toggleDropdownState();
                     }}
                   >
-                    <label className='cursor-pointer select-none text-[10px] font-normal text-yellow-800'
+                    <label className='cursor-pointer select-none text-[12px] font-normal text-yellow-800'
                       onClick={() => {
                         console.log('Alta');
                         toggleDropdownState();
@@ -371,7 +371,7 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                       toggleDropdownState();
                     }}
                   >
-                    <label className='cursor-pointer select-none text-[10px] font-normal text-blue-800'
+                    <label className='cursor-pointer select-none text-[12px] font-normal text-blue-800'
                       onClick={() => {
                         console.log('Alta');
                         toggleDropdownState();
@@ -387,7 +387,7 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                       toggleDropdownState();
                     }}
                   >
-                    <label className='cursor-pointer select-none text-[10px] font-normal text-green-800'
+                    <label className='cursor-pointer select-none text-[12px] font-normal text-green-800'
                       onClick={() => {
                         console.log('Alta');
                         toggleDropdownState();
@@ -403,7 +403,7 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                       toggleDropdownState();
                     }}
                   >
-                    <label className='cursor-pointer select-none text-[10px] font-normal text-red-800'
+                    <label className='cursor-pointer select-none text-[12px] font-normal text-red-800'
                       onClick={() => {
                         console.log('Alta');
                         toggleDropdownState();
@@ -419,7 +419,7 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                       toggleDropdownState();
                     }}
                   >
-                    <label className='cursor-pointer select-none text-[10px] font-normal text-red-800'
+                    <label className='cursor-pointer select-none text-[12px] font-normal text-red-800'
                       onClick={() => {
                         console.log('Alta');
                         toggleDropdownState();

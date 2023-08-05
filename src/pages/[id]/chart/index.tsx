@@ -95,8 +95,8 @@ const CreateChartInfo = () => {
       e.user_full_name,
       +e.new_tasks,
       +e.in_progress_tasks,
-      +e.resolved_tasks + 5,
-      +e.on_hold_tasks + 8,
+      +e.resolved_tasks,
+      +e.on_hold_tasks,
       +e.canceled_tasks
     ]);
   });

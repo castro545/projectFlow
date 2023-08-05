@@ -11,12 +11,19 @@ import { formatDate } from '@/src/utils/formatDate';
 
 type TaskCardProps = {
   task: TaskType;
+  openTask: () => void;
+  setIinfoTask: (_task_id: { task_id: number }) => void;
 }
 
-const TaskCard = ({ task }: TaskCardProps) => {
+const TaskCard = ({ task, openTask, setIinfoTask }: TaskCardProps) => {
 
   const [colorsPriority, setColorPriority] = useState<TaskColorPriority | null>(null);
   const [colorsState, setColorsStates] = useState<TaskColorState | null>(null);
+
+  const handleOpenModal = () => {
+    openTask();
+    setIinfoTask({ task_id: task.task_id });
+  };
 
   const setColorsPriority = () => {
     const colors: TaskColorPriority = {
@@ -137,14 +144,15 @@ const TaskCard = ({ task }: TaskCardProps) => {
   return (
     <div
       className='flex h-auto w-auto cursor-pointer flex-col items-center justify-center space-y-8 rounded-lg bg-[#FFFFFC] p-5 shadow-card'
+      onClick={handleOpenModal}
     >
       <div className='flex w-full flex-row justify-between'>
-        <label className='flex items-center text-[18px] font-semibold text-custom-color-dark-blue'>{capitalize(task.task_name)}</label>
+        <label className='flex items-center text-[20px] font-semibold text-custom-color-dark-blue'>{capitalize(task.task_name)}</label>
         <div className={`w-auto rounded-[10px] border-[2px] ${borderColor} ${bgColor} p-2 text-[12px] font-normal ${textColor}`}>
           Prioridad {task.task_priority}
         </div>
       </div>
-      <div className='flex w-full flex-col rounded-lg border border-[#7497FE] bg-[#7497fe3d] p-4'>
+      <div className='flex w-full flex-col rounded-lg border border-[#7497FE] bg-[#7497fe3d] p-4 text-[#4c64ab]'>
         {task.task_description}
       </div>
       <div className='flex w-full flex-row space-x-3'>

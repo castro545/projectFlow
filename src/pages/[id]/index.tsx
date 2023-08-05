@@ -22,6 +22,7 @@ import { capitalize } from 'lodash';
 import { useFetchAdminInfo } from '@/src/components/hooks/project/useFetchAdminInfo';
 import Storage from '@/src/utils/storage';
 import { InfoUserLogin } from '@/src/types/Login';
+import TaskModal from '@/src/components/tasks/TaskModal';
 
 const CreateProject = () => {
   const [tasksResult, setTaskResult] = useState<TaskType[]>([]);
@@ -30,6 +31,8 @@ const CreateProject = () => {
   const [isOpenCreateTask, setIsOpenCreateTask] = useState<boolean>(false);
   const [projectInfoAdmin, setProjectInfoAdmin] = useState<ProjectIsAdminInfo | null>(null);
   const [infoUser, setInfoUser] = useState<InfoUserLogin | null>(null);
+  const [isOpenModalTask, setIsOpenModalTask] = useState<boolean>(false);
+  const [infoTask, setIinfoTask] = useState<{ task_id: number } | null>(null);
 
 
   const fethProjectByUser = useGetCountTaskProject();
@@ -50,6 +53,10 @@ const CreateProject = () => {
 
     router.push(`/${12}/chart`);
 
+  };
+
+  const openTask = () => {
+    setIsOpenModalTask(!isOpenModalTask);
   };
 
   function transformFiltersToBody(filters: OptionType[]) {
@@ -275,6 +282,8 @@ const CreateProject = () => {
                   <TaskCard
                     key={index}
                     task={task}
+                    openTask={openTask}
+                    setIinfoTask={setIinfoTask}
                   />
                 ))
               }
@@ -291,6 +300,12 @@ const CreateProject = () => {
           isOpenCreateTask &&
           < ModalComponent onClose={onCreatedTask} maxWidth='max-w-[45.8125rem]'>
             <CreateTask />
+          </ModalComponent>
+        }
+        {
+          isOpenModalTask && infoUser && infoTask !== null &&
+          <ModalComponent onClose={openTask} maxWidth='max-w-[45.8125rem]'>
+            <TaskModal infoTask={infoTask} onClose={openTask} />
           </ModalComponent>
         }
       </Layout >

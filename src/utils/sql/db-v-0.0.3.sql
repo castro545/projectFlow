@@ -56,3 +56,101 @@ CREATE OR REPLACE FUNCTION create_project_with_contributors(
            -- 1,
            -- array['miguel@gmail.com']
         -- );
+
+
+
+
+
+		CREATE OR REPLACE FUNCTION create_task(
+		t_project_code integer,
+		t_priority_code integer,
+		t_user_mail varchar,
+		t_name varchar,
+		t_description text,
+		t_start_date timestamp,
+		t_estimated_date timestamp,
+		t_project_owner_code integer,
+		t_parent_code integer default NULL
+	)
+	RETURNS int
+	LANGUAGE plpgsql
+	AS $$
+		-- temp task id
+		DECLARE new_task_id int;
+		-- temp project owner name
+		DECLARE project_owner_name varchar;
+		-- temp user id
+		DECLARE temp_user_id int;
+		
+	BEGIN
+		SELECT users.full_name
+			INTO project_owner_name
+			FROM users 
+            INNER JOIN project_user ON project_user.user_code = users.user_id
+            INNER JOIN roles ON roles.role_id = project_user.role_code
+			WHERE users.user_id = t_project_owner_code
+            AND project_user.project_code = t_project_code
+            AND roles.name = 'Administrador';
+		-- creates task
+		IF project_owner_name IS NOT NULL
+		THEN
+		
+			SELECT user_id INTO temp_user_id FROM users WHERE email = t_user_mail AND is_active = '1';
+			
+			IF temp_user_id IS NOT NULL
+			THEN
+			
+				INSERT 
+				INTO tasks (
+					project_code,
+					task_parent_code,
+					status_code,
+					priority_code,
+					user_code,
+					name,
+					description,
+					start_date,
+					estimated_date,
+					updated_by,
+					updated_at
+				)
+				VALUES (
+					t_project_code,
+					t_parent_code,
+					(SELECT task_status_id FROM task_status WHERE name = 'Nueva'),
+					t_priority_code,
+					temp_user_id,
+					t_name,
+					t_description,
+					t_start_date,
+					t_estimated_date,
+					t_project_owner_code,
+					now()
+				)
+				RETURNING task_id INTO new_task_id;
+
+				-- asign task history
+				PERFORM task_updated(t_project_owner_code, new_task_id, CONCAT('Tarea creada por: ', project_owner_name));
+
+				RETURN new_task_id;
+				COMMIT;
+			
+			END IF;
+			
+		END IF;
+		
+		RETURN 0;
+	END;$$;
+
+
+	-- Ejemplo de uso
+    -- SELECT create_task(
+		-- 1::int,
+		-- 1::int,
+		-- 'mail@mail.com',
+		-- 'Creación de base de datos'::varchar,
+		-- 'Se busca crear la base de datos de projectFlow'::text,
+		-- now()::timestamp,
+		-- now()::timestamp,
+		-- 1::int
+	-- );

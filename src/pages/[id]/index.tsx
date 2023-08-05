@@ -60,7 +60,7 @@ const CreateProject = () => {
 
   const onViewChart = () => {
 
-    router.push(`/${12}/chart`);
+    router.push(`/${id}/chart`);
 
   };
 

@@ -1,87 +1,113 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Chart } from 'react-google-charts';
 import {
   ArrowDownTrayIcon
 } from '@heroicons/react/24/solid';
+import { useChartInfoByProject } from '../../../components/hooks/chart/fetchChartInfoByProject';
+import { ChartInfo } from '@/src/types/Chart';
+import Storage from '@/src/utils/storage';
+import { InfoUserLogin } from '@/src/types/Login';
 
-const CreateProject = () => {
-
+const CreateChartInfo = () => {
   const router = useRouter();
+  const { id } = router.query;
 
-  const dataLine = [
-    [
-      'Day',
-      'Guardians of the Galaxy',
-      'The Avengers',
-      'Transformers: Age of Extinction',
-    ],
-    [1, 37.8, 80.8, 41.8],
-    [2, 30.9, 69.5, 32.4],
-    [3, 25.4, 57, 25.7],
-    [4, 11.7, 18.8, 10.5],
-    [5, 11.9, 17.6, 10.4],
-    [6, 8.8, 13.6, 7.7],
-    [7, 7.6, 12.3, 9.6],
-    [8, 12.3, 29.2, 10.6],
-    [9, 16.9, 42.9, 14.8],
-    [10, 12.8, 30.9, 11.6],
-    [11, 5.3, 7.9, 4.7],
-    [12, 6.6, 8.4, 5.2],
-    [13, 4.8, 6.3, 3.6],
-    [14, 4.2, 6.2, 3.4],
+  const [chartInfo, setChartInfo] = useState<ChartInfo | null>(null);
+  const [infoUser, setInfoUser] = useState<InfoUserLogin | null>(null);
+
+  const fetchChartInfoByProject = useChartInfoByProject();
+
+  const getChartInfoByProject = async () => {
+    try {
+      const reqdata: ChartInfo = await fetchChartInfoByProject(id);
+
+      if (reqdata) {
+        setChartInfo(reqdata);
+      }
+    } catch {
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    const getUserInfo = () => {
+
+      const user_id = Storage.getItem(Storage.USER_ID);
+      const full_name = Storage.getItem(Storage.FULL_NAME);
+      const email = Storage.getItem(Storage.EMAIL);
+      const is_active = Storage.getItem(Storage.IS_ACTIVE);
+
+      if (user_id !== '' || full_name !== '' || email !== '' || is_active !== '') {
+        const infoUser: InfoUserLogin = {
+          user_id: parseInt(user_id!),
+          full_name: full_name!,
+          email: email!,
+          is_active: is_active!
+        };
+        setInfoUser(infoUser);
+      } else {
+        window.location.href = '/login';
+      }
+
+    };
+    getUserInfo();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (infoUser && router.isReady) {
+        await getChartInfoByProject();
+      }
+    };
+
+
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [infoUser, router.isReady]);
+
+  const dataDona = [
+    ['Tarea', 'Tareas por estados'],
+    ['Nueva', 0],
+    ['En progreso', 0],
+    ['Resuelta', 0],
+    ['En espera', 0],
+    ['Cancelada', 0],
   ];
 
-  const optionsLine = {
-    chart: {
-      title: 'Box Office Earnings in First Two Weeks of Opening',
-      subtitle: 'in millions of dollars (USD)',
-    },
+  chartInfo?.TasksByStatus.forEach(e => {
+    dataDona.forEach(data => {
+      if(data[0] == e.task_status_name){
+        data[1] = +e.total_tasks;
+      }
+    });
+  });
+
+  const optionsDona = {
+    title: 'Tareas por estados',
+    pieHole: 0.4,
+    is3D: true,
   };
 
   const dataStacked = [
-    ['City', '2010 Population', '2000 Population'],
-    ['New York City, NY', 8175000, 8008000],
-    ['Los Angeles, CA', 3792000, 3694000],
-    ['Chicago, IL', 2695000, 2896000],
-    ['Houston, TX', 2099000, 1953000],
-    ['Philadelphia, PA', 1526000, 1517000],
+    ['Status', 'Nueva', 'En progreso', 'Resuelta', 'En espera', 'Cancelada'],
+    ['New York City, NY', 8175000, 8008000, 0, 0, 0],
+    ['Los Angeles, CA', 3792000, 3694000, 0, 0, 0],
+    ['Chicago, IL', 2695000, 2896000, 0, 0, 0],
+    ['Houston, TX', 2099000, 1953000, 0, 0, 0],
+    ['Philadelphia, PA', 1526000, 1517000, 0, 0, 0],
   ];
 
   const optionsStacked = {
-    title: 'Population of Largest U.S. Cities',
+    title: 'Tareas por usuario',
     chartArea: { width: '50%' },
-    isStacked: true,
-    hAxis: {
-      title: 'Total Population',
-      minValue: 0,
-    },
-    vAxis: {
-      title: 'City',
-    },
-  };
-
-  const dataDona = [
-    ['Tarea', 'Tareas Terminadas'],
-    ['Helmer Torres', 11],
-    ['Hacer Login', 2],
-    ['Hacer registro', 2],
-    ['Watch TV', 2],
-    ['Sleep', 7],
-  ];
-
-  const optionsDona = {
-    title: 'Tareas realizadas',
-    pieHole: 0.4,
-    is3D: true,
+    // isStacked: true
+    isStacked: true
   };
 
   const onBackPage = () => {
     router.back();
   };
-
-
-  useEffect(() => { }, []);
 
   return (
     <>
@@ -125,13 +151,6 @@ const CreateProject = () => {
                 data={dataStacked}
                 options={optionsStacked}
               />
-              <Chart
-                chartType='Line'
-                width='100%'
-                height='400px'
-                data={dataLine}
-                options={optionsLine}
-              />
             </form>
           </div>
         </div>
@@ -140,4 +159,4 @@ const CreateProject = () => {
   );
 };
 
-export default CreateProject;
+export default CreateChartInfo;

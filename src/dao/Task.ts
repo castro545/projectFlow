@@ -1,8 +1,50 @@
 import { pool } from '@/src/utils/conn';
 import { TaskInterface } from '../interfaces/Task';
-import { CountTaskInfo, TaskType } from '../types/Task';
+import { CountTaskInfo, TaskType, UsersFilter } from '../types/Task';
 
 export class TaskDAO implements TaskInterface {
+
+  async fetchUserFilter(project_id: number): Promise<UsersFilter[]> {
+    const query = `
+      select
+          users.user_id user_id,
+        users.full_name user_full_name,
+        roles.role_id role_id,
+        roles.name role_name
+      from
+        project_user
+      inner join projects on
+        project_user.project_code = projects.project_id
+      inner join users on
+        project_user.user_code = users.user_id
+      inner join roles on
+        project_user.role_code = roles.role_id
+      where
+        project_user.is_active = '1'
+        and projects.is_active = '1'
+        and users.is_active = '1'
+        and projects.project_id = $1
+    `;
+
+    console.log(project_id);
+
+    const values = [project_id];
+
+    try {
+
+      const { rows } = await pool.query(query, values);
+
+      console.log(rows);
+
+      return rows || [];
+
+    } catch (error) {
+
+      console.log('Error in count the tasks:', error);
+      return [];
+
+    }
+  }
 
   async fetchCountTaskByProject(user_code: number, project_code: number | null): Promise<CountTaskInfo[]> {
     const query = `

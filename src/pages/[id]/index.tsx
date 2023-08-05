@@ -12,7 +12,7 @@ import {
   PlusCircleIcon,
   DocumentTextIcon
 } from '@heroicons/react/24/solid';
-import { BodyType, CountTaskInfo, OptionType, TaskType } from '@/src/types/Task';
+import { BodyType, CountTaskInfo, OptionType, TaskType, UsersFilter } from '@/src/types/Task';
 import { MultiValue } from 'react-select';
 import { useFetchFilterTasks } from '@/src/components/hooks/task/FetchFilterTask';
 import useGetCountTaskProject from '@/src/components/hooks/project/fetchCountTaskByProject';
@@ -26,10 +26,12 @@ import { InfoUserLogin } from '@/src/types/Login';
 import TaskModal from '@/src/components/tasks/TaskModal';
 import styles from '@/src/styles/Home.module.css';
 import { formatDate } from '@/src/utils/formatDate';
+import { useUserFilter } from '@/src/components/hooks/task/useUserFilter';
 
 const CreateProject = () => {
   const [tasksResult, setTaskResult] = useState<TaskType[]>([]);
   const [countTask, setCountTask] = useState<CountTaskInfo[]>([]);
+  const [usersFilter, setUsersFilter] = useState<UsersFilter[]>([]);
   const [projectInfo, setProjectInfo] = useState<ProjectType[] | null>(null);
   const [isOpenCreateTask, setIsOpenCreateTask] = useState<boolean>(false);
   const [isAddUserProject, setIsAddUserProject] = useState<boolean>(false);
@@ -43,6 +45,7 @@ const CreateProject = () => {
   const fetchTasks = useFetchFilterTasks();
   const fetchProject = useFetchInfoProject();
   const fetchisAdmin = useFetchAdminInfo();
+  const fetchUsersFilter = useUserFilter();
 
   const router = useRouter();
   const { id } = router.query;
@@ -99,10 +102,25 @@ const CreateProject = () => {
     }
   };
 
+  const getUserFilter = async () => {
+    try {
+      const numericId = typeof id === 'string' ? parseInt(id) : -1;
+      const reqdata: UsersFilter[] = await fetchUsersFilter(numericId);
+
+      console.log(reqdata);
+
+      if (reqdata) {
+        setUsersFilter(reqdata);
+      }
+    } catch {
+      return false;
+    }
+  };
+
   const getCountTask = async () => {
     try {
       const bodyCount = {
-        'user_code': 17,
+        'user_code': infoUser?.user_id,
         'project_id': id,
       };
       const reqdata: CountTaskInfo[] = await fethProjectByUser(bodyCount);
@@ -201,6 +219,17 @@ const CreateProject = () => {
     };
 
     fetchIsAdmin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [infoUser]);
+
+  useEffect(() => {
+    const fetchUsersFilter = async () => {
+      if (infoUser) {
+        await getUserFilter();
+      }
+    };
+
+    fetchUsersFilter();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [infoUser]);
 
@@ -319,9 +348,13 @@ const CreateProject = () => {
           <div className='flex flex-col space-y-6 px-[60px] pt-[45px]'>
             <label className='text-[20px] font-[700]'>Filtro</label>
             <div className='w-[400px]'>
-              <CustomSelect
-                onChange={handleFilter}
-              />
+              {
+                usersFilter.length > 0 &&
+                <CustomSelect
+                  onChange={handleFilter}
+                  users={usersFilter}
+                />
+              }
             </div>
           </div>
           <div className='flex flex-col space-y-6 px-[60px] pt-[45px]'>

@@ -28,7 +28,7 @@ export class ProjectDAO implements ProjectInterface {
 
       return rows[0];
     } catch (error) {
-      console.error('Error al obtener los proyectos por usuario:', error);
+      console.error('Error al obtener la info de un proyecto:', error);
       return null;
     }
   }
@@ -44,7 +44,7 @@ export class ProjectDAO implements ProjectInterface {
       const { rows } = await pool.query(query);
       return rows;
     } catch (error) {
-      console.error('Error al obtener los proyectos por usuario:', error);
+      console.error('Error al obtener los proyectos por proyecto:', error);
       return [];
     }
   }

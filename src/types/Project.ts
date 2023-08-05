@@ -5,6 +5,7 @@ export interface ProjectType {
   description: string;
   start_date: string;
   estimated_date: string;
+  end_date?: string;
   emails: string[];
   role_name?: string;
 }

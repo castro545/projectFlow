@@ -66,7 +66,7 @@ const CreateChartInfo = () => {
   const dataDona = [
     ['Tarea', 'Tareas por estados'],
     ['Nueva', 0],
-    ['En progreso', 0],
+    ['En proceso', 0],
     ['Resuelta', 0],
     ['En espera', 0],
     ['Cancelada', 0],
@@ -87,7 +87,7 @@ const CreateChartInfo = () => {
   };
 
   const dataStacked: (string | number)[][] = [
-    ['Status', 'Nueva', 'En progreso', 'Resuelta', 'En espera', 'Cancelada']
+    ['Status', 'Nueva', 'En proceso', 'Resuelta', 'En espera', 'Cancelada']
   ];
 
   chartInfo?.TasksByUser.forEach(e => {
@@ -118,7 +118,7 @@ const CreateChartInfo = () => {
           <div className='mx-5 my-5 h-auto w-[90%] rounded-lg bg-white p-5 pt-7 shadow-lg md:mx-0 md:my-5 md:h-auto md:w-[80%] md:p-6 '>
             <form className='px-4 py-6'>
               <div className='flex flex-row justify-between'>
-                <h1 className='text-[16px] font-bold text-custom-color-dark-blue md:text-[26px]'>Vista para ver graficos y resumen del proyecto</h1>
+                <h1 className='text-[16px] font-bold text-custom-color-dark-blue md:text-[26px]'>Vista de gráficos y resumen del proyecto</h1>
                 <div className='flex flex-row justify-center space-x-6'>
                   <button
                     type='button'

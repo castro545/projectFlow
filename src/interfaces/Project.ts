@@ -12,7 +12,7 @@ export interface ProjectInterface {
 
   deleteProject(project_id: number): Promise<boolean>;
 
-  finishProject(project_id: number): Promise<boolean>;
+  finishProject(project_id: string[] | string | undefined): Promise<number>;
 
   getProjectsByUserId(userId: string[] | string | undefined): Promise<ProjectType[]>;
 

@@ -28,19 +28,19 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
   const setColorsPriority = () => {
     const colors: TaskColorPriority = {
       alta: {
-        borde: 'border-red-300',
-        bg: 'bg-red-200',
-        text: 'text-red-600',
+        borde: 'border-red-400',
+        bg: 'bg-red-100',
+        text: 'text-red-800',
       },
       media: {
-        borde: 'border-yellow-300',
-        bg: 'bg-yellow-200',
-        text: 'text-yellow-600',
+        borde: 'border-yellow-400',
+        bg: 'bg-yellow-100',
+        text: 'text-yellow-800',
       },
       baja: {
-        borde: 'border-green-300',
-        bg: 'bg-green-200',
-        text: 'text-green-600',
+        borde: 'border-green-400',
+        bg: 'bg-green-100',
+        text: 'text-green-800',
       },
     };
     setColorPriority(colors);
@@ -49,29 +49,29 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
   const setColorsState = () => {
     const colors: TaskColorState = {
       nueva: {
-        borde: 'border-yellow-300',
-        bg: 'bg-yellow-200',
-        text: 'text-yellow-600',
+        borde: 'border-yellow-400',
+        bg: 'bg-yellow-100',
+        text: 'text-yellow-800',
       },
       enProceso: {
-        borde: 'border-blue-300',
-        bg: 'bg-blue-200',
-        text: 'text-blue-600',
+        borde: 'border-blue-400',
+        bg: 'bg-blue-100',
+        text: 'text-blue-800',
       },
       resuelta: {
-        borde: 'border-green-300',
-        bg: 'bg-green-200',
-        text: 'text-green-600',
+        borde: 'border-green-400',
+        bg: 'bg-green-100',
+        text: 'text-green-800',
       },
       enEspera: {
-        borde: 'border-pink-300',
-        bg: 'bg-pink-200',
-        text: 'text-pink-600',
+        borde: 'border-pink-400',
+        bg: 'bg-pink-100',
+        text: 'text-pink-800',
       },
       cancelada: {
-        borde: 'border-red-300',
-        bg: 'bg-red-200',
-        text: 'text-red-600',
+        borde: 'border-red-400',
+        bg: 'bg-red-100',
+        text: 'text-red-800',
       }
     };
     setColorsStates(colors);
@@ -152,14 +152,14 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
             <div className={`w-auto rounded-[10px] border-[2px] ${borderColor} ${bgColor} flex items-center justify-center p-2 text-[12px] font-normal ${textColor}`}>
               Prioridad {task.task_priority}
             </div>
-            <div className={'w-auto rounded-[10px] border-[2px] border-red-300 bg-red-200 p-2 text-[12px] font-normal text-red-600'}>
+            <div className={'w-auto rounded-[10px] border-[2px] border-red-400 bg-red-100 p-2 text-[12px] font-normal text-red-800'}>
               <TrashIcon
                 className='h-[1.5rem] w-[1.5rem] cursor-pointer text-red-700'
               />
             </div>
           </div>
         </div>
-        <div className='flex w-full flex-row rounded-lg border border-[#7497FE] bg-[#7497fe3d] p-4 text-[#4c64ab]'>
+        <div className='flex w-full flex-row rounded-lg border border-[#afafafaf] bg-[#f8f8f8] p-4 text-[#3f3f3f]'>
           <div className='w-5/6'>
             {task.task_description}
           </div>

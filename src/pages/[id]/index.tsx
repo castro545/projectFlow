@@ -31,6 +31,8 @@ import { useUserFilter } from '@/src/components/hooks/task/useUserFilter';
 import { useFinishProject } from '../../components/hooks/project/useFinishProject';
 import { ToastUtils } from '@/src/utils/ToastUtils';
 
+let globalID: any = '';
+
 const CreateProject = () => {
   const [tasksResult, setTaskResult] = useState<TaskType[]>([]);
   const [countTask, setCountTask] = useState<CountTaskInfo[]>([]);
@@ -214,6 +216,7 @@ const CreateProject = () => {
           email: email!,
           is_active: is_active!
         };
+        globalID = parseInt(user_id!);
         setInfoUser(infoUser);
       } else {
         window.location.href = '/login';
@@ -450,14 +453,14 @@ export const getServerSideProps = async ({ query }: any) => {
   let countTask: CountTaskInfo[] = [];
 
   const bodyFilter = {
-    'users': [17], // Obtener el ID del usuario!
+    'users': [globalID],
     'project_id': id,
     'priorities': [],
     'status': []
   };
 
   const bodyCount = {
-    'user_code': 17, // Obtener el ID del usuario!
+    'user_code': globalID,
     'project_id': id,
   };
 

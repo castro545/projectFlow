@@ -393,7 +393,7 @@ const CreateProject = () => {
         {
           isOpenModalTask && infoUser && infoTask !== null &&
           <ModalComponent onClose={openTask} maxWidth='max-w-[45.8125rem]'>
-            <TaskModal task={infoTask} onClose={openTask} />
+            <TaskModal task={infoTask} onClose={openTask} user_id={infoUser.user_id!} />
           </ModalComponent>
         }
       </Layout >

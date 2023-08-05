@@ -1,16 +1,17 @@
 import { useCallback } from 'react';
+import { UpdateTask } from '@/src/types/Task';
 
-export function useDeleteTask(): (_task_id: number) => Promise<number> {
-  const deleteTask = useCallback(async (task_id: number) => {
+export function useUpdateTask(): (_updateTask: UpdateTask) => Promise<number> {
+  const updateTask = useCallback(async (updateTask: UpdateTask) => {
     try {
       const headers = {
         'Content-Type': 'application/json',
       };
 
-      const response = await fetch('/api/tasks/deleteTask', {
+      const response = await fetch('/api/tasks/updateTask', {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify({ task_id }),
+        body: JSON.stringify(updateTask),
       });
       const resp = await response.json();
 
@@ -23,5 +24,5 @@ export function useDeleteTask(): (_task_id: number) => Promise<number> {
       console.log('Error -->', e);
     }
   }, []);
-  return deleteTask;
+  return updateTask;
 }

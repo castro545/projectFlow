@@ -3,6 +3,32 @@ import { TaskInterface } from '../interfaces/Task';
 import { CountTaskInfo, TaskType, UsersFilter } from '../types/Task';
 
 export class TaskDAO implements TaskInterface {
+  async updateTask(task_id: number, priority_code: number, status_code: number, description: string, updated_by: number): Promise<number> {
+
+    const query = `
+      UPDATE tasks SET
+        ${status_code === 3 || status_code === 5 ? 'end_date = now()::timestamp,' : ''}
+        description = $1,
+        priority_code = ${priority_code},
+        status_code  = ${status_code},
+        updated_by = ${updated_by},
+        updated_at = now()::timestamp
+      WHERE task_id = $2`;
+
+    const values = [description, task_id];
+
+    try {
+
+      const { rowCount } = await pool.query(query, values);
+      return rowCount || 0;
+
+    } catch (error) {
+
+      console.log('Error in count the tasks:', error);
+      return 0;
+
+    }
+  }
 
   async deleteTask(task_id: number): Promise<number> {
     const query = 'UPDATE tasks SET is_active = \'0\' WHERE task_id = $1';

@@ -13,4 +13,5 @@ export interface TaskInterface {
 
   fetchUserFilter(project_id: number): Promise<UsersFilter[]>;
   deleteTask(task_id: number): Promise<number>;
+  updateTask(task_id: number, priority_code: number, status_code: number, description: string, updated_by: number): Promise<number>;
 }

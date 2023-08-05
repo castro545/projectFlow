@@ -7,7 +7,6 @@ import LoginImg from '../../../public/images/png/Login.png';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 
 import { useForm } from 'react-hook-form';
-import Link from 'next/link';
 import CircularProgressIndicator from '@/src/components/CircularProgressIndicator';
 import { ToastUtils } from '@/src/utils/ToastUtils';
 import { InfoUserLogin, LoginType } from '@/src/types/Login';
@@ -15,6 +14,8 @@ import { useLogin } from '@/src/components/hooks/user/login/login';
 import Storage from '@/src/utils/storage';
 import { verifyToken } from '@/src/utils/jwt';
 import { useRouter } from 'next/router';
+import ModalComponent from '@/src/components/layout/Modal';
+import RegisterUser from '@/src/components/register/RegisterUser';
 
 const ModalLayout = ({ children }: any) => (
   <>
@@ -46,6 +47,7 @@ const Login = () => {
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(true);
 
   const login = useLogin();
 
@@ -105,10 +107,10 @@ const Login = () => {
         const infoUser: InfoUserLogin = decodedToken.user as InfoUserLogin;
 
         // Guardado de la info de sesion a LocalStorage
-        Storage.setItem(Storage.USER_ID, infoUser.user_id.toString());
-        Storage.setItem(Storage.FULL_NAME, infoUser.full_name);
-        Storage.setItem(Storage.EMAIL, infoUser.email);
-        Storage.setItem(Storage.IS_ACTIVE, infoUser.is_active);
+        Storage.setItem(Storage.USER_ID, infoUser.user_id!.toString());
+        Storage.setItem(Storage.FULL_NAME, infoUser.full_name!);
+        Storage.setItem(Storage.EMAIL, infoUser.email!);
+        Storage.setItem(Storage.IS_ACTIVE, infoUser.is_active!);
         setLoading(false);
 
         router.push('/');
@@ -117,11 +119,15 @@ const Login = () => {
 
   };
 
+  const openRegister = () => {
+    setIsOpenModal(!isOpenModal);
+  };
+
 
   return (
     <>
       <Head>
-        <title>Inicio Sesión</title>
+        <title>{isOpenModal ? 'Registro :: ProjectFlow' : 'Inicio Sesión :: ProjectFlow'}</title>
       </Head>
       <ModalLayout>
         <div className='flex flex-row items-center pl-4 text-[24px] font-semibold italic'>
@@ -169,9 +175,19 @@ const Login = () => {
             {loading ? <CircularProgressIndicator /> : <h1>Iniciar Sesión</h1>}
           </button>
           <label className='text-center text-[12px] font-semibold italic'>No tienes una cuenta?
-            <Link href='/register' className='not-italic text-blue-500'> puedes crear una aquí</Link>
+            <label
+              className='cursor-pointer not-italic text-blue-500'
+              onClick={openRegister}
+            > puedes crear una aquí</label>
           </label>
         </form>
+
+        {
+          isOpenModal &&
+          <ModalComponent onClose={openRegister} maxWidth='max-w-[45.8125rem]'>
+            <RegisterUser onClose={openRegister} />
+          </ModalComponent>
+        }
 
       </ModalLayout>
       <style jsx>{`

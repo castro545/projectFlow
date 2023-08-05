@@ -159,7 +159,7 @@ const HomePage = () => {
             <Projects
               onCreateProject={onCreatedProject}
               projects={projects}
-              user_code={infoUser!.user_id}
+              user_code={infoUser!.user_id!}
             />
           }
         </div>
@@ -167,7 +167,7 @@ const HomePage = () => {
       {
         isOpenCreateProject && infoUser &&
         < ModalComponent onClose={onCreatedProject} maxWidth='max-w-[45.8125rem]'>
-          <CreateProject onClose={onCreatedProject} owner_id={infoUser!.user_id} />
+          <CreateProject onClose={onCreatedProject} owner_id={infoUser!.user_id!} />
         </ModalComponent>
       }
     </Layout>

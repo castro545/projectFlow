@@ -20,6 +20,8 @@ import CreateTask from './createtask';
 import { useFetchInfoProject } from '@/src/components/hooks/project/fetchInfoPoject';
 import { capitalize } from 'lodash';
 import { useFetchAdminInfo } from '@/src/components/hooks/project/useFetchAdminInfo';
+import Storage from '@/src/utils/storage';
+import { InfoUserLogin } from '@/src/types/Login';
 
 const CreateProject = () => {
   const [tasksResult, setTaskResult] = useState<TaskType[]>([]);
@@ -27,6 +29,7 @@ const CreateProject = () => {
   const [projectInfo, setProjectInfo] = useState<ProjectType[] | null>(null);
   const [isOpenCreateTask, setIsOpenCreateTask] = useState<boolean>(false);
   const [projectInfoAdmin, setProjectInfoAdmin] = useState<ProjectIsAdminInfo | null>(null);
+  const [infoUser, setInfoUser] = useState<InfoUserLogin | null>(null);
 
 
   const fethProjectByUser = useGetCountTaskProject();
@@ -150,48 +153,73 @@ const CreateProject = () => {
   };
 
   useEffect(() => {
+    const getUserInfo = () => {
+
+      const user_id = Storage.getItem(Storage.USER_ID);
+      const full_name = Storage.getItem(Storage.FULL_NAME);
+      const email = Storage.getItem(Storage.EMAIL);
+      const is_active = Storage.getItem(Storage.IS_ACTIVE);
+
+      if (user_id !== '' || full_name !== '' || email !== '' || is_active !== '') {
+        const infoUser: InfoUserLogin = {
+          user_id: parseInt(user_id!),
+          full_name: full_name!,
+          email: email!,
+          is_active: is_active!
+        };
+        setInfoUser(infoUser);
+      } else {
+        window.location.href = '/login';
+      }
+
+    };
+    getUserInfo();
+  }, []);
+
+  useEffect(() => {
     const fetchIsAdmin = async () => {
-
-      await getIsAdmin();
-
+      if (infoUser) {
+        await getIsAdmin();
+      }
     };
 
     fetchIsAdmin();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [infoUser]);
 
   useEffect(() => {
     const fetchFilterTask = async () => {
-
-      await getFilterTask();
+      if (infoUser) {
+        await getFilterTask();
+      }
 
     };
 
     fetchFilterTask();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpenCreateTask]);
+  }, [isOpenCreateTask, infoUser]);
 
   useEffect(() => {
     const fetchProjectInfo = async () => {
-
-      await getInfoProject();
-
+      if (infoUser) {
+        await getInfoProject();
+      }
     };
 
     fetchProjectInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [infoUser]);
 
   useEffect(() => {
     const fetchData = async () => {
-
-      await getCountTask();
-
+      if (infoUser) {
+        await getCountTask();
+      }
     };
 
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpenCreateTask]);
+  }, [isOpenCreateTask, infoUser]);
 
   return (
     <>

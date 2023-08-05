@@ -22,9 +22,9 @@ const TaskCard = ({ task }: TaskCardProps) => {
     >
       <div className='flex w-full flex-row justify-between'>
         <label className='flex items-center text-[18px] font-semibold text-custom-color-dark-blue'>{capitalize(task.task_name)}</label>
-        <div className='w-auto rounded-[10px] border-[2px] border-red-600 p-2 text-[12px] font-normal text-custom-color-dark-blue'>Prioridad {task.task_priority}</div>
+        <div className='w-auto rounded-[10px] border-[2px] border-red-600 bg-red-300 p-2 text-[12px] font-normal text-white'>Prioridad {task.task_priority}</div>
       </div>
-      <div className='flex w-full flex-col border border-[#7497FE] p-4'>
+      <div className='flex w-full flex-col rounded-lg border border-[#7497FE] bg-[#7497fe3d] p-4'>
         {task.task_description}
       </div>
       <div className='flex w-full flex-row space-x-3'>
@@ -39,7 +39,7 @@ const TaskCard = ({ task }: TaskCardProps) => {
         />
         <h4 className='flex items-center text-[14px]'>Terminará el {formatDate(task.task_estimated_date)}</h4>
       </div>
-      <div className='flex w-full flex-col rounded-[10px] border border-green-500 p-2 text-center'>
+      <div className='flex w-full flex-col rounded-[10px] border border-green-500 bg-green-200 p-2 text-center text-green-600'>
         {task.task_status_name}
       </div>
       <div className='flex w-full flex-row justify-between'>

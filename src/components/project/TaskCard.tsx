@@ -5,7 +5,8 @@ import {
   UserGroupIcon,
   ClockIcon,
   ArrowPathIcon,
-  CalendarIcon
+  CalendarIcon,
+  EllipsisVerticalIcon
 } from '@heroicons/react/24/solid';
 import { formatDate } from '@/src/utils/formatDate';
 
@@ -143,9 +144,16 @@ const TaskCard = ({ task, openTask, setIinfoTask }: TaskCardProps) => {
 
   return (
     <div
-      className='flex h-auto w-auto cursor-pointer flex-col items-center justify-center space-y-8 rounded-lg bg-[#FFFFFC] p-5 shadow-card'
-      onClick={handleOpenModal}
+      className='flex h-auto w-auto flex-col items-center justify-center space-y-8 rounded-lg bg-[#FFFFFC] p-5 shadow-card'
     >
+      <div className='relative w-full'>
+        <div className='absolute right-[-15px] top-[-10px]'>
+          <EllipsisVerticalIcon
+            className='h-[2rem] w-[2rem] cursor-pointer text-custom-color-gold text-opacity-50'
+            onClick={handleOpenModal}
+          />
+        </div>
+      </div>
       <div className='flex w-full flex-row justify-between'>
         <label className='flex items-center text-[20px] font-semibold text-custom-color-dark-blue'>{capitalize(task.task_name)}</label>
         <div className={`w-auto rounded-[10px] border-[2px] ${borderColor} ${bgColor} p-2 text-[12px] font-normal ${textColor}`}>

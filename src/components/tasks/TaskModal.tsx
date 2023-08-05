@@ -12,16 +12,19 @@ import {
 } from '@heroicons/react/24/solid';
 import { capitalize } from 'lodash';
 import { formatDate } from '@/src/utils/formatDate';
+import { useForm } from 'react-hook-form';
 
 type TaskModalProps = {
   task: TaskType;
-  _onClose: () => void;
+  onClose: () => void;
 }
 
-const TaskModal = ({ task, _onClose }: TaskModalProps) => {
+const TaskModal = ({ task, onClose }: TaskModalProps) => {
   const [colorsPriority, setColorPriority] = useState<TaskColorPriority | null>(null);
   const [colorsState, setColorsStates] = useState<TaskColorState | null>(null);
   const [isDropdownOpenTrash, setIsDropdownOpenTrash] = useState<boolean>(false);
+  const [isEdditingDesc, setIsEdditingDesc] = useState<boolean>(false);
+
 
   const toggleDropdownTrash = () => {
     setIsDropdownOpenTrash(!isDropdownOpenTrash);
@@ -149,10 +152,22 @@ const TaskModal = ({ task, _onClose }: TaskModalProps) => {
       break;
   }
 
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      description: task.task_description,
+    },
+    shouldUseNativeValidation: false
+  });
+
+  const onSubmit = async (data: any) => {
+    console.log(data);
+  };
+
   return (
     <>
-      <div
+      <form
         className='flex h-auto w-full flex-col items-center justify-center space-y-8 rounded-lg p-5'
+        onSubmit={handleSubmit(onSubmit)}
       >
         <div className='flex w-full flex-row justify-between'>
           <label className='flex items-center text-[20px] font-semibold text-custom-color-dark-blue'>{capitalize(task.task_name)}</label>
@@ -198,25 +213,54 @@ const TaskModal = ({ task, _onClose }: TaskModalProps) => {
             </div>
           </div>
         </div>
-        <div className='flex w-full flex-col rounded-lg border border-[#afafafaf] bg-[#f8f8f8] p-4 text-[#3f3f3f]'>
-          <div className='flex flex-row'>
-            <div className='w-11/12'>
-              {task.task_description}
-            </div>
-            <div className='flex w-1/12 justify-end'>
-              <PencilSquareIcon
-                className='h-[1.5rem] w-[1.5rem] cursor-pointer text-[#3f3f3f]'
-                onClick={()=>console.log('modo editar')}
-              />
+        {
+          !isEdditingDesc &&
+          <div className='flex w-full flex-col rounded-lg border border-[#afafafaf] bg-[#f8f8f8] p-4 text-[#3f3f3f]'>
+            <div className='flex flex-row'>
+              <div className='w-11/12'>
+                {task.task_description}
+              </div>
+              <div className='flex w-1/12 justify-end'>
+                <PencilSquareIcon
+                  className='h-[1.5rem] w-[1.5rem] cursor-pointer text-[#3f3f3f]'
+                  onClick={() => setIsEdditingDesc(!isEdditingDesc)}
+                />
+              </div>
             </div>
           </div>
-        </div>
+        }
+        {
+          isEdditingDesc &&
+          <div className='w-full space-y-1'>
+            <textarea
+              className='m-0 h-[80px] w-full resize-none rounded-[10px] border border-[#afafafaf] bg-[#f8f8f8] p-3 text-[14px] text-[#3f3f3f] placeholder-gray-400 outline-none focus:ring focus:ring-custom-color-light-gray'
+              rows={5}
+              required={true}
+              placeholder=''
+              {...register('description')}
+            />
+            <div className='flex w-full flex-row space-x-2'>
+              <div
+                className='flex w-full cursor-pointer flex-row justify-center rounded-lg bg-slate-300 p-2'
+                onClick={onClose}
+              >
+                Guardar
+              </div>
+              <div
+                className='flex w-full cursor-pointer flex-row justify-center rounded-lg bg-slate-300 p-2'
+                onClick={() => setIsEdditingDesc(!isEdditingDesc)}
+              >
+                Cancelar
+              </div>
+            </div>
+          </div>
+        }
         <div className='flex w-full flex-row space-x-3'>
           <UserGroupIcon
             className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold text-opacity-50'
           />
           <h4 className='flex items-center text-[14px]'><b>{capitalize(task.user_full_name)}&nbsp;</b>{'es el responsable de esta tarea'}</h4>
-        </div>
+          d</div>
         <div className='flex w-full flex-row space-x-3'>
           <ClockIcon
             className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold text-opacity-50'
@@ -240,7 +284,7 @@ const TaskModal = ({ task, _onClose }: TaskModalProps) => {
             <h4 className='flex items-center text-[11px]'>Iniciada el {formatDate(task.task_start_date)}</h4>
           </div>
         </div>
-      </div>
+      </form>
     </>
   );
 };

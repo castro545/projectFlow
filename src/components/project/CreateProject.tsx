@@ -166,6 +166,7 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
                   className='m-0 h-[80px] w-full resize-none rounded-[10px] border-[#D9D9D9] bg-[#E9E9E9] p-3 text-[14px] text-gray-400 placeholder-gray-400 outline-none focus:ring focus:ring-custom-color-light-gray'
                   rows={5}
                   required={true}
+                  placeholder=''
                   {...register('description')}
                 />
               </div>

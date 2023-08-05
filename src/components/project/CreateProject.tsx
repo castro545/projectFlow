@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { PlusIcon } from '@heroicons/react/24/solid';
+import { PlusIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import CreateProjectImage from '../../../public/images/png/create_project.png';
 import { ToastUtils } from '@/src/utils/ToastUtils';
 import CircularProgressIndicator from '../CircularProgressIndicator';
@@ -138,6 +138,13 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
     setValue('colaborator', '');
   };
 
+  const onDeleteColaborator = (emailToDelete: string) => {
+    const updatedColaborators = colaborators.filter(
+      (colaborator) => colaborator.email !== emailToDelete
+    );
+    setColaborators(updatedColaborators);
+  };
+
   useEffect(() => {
 
   }, []);
@@ -234,7 +241,13 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
                 {
                   colaborators.length > 0 &&
                   colaborators.map((colaborator, index) => (
-                    <h1 key={index}>{colaborator.email}</h1>
+                    <div key={index} className='flex flex-row'>
+                      <h1>{colaborator.email}</h1>
+                      <XMarkIcon
+                        className='h-6 w-6 cursor-pointer stroke-1 text-red-500'
+                        onClick={() => onDeleteColaborator(colaborator.email)}
+                      />
+                    </div>
                   ))
                 }
               </div>

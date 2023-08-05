@@ -274,7 +274,7 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                       <div className='w-20 p-5'>
                         <div
                           className='cursor-pointer rounded-lg bg-red-200 p-2'
-                          onClick={() => deleteTask(task.task_id)}
+                          onClick={() => onClose()}
                         >
                           <XMarkIcon
                             className='h-[1.5rem] w-[1.5rem] text-red-700'

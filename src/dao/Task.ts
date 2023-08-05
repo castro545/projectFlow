@@ -4,6 +4,25 @@ import { CountTaskInfo, TaskType, UsersFilter } from '../types/Task';
 
 export class TaskDAO implements TaskInterface {
 
+  async deleteTask(task_id: number): Promise<number> {
+    const query = 'UPDATE tasks SET is_active = \'0\' WHERE task_id = $1';
+
+    const values = [task_id];
+
+    try {
+
+      const { rowCount } = await pool.query(query, values);
+
+      return rowCount || 0;
+
+    } catch (error) {
+
+      console.log('Error in count the tasks:', error);
+      return 0;
+
+    }
+  }
+
   async fetchUserFilter(project_id: number): Promise<UsersFilter[]> {
     const query = `
       select
@@ -25,8 +44,6 @@ export class TaskDAO implements TaskInterface {
         and users.is_active = '1'
         and projects.project_id = $1
     `;
-
-    console.log(project_id);
 
     const values = [project_id];
 

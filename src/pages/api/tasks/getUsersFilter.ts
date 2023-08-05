@@ -21,8 +21,6 @@ async function handler(
 
         const usersFiltes: UsersFilter[] = await taskDAO.fetchUserFilter(project_id);
 
-        console.log(usersFiltes);
-
         if (usersFiltes) {
           return res.status(200).json(usersFiltes);
         } else {

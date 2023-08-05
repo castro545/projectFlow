@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { TaskInterface } from '@/src/interfaces/Task';
 import { TaskDAO } from '@/src/dao/Task';
-import { CountTaskInfo } from '@/src/types/Task';
 
 // Creamos una instancia del DAO
 const taskDAO: TaskInterface = new TaskDAO();
@@ -17,17 +16,17 @@ async function handler(
   switch (method) {
     case 'POST':
       try {
-        const {user_code  } = body;
+        const { task_id } = body;
 
-        const countTasks: CountTaskInfo[] = await taskDAO.fetchCountTaskByUser(user_code);
+        const deletedTask: number = await taskDAO.deleteTask(task_id);
 
-        if (countTasks) {
-          return res.status(200).json(countTasks);
+        if (deletedTask >= 1 ) {
+          return res.status(200).json(deletedTask);
         } else {
-          return res.status(404).json({ message: 'Not Tasks to count' });
+          return res.status(404).json({ message: 'Tasks not deleted' });
         }
       } catch (error) {
-        return res.status(500).json({ message: 'Error Counting task', error });
+        return res.status(500).json({ message: 'Error Deleting task', error });
       }
     default:
       return res.status(405).json({ message: 'Method not allowed' });

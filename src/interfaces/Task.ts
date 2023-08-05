@@ -12,4 +12,5 @@ export interface TaskInterface {
   fetchCountTaskByUser(user_code: number): Promise<CountTaskInfo[]>;
 
   fetchUserFilter(project_id: number): Promise<UsersFilter[]>;
+  deleteTask(task_id: number): Promise<number>;
 }

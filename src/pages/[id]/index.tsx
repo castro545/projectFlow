@@ -107,8 +107,6 @@ const CreateProject = () => {
       const numericId = typeof id === 'string' ? parseInt(id) : -1;
       const reqdata: UsersFilter[] = await fetchUsersFilter(numericId);
 
-      console.log(reqdata);
-
       if (reqdata) {
         setUsersFilter(reqdata);
       }
@@ -243,7 +241,7 @@ const CreateProject = () => {
 
     fetchFilterTask();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpenCreateTask, infoUser]);
+  }, [isOpenCreateTask, infoUser, isOpenModalTask]);
 
   useEffect(() => {
     const fetchProjectInfo = async () => {

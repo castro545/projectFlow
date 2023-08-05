@@ -13,6 +13,8 @@ import {
 import { capitalize } from 'lodash';
 import { formatDate } from '@/src/utils/formatDate';
 import { useForm } from 'react-hook-form';
+import { useDeleteTask } from '../hooks/task/useDeleteTask';
+import { ToastUtils } from '@/src/utils/ToastUtils';
 
 type TaskModalProps = {
   task: TaskType;
@@ -40,10 +42,23 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
     setIsDropdownOpenState(!isDropdownOpenState);
   };
 
-  useEffect(() => {
+  const deleteTaskHook = useDeleteTask();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const deleteTask = async (task_id: number) => {
+    try {
+      const reqdata: number = await deleteTaskHook(task_id);
+
+      if (reqdata >= 1) {
+        ToastUtils.successMessage('¡Tarea eliminada exitosamente!');
+        onClose();
+      } else {
+        ToastUtils.warnMessage('Hubo un error eliminando la tarea, vuelve a intentarlo');
+        onClose();
+      }
+    } catch {
+      return false;
+    }
+  };
 
   const setColorsPriority = () => {
     const colors: TaskColorPriority = {
@@ -259,7 +274,7 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                       <div className='w-20 p-5'>
                         <div
                           className='cursor-pointer rounded-lg bg-red-200 p-2'
-                          onClick={() => console.log('se elimina')}
+                          onClick={() => deleteTask(task.task_id)}
                         >
                           <XMarkIcon
                             className='h-[1.5rem] w-[1.5rem] text-red-700'
@@ -269,7 +284,7 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                       <div className='w-20 p-5'>
                         <div
                           className='cursor-pointer rounded-lg bg-green-200 p-2'
-                          onClick={() => console.log('no se elimina')}
+                          onClick={() => deleteTask(task.task_id)}
                         >
                           <CheckIcon
                             className='h-[1.5rem] w-[1.5rem] text-green-700'

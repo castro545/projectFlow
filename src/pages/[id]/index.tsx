@@ -8,7 +8,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import {
-  UserPlusIcon,
+  //UserPlusIcon,
   PlusCircleIcon,
   DocumentTextIcon
 } from '@heroicons/react/24/solid';
@@ -17,7 +17,6 @@ import { MultiValue } from 'react-select';
 import { useFetchFilterTasks } from '@/src/components/hooks/task/FetchFilterTask';
 import useGetCountTaskProject from '@/src/components/hooks/project/fetchCountTaskByProject';
 import ModalComponent from '@/src/components/layout/Modal';
-import CreateTask from './createtask';
 import { useFetchInfoProject } from '@/src/components/hooks/project/fetchInfoPoject';
 import { capitalize } from 'lodash';
 import { useFetchAdminInfo } from '@/src/components/hooks/project/useFetchAdminInfo';
@@ -27,6 +26,7 @@ import TaskModal from '@/src/components/tasks/TaskModal';
 import styles from '@/src/styles/Home.module.css';
 import { formatDate } from '@/src/utils/formatDate';
 import { useUserFilter } from '@/src/components/hooks/task/useUserFilter';
+import CreateTask from '@/src/components/tasks/CreatedTask';
 
 const CreateProject = () => {
   const [tasksResult, setTaskResult] = useState<TaskType[]>([]);
@@ -39,6 +39,7 @@ const CreateProject = () => {
   const [infoUser, setInfoUser] = useState<InfoUserLogin | null>(null);
   const [isOpenModalTask, setIsOpenModalTask] = useState<boolean>(false);
   const [infoTask, setIinfoTask] = useState<TaskType | null>(null);
+
 
 
   const fethProjectByUser = useGetCountTaskProject();
@@ -284,12 +285,12 @@ const CreateProject = () => {
                 }
               </label>
               <div className='flex flex-row space-x-6'>
-                <span className={styles.tooltip} title='Añadir contribuidor'>
+                {/* <span className={styles.tooltip} title='Añadir contribuidor'>
                   <UserPlusIcon
                     className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
                     onClick={onAddUserProject}
                   />
-                </span>
+                </span> */}
                 <span className={styles.tooltip} title='Crear nueva tarea'>
                   <PlusCircleIcon
                     className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
@@ -379,9 +380,13 @@ const CreateProject = () => {
           </div>
         </div>
         {
-          isOpenCreateTask &&
+          isOpenCreateTask && infoUser !== null &&
           < ModalComponent onClose={onCreatedTask} maxWidth='max-w-[45.8125rem]'>
-            <CreateTask />
+            <CreateTask
+              onClose={onCreatedTask}
+              owner_id={infoUser?.user_id!}
+              project_id={typeof id === 'string' ? parseInt(id) : -1}
+            />
           </ModalComponent>
         }
         {

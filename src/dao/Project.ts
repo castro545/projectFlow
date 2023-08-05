@@ -200,9 +200,16 @@ export class ProjectDAO implements ProjectInterface {
   }
   async getProjectsByUserId(userId: string[] | string | undefined): Promise<ProjectType[]> {
     const query = `
-      SELECT *
-      FROM projects
-      WHERE owner_code = ${userId}
+      SELECT
+        projects.*,
+        roles.name role_name
+      FROM project_user
+      INNER JOIN projects ON project_user.project_code = projects.project_id
+      INNER JOIN roles ON project_user.role_code = roles.role_id
+      WHERE project_user.user_code = ${userId}
+      AND project_user.is_active = '1'
+      AND projects.is_active = '1'
+      ORDER BY roles.role_id;
     `;
 
     try {

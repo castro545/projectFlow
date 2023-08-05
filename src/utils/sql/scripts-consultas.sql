@@ -29,7 +29,9 @@ INNER JOIN task_status ON tasks.status_code = task_status.task_status_id
 WHERE tasks.is_active = '1'
 AND projects.is_active = '1'
 AND project_user.is_active = '1'
+AND users.is_active = '1'
 AND projects.project_id = 1
+AND tasks.project_code = 1
 -- Filtro por usuario
 AND users.user_id = 1
 -- Filtro por prioridad

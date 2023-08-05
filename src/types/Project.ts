@@ -6,6 +6,7 @@ export interface ProjectType {
   start_date: string;
   estimated_date: string;
   emails: string[];
+  role_name?: string;
 }
 
 export type InfoProjectHome = {

@@ -39,15 +39,15 @@ export class TaskDAO implements TaskInterface {
       SELECT
         SUM(CASE WHEN status_code IN(1, 2, 4) THEN 1 ELSE 0 END) AS pending_tasks,
         SUM(CASE WHEN status_code IN(3, 5) THEN 1 ELSE 0 END) AS completed_tasks,
-        SUM(CASE WHEN user_code = 17 THEN 1 ELSE 0 END) AS created_by_me
+        SUM(CASE WHEN user_code = $1 THEN 1 ELSE 0 END) AS created_by_me
       FROM tasks
       INNER JOIN projects ON projects.project_id = tasks.project_code
-      WHERE tasks.user_code = $1
+      WHERE tasks.user_code = $2
         AND tasks.is_active = '1'
         AND projects.is_active = '1'
     `;
 
-    const values = [user_code];
+    const values = [user_code, user_code];
 
     try {
 

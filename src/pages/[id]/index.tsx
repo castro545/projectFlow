@@ -25,6 +25,7 @@ import Storage from '@/src/utils/storage';
 import { InfoUserLogin } from '@/src/types/Login';
 import TaskModal from '@/src/components/tasks/TaskModal';
 import styles from '@/src/styles/Home.module.css';
+import { formatDate } from '@/src/utils/formatDate';
 
 const CreateProject = () => {
   const [tasksResult, setTaskResult] = useState<TaskType[]>([]);
@@ -247,9 +248,9 @@ const CreateProject = () => {
       </Head>
       <Layout>
         <div className='space-y-3'>
-          <div className='space-y-3 px-[60px] pt-[45px]'>
+          <div className='space-y-8 px-[60px] pt-[45px]'>
             <div className='flex w-full flex-row justify-between'>
-              <label className='text-[24px] font-[700]'>
+              <label className='text-[26px] font-[700]'>
                 {
                   projectInfo &&
                   capitalize(projectInfo[0].name)
@@ -273,9 +274,40 @@ const CreateProject = () => {
                     className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
                     onClick={onViewChart}
                   />
-                </span>              
+                </span>
               </div>
             </div>
+            {
+              projectInfo &&
+              <div className='flex flex-row'>
+                <div className='flex w-1/2 flex-col space-y-3'>
+                  <label className='text-[18px] font-bold text-custom-color-dark-blue'>
+                    Descripción:
+                  </label>
+                  <label className='text-[14px] font-normal text-custom-color-dark-blue'>
+                    {capitalize(projectInfo[0].description)}
+                  </label>
+                </div>
+                <div className='flex w-1/2 flex-row space-y-3'>
+                  <div className='flex w-1/2 flex-col'>
+                    <label className='text-[18px] font-bold text-custom-color-dark-blue'>
+                      Fecha Creación:
+                    </label>
+                    <label className='text-[14px] font-normal text-custom-color-dark-blue'>
+                      {formatDate(projectInfo[0].start_date)}
+                    </label>
+                  </div>
+                  <div className='flex w-1/2 flex-col'>
+                    <label className='text-[18px] font-bold text-custom-color-dark-blue'>
+                      Fecha Estimada de finalización:
+                    </label>
+                    <label className='text-[14px] font-normal text-custom-color-dark-blue'>
+                      {formatDate(projectInfo[0].estimated_date)}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            }
             {
               countTask.length > 0 && projectInfoAdmin &&
               <HeaderCards
@@ -321,12 +353,12 @@ const CreateProject = () => {
             <CreateTask />
           </ModalComponent>
         }
-        {/* {
+        {
           isAddUserProject && infoUser !== null &&
           < ModalComponent onClose={onAddUserProject} maxWidth='max-w-[45.8125rem]'>
-           
+
           </ModalComponent>
-        } */}
+        }
         {
           isOpenModalTask && infoUser && infoTask !== null &&
           <ModalComponent onClose={openTask} maxWidth='max-w-[45.8125rem]'>

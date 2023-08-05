@@ -41,7 +41,6 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
   };
 
   useEffect(() => {
-    console.log(task.task_id);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

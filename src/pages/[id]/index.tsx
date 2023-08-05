@@ -338,10 +338,10 @@ const CreateProject = () => {
                     {capitalize(projectInfo[0].description)}
                   </label>
                 </div>
-                <div className='flex w-1/2 flex-row space-y-3'>
+                <div className='flex w-1/2 flex-row space-x-3'>
                   <div className='flex w-1/2 flex-col'>
                     <label className='text-[18px] font-bold text-custom-color-dark-blue'>
-                      Fecha Creación:
+                      Fecha creación:
                     </label>
                     <label className='text-[14px] font-normal text-custom-color-dark-blue'>
                       {formatDate(projectInfo[0].start_date)}
@@ -349,12 +349,23 @@ const CreateProject = () => {
                   </div>
                   <div className='flex w-1/2 flex-col'>
                     <label className='text-[18px] font-bold text-custom-color-dark-blue'>
-                      Fecha Estimada de finalización:
+                      Fecha estimada de finalización:
                     </label>
                     <label className='text-[14px] font-normal text-custom-color-dark-blue'>
                       {formatDate(projectInfo[0].estimated_date)}
                     </label>
                   </div>
+                  { projectInfo &&
+                      (projectInfo[0]?.end_date != null && projectInfo[0]?.end_date != undefined) &&
+                    <div className='flex w-1/2 flex-col'>
+                    <label className='text-[18px] font-bold text-custom-color-dark-blue'>
+                      Fecha de finalización:
+                    </label>
+                    <label className='text-[14px] font-normal text-custom-color-dark-blue'>
+                      {formatDate(projectInfo[0].end_date)}
+                    </label>
+                  </div>
+                  }
                 </div>
               </div>
             }

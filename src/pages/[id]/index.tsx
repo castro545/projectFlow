@@ -242,7 +242,7 @@ const CreateProject = () => {
       <Head>
         {
           projectInfo &&
-          <title>Proyecto :: {capitalize(projectInfo[0].name)} {isOpenCreateTask ? ':: Creando Tarea' : ''}</title>
+          <title>Proyecto :: {capitalize(projectInfo[0].name)} {isOpenCreateTask ? ':: Creando Tarea' : ''} {isOpenModalTask ? ` :: ${capitalize(infoTask?.task_name)}` : ''}</title>
         }
       </Head>
       <Layout>

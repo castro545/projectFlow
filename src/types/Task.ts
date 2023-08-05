@@ -38,3 +38,49 @@ export type CountTaskInfo = {
   created_by_me?: number;
   redirectTo?: string;
 };
+
+export type TaskColorPriority = {
+  alta: {
+    borde: string;
+    bg: string;
+    text: string;
+  };
+  media: {
+    borde: string;
+    bg: string;
+    text: string;
+  };
+  baja: {
+    borde: string;
+    bg: string;
+    text: string;
+  };
+}
+
+export type TaskColorState = {
+  nueva: {
+    borde: string;
+    bg: string;
+    text: string;
+  };
+  enProceso: {
+    borde: string;
+    bg: string;
+    text: string;
+  };
+  resuelta: {
+    borde: string;
+    bg: string;
+    text: string;
+  };
+  enEspera: {
+    borde: string;
+    bg: string;
+    text: string;
+  };
+  cancelada: {
+    borde: string;
+    bg: string;
+    text: string;
+  };
+}

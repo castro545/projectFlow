@@ -16,9 +16,7 @@ const ProjectCard = ({ projectData }: ProjectCardProps) => {
   const router = useRouter();
 
   const openProject = () => {
-
     router.push(`/${projectData.project_id}`);
-
   };
 
   useEffect(() => { }, []);

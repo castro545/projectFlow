@@ -29,6 +29,9 @@ const ProjectCard = ({ projectData }: ProjectCardProps) => {
         <div className='w-full space-y-10'>
           <label className='text-[24px] font-normal text-custom-color-dark-blue'>
             {capitalize(projectData.name)}
+          </label> <br />
+          <label className='text-[16px] font-normal text-custom-color-dark-blue'>
+            {capitalize(projectData.role_name)}
           </label>
           <div className='flex flex-row items-center space-x-3'>
             <CalendarIcon

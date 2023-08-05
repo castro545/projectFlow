@@ -24,7 +24,7 @@ const HomePage = () => {
   const [infoUser, setInfoUser] = useState<InfoUserLogin | null>(null);
   const [isOpenCreateProject, setIsOpenCreateProject] = useState<boolean>(false);
 
-  const fethProjectByUser = useGetCountTaskUser();
+  const fetchCountTaskUser = useGetCountTaskUser();
   const fetchProjectByUser = useProjectByUser();
 
   const getCountTask = async () => {
@@ -32,7 +32,7 @@ const HomePage = () => {
       const bodyCount = {
         'user_code': infoUser!.user_id
       };
-      const reqdata: CountTaskInfo[] = await fethProjectByUser(bodyCount);
+      const reqdata: CountTaskInfo[] = await fetchCountTaskUser(bodyCount);
 
       if (reqdata[0].completed_tasks === null) {
         reqdata[0] = {
@@ -155,7 +155,7 @@ const HomePage = () => {
         <div className='space-y-3 px-[60px] pt-[45px]'>
           <label className='text-[20px] font-[700]'>Proyectos</label>
           {
-            infoUser &&
+            infoUser && projects &&
             <Projects
               onCreateProject={onCreatedProject}
               projects={projects}

@@ -2,9 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { TaskInterface } from '@/src/interfaces/Task';
 import { TaskDAO } from '@/src/dao/Task';
 import { CountTaskInfo } from '@/src/types/Task';
-import { validateTokenMiddleware } from '@/src/utils/validateToken';
-
-const loginUrl = '/login';
 
 // Creamos una instancia del DAO
 const taskDAO: TaskInterface = new TaskDAO();
@@ -48,6 +45,4 @@ async function handler(
   }
 }
 
-
-//export default validateTokenMiddleware(handler, loginUrl);
 export default handler;

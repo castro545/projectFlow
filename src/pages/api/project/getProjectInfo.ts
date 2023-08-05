@@ -1,9 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ProjectInterface } from '@/src/interfaces/Project';
 import { ProjectDAO } from '@/src/dao/Project';
-import { validateTokenMiddleware } from '@/src/utils/validateToken';
-
-const loginUrl = '/login';
 
 // Creamos una instancia del DAO
 const projectDAO: ProjectInterface = new ProjectDAO();
@@ -29,5 +26,4 @@ async function handler(
   }
 }
 
-//export default validateTokenMiddleware(handler, loginUrl);
 export default handler;

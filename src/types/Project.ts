@@ -21,3 +21,11 @@ export type ProjectIsAdminInfo = {
   role_id: number;
   role_name: string;
 }
+
+export type ProjectCardType = {
+  project_name: string;
+  project_start_date: string;
+  users_full_name: string;
+  total_tasks: number;
+  users?: string[]
+}

@@ -32,7 +32,7 @@ const CreateProject = () => {
   const [projectInfoAdmin, setProjectInfoAdmin] = useState<ProjectIsAdminInfo | null>(null);
   const [infoUser, setInfoUser] = useState<InfoUserLogin | null>(null);
   const [isOpenModalTask, setIsOpenModalTask] = useState<boolean>(false);
-  const [infoTask, setIinfoTask] = useState<{ task_id: number } | null>(null);
+  const [infoTask, setIinfoTask] = useState<TaskType | null>(null);
 
 
   const fethProjectByUser = useGetCountTaskProject();
@@ -305,7 +305,7 @@ const CreateProject = () => {
         {
           isOpenModalTask && infoUser && infoTask !== null &&
           <ModalComponent onClose={openTask} maxWidth='max-w-[45.8125rem]'>
-            <TaskModal infoTask={infoTask} onClose={openTask} />
+            <TaskModal task={infoTask} onClose={openTask} />
           </ModalComponent>
         }
       </Layout >

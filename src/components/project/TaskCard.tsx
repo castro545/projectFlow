@@ -12,7 +12,7 @@ import { formatDate } from '@/src/utils/formatDate';
 type TaskCardProps = {
   task: TaskType;
   openTask: () => void;
-  setIinfoTask: (_task_id: { task_id: number }) => void;
+  setIinfoTask: (_task: TaskType) => void;
 }
 
 const TaskCard = ({ task, openTask, setIinfoTask }: TaskCardProps) => {
@@ -22,7 +22,7 @@ const TaskCard = ({ task, openTask, setIinfoTask }: TaskCardProps) => {
 
   const handleOpenModal = () => {
     openTask();
-    setIinfoTask({ task_id: task.task_id });
+    setIinfoTask(task);
   };
 
   const setColorsPriority = () => {

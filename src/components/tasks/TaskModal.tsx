@@ -8,6 +8,7 @@ import {
   TrashIcon,
   CheckIcon,
   XMarkIcon,
+  PencilSquareIcon
 } from '@heroicons/react/24/solid';
 import { capitalize } from 'lodash';
 import { formatDate } from '@/src/utils/formatDate';
@@ -20,10 +21,10 @@ type TaskModalProps = {
 const TaskModal = ({ task, _onClose }: TaskModalProps) => {
   const [colorsPriority, setColorPriority] = useState<TaskColorPriority | null>(null);
   const [colorsState, setColorsStates] = useState<TaskColorState | null>(null);
-  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const [isDropdownOpenTrash, setIsDropdownOpenTrash] = useState<boolean>(false);
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+  const toggleDropdownTrash = () => {
+    setIsDropdownOpenTrash(!isDropdownOpenTrash);
   };
 
   useEffect(() => {
@@ -35,19 +36,19 @@ const TaskModal = ({ task, _onClose }: TaskModalProps) => {
   const setColorsPriority = () => {
     const colors: TaskColorPriority = {
       alta: {
-        borde: 'border-red-300',
-        bg: 'bg-red-200',
-        text: 'text-red-600',
+        borde: 'border-red-400',
+        bg: 'bg-red-100',
+        text: 'text-red-800',
       },
       media: {
-        borde: 'border-yellow-300',
-        bg: 'bg-yellow-200',
-        text: 'text-yellow-600',
+        borde: 'border-yellow-400',
+        bg: 'bg-yellow-100',
+        text: 'text-yellow-800',
       },
       baja: {
-        borde: 'border-green-300',
-        bg: 'bg-green-200',
-        text: 'text-green-600',
+        borde: 'border-green-400',
+        bg: 'bg-green-100',
+        text: 'text-green-800',
       },
     };
     setColorPriority(colors);
@@ -56,29 +57,29 @@ const TaskModal = ({ task, _onClose }: TaskModalProps) => {
   const setColorsState = () => {
     const colors: TaskColorState = {
       nueva: {
-        borde: 'border-yellow-300',
-        bg: 'bg-yellow-200',
-        text: 'text-yellow-600',
+        borde: 'border-yellow-400',
+        bg: 'bg-yellow-50',
+        text: 'text-yellow-800',
       },
       enProceso: {
-        borde: 'border-blue-300',
-        bg: 'bg-blue-200',
-        text: 'text-blue-600',
+        borde: 'border-blue-400',
+        bg: 'bg-blue-100',
+        text: 'text-blue-800',
       },
       resuelta: {
-        borde: 'border-green-300',
-        bg: 'bg-green-200',
-        text: 'text-green-600',
+        borde: 'border-green-400',
+        bg: 'bg-green-100',
+        text: 'text-green-800',
       },
       enEspera: {
-        borde: 'border-pink-300',
-        bg: 'bg-pink-200',
-        text: 'text-pink-600',
+        borde: 'border-pink-400',
+        bg: 'bg-pink-100',
+        text: 'text-pink-800',
       },
       cancelada: {
-        borde: 'border-red-300',
-        bg: 'bg-red-200',
-        text: 'text-red-600',
+        borde: 'border-red-400',
+        bg: 'bg-red-100',
+        text: 'text-red-800',
       }
     };
     setColorsStates(colors);
@@ -161,13 +162,13 @@ const TaskModal = ({ task, _onClose }: TaskModalProps) => {
             </div>
             <div className='relative'>
               <div
-                className={'w-auto cursor-pointer rounded-[10px] border-[2px] border-red-300 bg-red-200 p-2 text-[12px] font-normal text-red-600'}
-                onClick={toggleDropdown}
+                className={'w-auto cursor-pointer rounded-[10px] border-[2px] border-red-400 bg-red-100 p-2 text-[12px] font-normal text-red-800'}
+                onClick={toggleDropdownTrash}
               >
                 <TrashIcon
                   className='h-[1.5rem] w-[1.5rem] text-red-700'
                 />
-                {isDropdownOpen && (
+                {isDropdownOpenTrash && (
                   <div className='absolute right-0 mt-2 w-auto cursor-auto rounded-lg border border-gray-300 bg-white shadow'>
                     <div className='flex flex-row'>
                       <div className='w-20 p-5'>
@@ -197,12 +198,17 @@ const TaskModal = ({ task, _onClose }: TaskModalProps) => {
             </div>
           </div>
         </div>
-        <div className='flex w-full flex-row rounded-lg border border-[#7497FE] bg-[#7497fe3d] p-4 text-[#4c64ab]'>
-          <div className='w-5/6'>
-            {task.task_description}
-          </div>
-          <div className='w-1/6'>
-            hola
+        <div className='flex w-full flex-col rounded-lg border border-[#afafafaf] bg-[#f8f8f8] p-4 text-[#3f3f3f]'>
+          <div className='flex flex-row'>
+            <div className='w-11/12'>
+              {task.task_description}
+            </div>
+            <div className='flex w-1/12 justify-end'>
+              <PencilSquareIcon
+                className='h-[1.5rem] w-[1.5rem] cursor-pointer text-[#3f3f3f]'
+                onClick={()=>console.log('modo editar')}
+              />
+            </div>
           </div>
         </div>
         <div className='flex w-full flex-row space-x-3'>

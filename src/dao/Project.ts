@@ -184,18 +184,18 @@ export class ProjectDAO implements ProjectInterface {
     }
   }
 
-  async finishProject(project_id: number): Promise<boolean> {
-    const query = `
-    SELECT finish_project($1)
-    `;
-    const values = [project_id];
+  async finishProject(project_id: string[] | string | undefined): Promise<number> {
+    const query = `SELECT finish_project(${project_id})`;
+
+    console.log(query);
 
     try {
-      const result = await pool.query(query, values);
-      return result.rowCount > 0; // Retorna true si se eliminó al menos un registro.
+      const { rows } = await pool.query<{ finish_project: number }>(query);
+
+      return rows[0].finish_project; // Retorna 0 si no logra eliminar proyecto debido a que tiene tareas Nuevas/En proceso/ en espera
     } catch (error) {
       console.error('Error al eliminar el Proyecto:', error);
-      return false;
+      return 0;
     }
   }
   async getProjectsByUserId(userId: string[] | string | undefined): Promise<ProjectType[]> {

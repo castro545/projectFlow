@@ -10,7 +10,8 @@ import { useEffect, useState } from 'react';
 import {
   UserPlusIcon,
   PlusCircleIcon,
-  DocumentTextIcon
+  DocumentTextIcon,
+  LockClosedIcon
 } from '@heroicons/react/24/solid';
 import { BodyType, CountTaskInfo, OptionType, TaskType } from '@/src/types/Task';
 import { MultiValue } from 'react-select';
@@ -25,6 +26,8 @@ import Storage from '@/src/utils/storage';
 import { InfoUserLogin } from '@/src/types/Login';
 import TaskModal from '@/src/components/tasks/TaskModal';
 import styles from '@/src/styles/Home.module.css';
+import { useFinishProject } from '../../components/hooks/project/useFinishProject';
+import { ToastUtils } from '@/src/utils/ToastUtils';
 
 const CreateProject = () => {
   const [tasksResult, setTaskResult] = useState<TaskType[]>([]);
@@ -42,6 +45,7 @@ const CreateProject = () => {
   const fetchTasks = useFetchFilterTasks();
   const fetchProject = useFetchInfoProject();
   const fetchisAdmin = useFetchAdminInfo();
+  const fetchFinishProject = useFinishProject();
 
   const router = useRouter();
   const { id } = router.query;
@@ -56,6 +60,16 @@ const CreateProject = () => {
 
     setIsAddUserProject(!isAddUserProject);
 
+  };
+
+  const onFinishProject = async () => {
+    const finishedCode = await fetchFinishProject(id);
+
+    if(finishedCode > 0){
+      ToastUtils.successMessage('¡Proyecto finalizado!');
+    } else {
+      ToastUtils.errorMessage('¡Error! El proyecto tiene tareas en proceso');
+    }
   };
 
   const onViewChart = () => {
@@ -101,7 +115,7 @@ const CreateProject = () => {
   const getCountTask = async () => {
     try {
       const bodyCount = {
-        'user_code': 17,
+        'user_code': infoUser?.user_id,
         'project_id': id,
       };
       const reqdata: CountTaskInfo[] = await fethProjectByUser(bodyCount);
@@ -154,7 +168,7 @@ const CreateProject = () => {
     try {
       const body = {
         'project_id': +id!,
-        'user_id': 17,
+        'user_id': infoUser?.user_id,
       };
       const response: ProjectIsAdminInfo | null = await fetchisAdmin(body);
 
@@ -256,6 +270,15 @@ const CreateProject = () => {
                 }
               </label>
               <div className='flex flex-row space-x-6'>
+                {
+                  projectInfoAdmin?.role_name === 'Administrador'  &&
+                  <span className={styles.tooltip} title='Finalizar proyecto'>
+                    <LockClosedIcon
+                      className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
+                      onClick={() => onFinishProject()}
+                    />
+                  </span>
+                }
                 <span className={styles.tooltip} title='Añadir contribuidor'>
                   <UserPlusIcon
                     className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
@@ -301,6 +324,10 @@ const CreateProject = () => {
                   <TaskCard
                     key={index}
                     task={task}
+                    isFinishedProject={
+                      projectInfo &&
+                      (projectInfo[0]?.end_date != null && projectInfo[0]?.end_date != undefined)
+                    }
                     openTask={openTask}
                     setIinfoTask={setIinfoTask}
                   />
@@ -349,14 +376,14 @@ export const getServerSideProps = async ({ query }: any) => {
   let countTask: CountTaskInfo[] = [];
 
   const bodyFilter = {
-    'users': [17],
+    'users': [17], // Obtener el ID del usuario!
     'project_id': id,
     'priorities': [],
     'status': []
   };
 
   const bodyCount = {
-    'user_code': 17,
+    'user_code': 17, // Obtener el ID del usuario!
     'project_id': id,
   };
 

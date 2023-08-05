@@ -66,7 +66,7 @@ const CreateChartInfo = () => {
   const dataDona = [
     ['Tarea', 'Tareas por estados'],
     ['Nueva', 0],
-    ['En progreso', 0],
+    ['En proceso', 0],
     ['Resuelta', 0],
     ['En espera', 0],
     ['Cancelada', 0],
@@ -87,7 +87,7 @@ const CreateChartInfo = () => {
   };
 
   const dataStacked: (string | number)[][] = [
-    ['Status', 'Nueva', 'En progreso', 'Resuelta', 'En espera', 'Cancelada']
+    ['Status', 'Nueva', 'En proceso', 'Resuelta', 'En espera', 'Cancelada']
   ];
 
   chartInfo?.TasksByUser.forEach(e => {

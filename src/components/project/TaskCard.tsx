@@ -14,9 +14,10 @@ type TaskCardProps = {
   task: TaskType;
   openTask: () => void;
   setIinfoTask: (_task: TaskType) => void;
+  isFinishedProject: boolean | null;
 }
 
-const TaskCard = ({ task, openTask, setIinfoTask }: TaskCardProps) => {
+const TaskCard = ({ task, openTask, setIinfoTask, isFinishedProject }: TaskCardProps) => {
 
   const [colorsPriority, setColorPriority] = useState<TaskColorPriority | null>(null);
   const [colorsState, setColorsStates] = useState<TaskColorState | null>(null);
@@ -148,10 +149,12 @@ const TaskCard = ({ task, openTask, setIinfoTask }: TaskCardProps) => {
     >
       <div className='relative w-full'>
         <div className='absolute right-[-15px] top-[-10px]'>
-          <EllipsisVerticalIcon
+          { !isFinishedProject &&
+            <EllipsisVerticalIcon
             className='h-[2rem] w-[2rem] cursor-pointer text-custom-color-gold text-opacity-50'
             onClick={handleOpenModal}
           />
+          }
         </div>
       </div>
       <div className='flex w-full flex-row justify-between'>

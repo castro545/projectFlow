@@ -1,4 +1,4 @@
-import { TaskColorPriority, TaskColorState, TaskType } from '@/src/types/Task';
+import { TaskColorPriority, TaskColorState, TaskType, UpdateTask } from '@/src/types/Task';
 import { useEffect, useState } from 'react';
 import {
   UserGroupIcon,
@@ -13,13 +13,17 @@ import {
 import { capitalize } from 'lodash';
 import { formatDate } from '@/src/utils/formatDate';
 import { useForm } from 'react-hook-form';
+import { useDeleteTask } from '../hooks/task/useDeleteTask';
+import { ToastUtils } from '@/src/utils/ToastUtils';
+import { useUpdateTask } from '../hooks/task/useUpdateTask';
 
 type TaskModalProps = {
   task: TaskType;
   onClose: () => void;
+  user_id: number;
 }
 
-const TaskModal = ({ task, onClose }: TaskModalProps) => {
+const TaskModal = ({ task, onClose, user_id }: TaskModalProps) => {
   const [colorsPriority, setColorPriority] = useState<TaskColorPriority | null>(null);
   const [colorsState, setColorsStates] = useState<TaskColorState | null>(null);
   const [isDropdownOpenTrash, setIsDropdownOpenTrash] = useState<boolean>(false);
@@ -40,11 +44,60 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
     setIsDropdownOpenState(!isDropdownOpenState);
   };
 
-  useEffect(() => {
-    console.log(task.task_id);
+  const deleteTaskHook = useDeleteTask();
+  const updateTaskHook = useUpdateTask();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { register, handleSubmit, getValues, setValue } = useForm({
+    defaultValues: {
+      description: task.task_description,
+      task_priority_id: task.task_priority_id,
+      task_status_id: task.task_status_id
+    },
+    shouldUseNativeValidation: false
+  });
+
+  const deleteTask = async (task_id: number) => {
+    try {
+      const reqdata: number = await deleteTaskHook(task_id);
+
+      if (reqdata >= 1) {
+        ToastUtils.successMessage('¡Tarea eliminada exitosamente!');
+        onClose();
+      } else {
+        ToastUtils.warnMessage('Hubo un error eliminando la tarea, vuelve a intentarlo');
+        onClose();
+      }
+    } catch {
+      return false;
+    }
+  };
+
+  const updateTask = async () => {
+    try {
+
+      const updateBody: UpdateTask = {
+        description: getValues('description') === task.task_description ? task.task_description : getValues('description'),
+        priority_code: getValues('task_priority_id'),
+        status_code: getValues('task_status_id'),
+        updated_by: user_id,
+        task_id: task.task_id
+      };
+
+      const reqdata: number = await updateTaskHook(updateBody);
+
+      console.log(reqdata);
+
+      if (reqdata >= 1) {
+        ToastUtils.successMessage('¡Tarea actualizada exitosamente!');
+        onClose();
+      } else {
+        ToastUtils.warnMessage('Hubo un error actualizando la tarea, vuelve a intentarlo');
+        onClose();
+      }
+    } catch {
+      return false;
+    }
+  };
 
   const setColorsPriority = () => {
     const colors: TaskColorPriority = {
@@ -162,15 +215,12 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
       break;
   }
 
-  const { register, handleSubmit } = useForm({
-    defaultValues: {
-      description: task.task_description,
-    },
-    shouldUseNativeValidation: false
-  });
-
   const onSubmit = async (data: any) => {
     console.log(data);
+
+    await updateTask();
+
+
   };
 
   return (
@@ -195,14 +245,16 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                     <div className='w-[92px] space-y-2 p-0'>
                       <div
                         className='flex cursor-pointer justify-center rounded-lg bg-red-200 p-2 hover:bg-red-300'
-                        onClick={() => {
-                          console.log('Alta');
+                        onClick={async () => {
+                          setValue('task_priority_id', 1);
+                          await updateTask();
                           toggleDropdownPriority();
                         }}
                       >
                         <label className='cursor-pointer text-[10px] font-normal text-red-800'
-                          onClick={() => {
-                            console.log('Alta');
+                          onClick={async () => {
+                            setValue('task_priority_id', 1);
+                            await updateTask();
                             toggleDropdownPriority();
                           }}
                         >
@@ -211,14 +263,16 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                       </div>
                       <div
                         className='flex cursor-pointer justify-center rounded-lg bg-yellow-200 p-2 hover:bg-yellow-300'
-                        onClick={() => {
-                          console.log('Media');
+                        onClick={async () => {
+                          setValue('task_priority_id', 2);
+                          await updateTask();
                           toggleDropdownPriority();
                         }}
                       >
                         <label className='cursor-pointer text-[10px] font-normal text-red-800'
-                          onClick={() => {
-                            console.log('Alta');
+                          onClick={async () => {
+                            setValue('task_priority_id', 2);
+                            await updateTask();
                             toggleDropdownPriority();
                           }}
                         >
@@ -227,14 +281,16 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                       </div>
                       <div
                         className='flex cursor-pointer justify-center rounded-lg bg-green-200 p-2 hover:bg-green-300'
-                        onClick={() => {
-                          console.log('Baja');
+                        onClick={async () => {
+                          setValue('task_priority_id', 3);
+                          await updateTask();
                           toggleDropdownPriority();
                         }}
                       >
                         <label className='cursor-pointer text-[10px] font-normal text-red-800'
-                          onClick={() => {
-                            console.log('Alta');
+                          onClick={async () => {
+                            setValue('task_priority_id', 3);
+                            await updateTask();
                             toggleDropdownPriority();
                           }}
                         >
@@ -260,7 +316,7 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                       <div className='w-20 p-5'>
                         <div
                           className='cursor-pointer rounded-lg bg-red-200 p-2'
-                          onClick={() => console.log('se elimina')}
+                          onClick={() => onClose()}
                         >
                           <XMarkIcon
                             className='h-[1.5rem] w-[1.5rem] text-red-700'
@@ -270,7 +326,7 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                       <div className='w-20 p-5'>
                         <div
                           className='cursor-pointer rounded-lg bg-green-200 p-2'
-                          onClick={() => console.log('no se elimina')}
+                          onClick={() => deleteTask(task.task_id)}
                         >
                           <CheckIcon
                             className='h-[1.5rem] w-[1.5rem] text-green-700'
@@ -311,12 +367,12 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
               {...register('description')}
             />
             <div className='flex w-full flex-row space-x-2'>
-              <div
+              <button
+                type='submit'
                 className='flex w-full cursor-pointer select-none flex-row justify-center rounded-lg bg-slate-200 p-2 text-slate-500 hover:bg-slate-300'
-                onClick={onClose}
               >
                 Guardar
-              </div>
+              </button>
               <div
                 className='flex w-full cursor-pointer select-none flex-row justify-center rounded-lg bg-slate-200 p-2 text-slate-500 hover:bg-slate-300'
                 onClick={() => setIsEdditingDesc(!isEdditingDesc)}
@@ -350,14 +406,16 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                 <div className='w-[92px] space-y-2 p-0'>
                   <div
                     className='flex cursor-pointer justify-center rounded-lg bg-yellow-100 p-2 hover:bg-yellow-200'
-                    onClick={() => {
-                      console.log('Alta');
+                    onClick={async () => {
+                      setValue('task_status_id', 1);
+                      await updateTask();
                       toggleDropdownState();
                     }}
                   >
-                    <label className='cursor-pointer select-none text-[10px] font-normal text-yellow-800'
-                      onClick={() => {
-                        console.log('Alta');
+                    <label className='cursor-pointer select-none text-[12px] font-normal text-yellow-800'
+                      onClick={async () => {
+                        setValue('task_status_id', 1);
+                        await updateTask();
                         toggleDropdownState();
                       }}
                     >
@@ -366,14 +424,16 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                   </div>
                   <div
                     className='flex cursor-pointer justify-center rounded-lg bg-blue-100 p-2 hover:bg-blue-200'
-                    onClick={() => {
-                      console.log('Media');
+                    onClick={async () => {
+                      setValue('task_status_id', 2);
+                      await updateTask();
                       toggleDropdownState();
                     }}
                   >
-                    <label className='cursor-pointer select-none text-[10px] font-normal text-blue-800'
-                      onClick={() => {
-                        console.log('Alta');
+                    <label className='cursor-pointer select-none text-[12px] font-normal text-blue-800'
+                      onClick={async () => {
+                        setValue('task_status_id', 2);
+                        await updateTask();
                         toggleDropdownState();
                       }}
                     >
@@ -382,14 +442,16 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                   </div>
                   <div
                     className='flex cursor-pointer justify-center rounded-lg bg-green-100 p-2 hover:bg-green-200'
-                    onClick={() => {
-                      console.log('Baja');
+                    onClick={async () => {
+                      setValue('task_status_id', 3);
+                      await updateTask();
                       toggleDropdownState();
                     }}
                   >
-                    <label className='cursor-pointer select-none text-[10px] font-normal text-green-800'
-                      onClick={() => {
-                        console.log('Alta');
+                    <label className='cursor-pointer select-none text-[12px] font-normal text-green-800'
+                      onClick={async () => {
+                        setValue('task_status_id', 3);
+                        await updateTask();
                         toggleDropdownState();
                       }}
                     >
@@ -398,14 +460,16 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                   </div>
                   <div
                     className='flex cursor-pointer justify-center rounded-lg bg-pink-100 p-2 hover:bg-pink-200'
-                    onClick={() => {
-                      console.log('Baja');
+                    onClick={async () => {
+                      setValue('task_status_id', 4);
+                      await updateTask();
                       toggleDropdownState();
                     }}
                   >
-                    <label className='cursor-pointer select-none text-[10px] font-normal text-red-800'
-                      onClick={() => {
-                        console.log('Alta');
+                    <label className='cursor-pointer select-none text-[12px] font-normal text-red-800'
+                      onClick={async () => {
+                        setValue('task_status_id', 4);
+                        await updateTask();
                         toggleDropdownState();
                       }}
                     >
@@ -414,14 +478,17 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
                   </div>
                   <div
                     className='flex cursor-pointer justify-center rounded-lg bg-red-100 p-2 hover:bg-red-200'
-                    onClick={() => {
-                      console.log('Baja');
+                    onClick={async () => {
+                      setValue('task_status_id', 5);
+
+                      await updateTask();
                       toggleDropdownState();
                     }}
                   >
-                    <label className='cursor-pointer select-none text-[10px] font-normal text-red-800'
-                      onClick={() => {
-                        console.log('Alta');
+                    <label className='cursor-pointer select-none text-[12px] font-normal text-red-800'
+                      onClick={async () => {
+                        setValue('task_status_id', 5);
+                        await updateTask();
                         toggleDropdownState();
                       }}
                     >

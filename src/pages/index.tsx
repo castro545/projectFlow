@@ -14,8 +14,7 @@ import CreateProject from '../components/project/CreateProject';
 import { useProjectByUser } from '../components/hooks/project/useProjectByUser';
 import Storage from '@/src/utils/storage';
 import { InfoUserLogin } from '../types/Login';
-
-
+import styles from '@/src/styles/Home.module.css';
 
 const HomePage = () => {
 
@@ -138,10 +137,12 @@ const HomePage = () => {
           <div className='flex w-full flex-row justify-between'>
             <label className='text-[24px] font-[700]'>Inicio</label>
             <div className='flex flex-row space-x-6'>
-              <PlusCircleIcon
-                className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
-                onClick={onCreatedProject}
-              />
+              <span className={styles.tooltip} title='Crear Proyecto' >
+                <PlusCircleIcon
+                  className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
+                  onClick={onCreatedProject}
+                />
+              </span>
             </div>
           </div>
           {

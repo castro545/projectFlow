@@ -57,6 +57,21 @@ export type TaskColorPriority = {
   };
 }
 
+export type UpdateTask = {
+  task_id: number;
+  description: string;
+  priority_code: number;
+  status_code: number;
+  updated_by: number;
+}
+
+export type UsersFilter = {
+  user_id: number;
+  user_full_name: string;
+  rolde_id: number;
+  role_name: string;
+}
+
 export type TaskColorState = {
   nueva: {
     borde: string;

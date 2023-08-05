@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { TaskInterface } from '@/src/interfaces/Task';
 import { TaskDAO } from '@/src/dao/Task';
-import { CountTaskInfo } from '@/src/types/Task';
+import { UsersFilter } from '@/src/types/Task';
 
 // Creamos una instancia del DAO
 const taskDAO: TaskInterface = new TaskDAO();
@@ -17,17 +17,17 @@ async function handler(
   switch (method) {
     case 'POST':
       try {
-        const {user_code  } = body;
+        const { project_id } = body;
 
-        const countTasks: CountTaskInfo[] = await taskDAO.fetchCountTaskByUser(user_code);
+        const usersFiltes: UsersFilter[] = await taskDAO.fetchUserFilter(project_id);
 
-        if (countTasks) {
-          return res.status(200).json(countTasks);
+        if (usersFiltes) {
+          return res.status(200).json(usersFiltes);
         } else {
-          return res.status(404).json({ message: 'Not Tasks to count' });
+          return res.status(404).json({ message: 'Tasks not found' });
         }
       } catch (error) {
-        return res.status(500).json({ message: 'Error Counting task', error });
+        return res.status(500).json({ message: 'Error Fetching task', error });
       }
     default:
       return res.status(405).json({ message: 'Method not allowed' });

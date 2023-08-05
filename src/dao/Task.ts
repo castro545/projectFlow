@@ -1,8 +1,93 @@
 import { pool } from '@/src/utils/conn';
 import { TaskInterface } from '../interfaces/Task';
-import { CountTaskInfo, TaskType } from '../types/Task';
+import { CountTaskInfo, TaskType, UsersFilter } from '../types/Task';
 
 export class TaskDAO implements TaskInterface {
+  async updateTask(task_id: number, priority_code: number, status_code: number, description: string, updated_by: number): Promise<number> {
+
+    const query = `
+      UPDATE tasks SET
+        ${status_code === 3 || status_code === 5 ? 'end_date = now()::timestamp,' : ''}
+        description = $1,
+        priority_code = ${priority_code},
+        status_code  = ${status_code},
+        updated_by = ${updated_by},
+        updated_at = now()::timestamp
+      WHERE task_id = $2`;
+
+    const values = [description, task_id];
+
+    try {
+
+      const { rowCount } = await pool.query(query, values);
+      return rowCount || 0;
+
+    } catch (error) {
+
+      console.log('Error in count the tasks:', error);
+      return 0;
+
+    }
+  }
+
+  async deleteTask(task_id: number): Promise<number> {
+    const query = 'UPDATE tasks SET is_active = \'0\' WHERE task_id = $1';
+
+    const values = [task_id];
+
+    try {
+
+      const { rowCount } = await pool.query(query, values);
+
+      return rowCount || 0;
+
+    } catch (error) {
+
+      console.log('Error in count the tasks:', error);
+      return 0;
+
+    }
+  }
+
+  async fetchUserFilter(project_id: number): Promise<UsersFilter[]> {
+    const query = `
+      select
+          users.user_id user_id,
+        users.full_name user_full_name,
+        roles.role_id role_id,
+        roles.name role_name
+      from
+        project_user
+      inner join projects on
+        project_user.project_code = projects.project_id
+      inner join users on
+        project_user.user_code = users.user_id
+      inner join roles on
+        project_user.role_code = roles.role_id
+      where
+        project_user.is_active = '1'
+        and projects.is_active = '1'
+        and users.is_active = '1'
+        and projects.project_id = $1
+    `;
+
+    const values = [project_id];
+
+    try {
+
+      const { rows } = await pool.query(query, values);
+
+      console.log(rows);
+
+      return rows || [];
+
+    } catch (error) {
+
+      console.log('Error in count the tasks:', error);
+      return [];
+
+    }
+  }
 
   async fetchCountTaskByProject(user_code: number, project_code: number | null): Promise<CountTaskInfo[]> {
     const query = `

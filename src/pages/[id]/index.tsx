@@ -13,7 +13,7 @@ import {
   DocumentTextIcon,
   LockClosedIcon
 } from '@heroicons/react/24/solid';
-import { BodyType, CountTaskInfo, OptionType, TaskType } from '@/src/types/Task';
+import { BodyType, CountTaskInfo, OptionType, TaskType, UsersFilter } from '@/src/types/Task';
 import { MultiValue } from 'react-select';
 import { useFetchFilterTasks } from '@/src/components/hooks/task/FetchFilterTask';
 import useGetCountTaskProject from '@/src/components/hooks/project/fetchCountTaskByProject';
@@ -26,12 +26,15 @@ import Storage from '@/src/utils/storage';
 import { InfoUserLogin } from '@/src/types/Login';
 import TaskModal from '@/src/components/tasks/TaskModal';
 import styles from '@/src/styles/Home.module.css';
+import { formatDate } from '@/src/utils/formatDate';
+import { useUserFilter } from '@/src/components/hooks/task/useUserFilter';
 import { useFinishProject } from '../../components/hooks/project/useFinishProject';
 import { ToastUtils } from '@/src/utils/ToastUtils';
 
 const CreateProject = () => {
   const [tasksResult, setTaskResult] = useState<TaskType[]>([]);
   const [countTask, setCountTask] = useState<CountTaskInfo[]>([]);
+  const [usersFilter, setUsersFilter] = useState<UsersFilter[]>([]);
   const [projectInfo, setProjectInfo] = useState<ProjectType[] | null>(null);
   const [isOpenCreateTask, setIsOpenCreateTask] = useState<boolean>(false);
   const [isAddUserProject, setIsAddUserProject] = useState<boolean>(false);
@@ -45,6 +48,7 @@ const CreateProject = () => {
   const fetchTasks = useFetchFilterTasks();
   const fetchProject = useFetchInfoProject();
   const fetchisAdmin = useFetchAdminInfo();
+  const fetchUsersFilter = useUserFilter();
   const fetchFinishProject = useFinishProject();
 
   const router = useRouter();
@@ -109,6 +113,19 @@ const CreateProject = () => {
       const tasks: TaskType[] = fetchedTasks;
 
       setTaskResult(tasks);
+    }
+  };
+
+  const getUserFilter = async () => {
+    try {
+      const numericId = typeof id === 'string' ? parseInt(id) : -1;
+      const reqdata: UsersFilter[] = await fetchUsersFilter(numericId);
+
+      if (reqdata) {
+        setUsersFilter(reqdata);
+      }
+    } catch {
+      return false;
     }
   };
 
@@ -218,6 +235,17 @@ const CreateProject = () => {
   }, [infoUser]);
 
   useEffect(() => {
+    const fetchUsersFilter = async () => {
+      if (infoUser) {
+        await getUserFilter();
+      }
+    };
+
+    fetchUsersFilter();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [infoUser]);
+
+  useEffect(() => {
     const fetchFilterTask = async () => {
       if (infoUser) {
         await getFilterTask();
@@ -227,7 +255,7 @@ const CreateProject = () => {
 
     fetchFilterTask();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpenCreateTask, infoUser]);
+  }, [isOpenCreateTask, infoUser, isOpenModalTask]);
 
   useEffect(() => {
     const fetchProjectInfo = async () => {
@@ -261,9 +289,9 @@ const CreateProject = () => {
       </Head>
       <Layout>
         <div className='space-y-3'>
-          <div className='space-y-3 px-[60px] pt-[45px]'>
+          <div className='space-y-8 px-[60px] pt-[45px]'>
             <div className='flex w-full flex-row justify-between'>
-              <label className='text-[24px] font-[700]'>
+              <label className='text-[26px] font-[700]'>
                 {
                   projectInfo &&
                   capitalize(projectInfo[0].name)
@@ -296,9 +324,40 @@ const CreateProject = () => {
                     className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
                     onClick={onViewChart}
                   />
-                </span>              
+                </span>
               </div>
             </div>
+            {
+              projectInfo &&
+              <div className='flex flex-row'>
+                <div className='flex w-1/2 flex-col space-y-3'>
+                  <label className='text-[18px] font-bold text-custom-color-dark-blue'>
+                    Descripción:
+                  </label>
+                  <label className='text-[14px] font-normal text-custom-color-dark-blue'>
+                    {capitalize(projectInfo[0].description)}
+                  </label>
+                </div>
+                <div className='flex w-1/2 flex-row space-y-3'>
+                  <div className='flex w-1/2 flex-col'>
+                    <label className='text-[18px] font-bold text-custom-color-dark-blue'>
+                      Fecha Creación:
+                    </label>
+                    <label className='text-[14px] font-normal text-custom-color-dark-blue'>
+                      {formatDate(projectInfo[0].start_date)}
+                    </label>
+                  </div>
+                  <div className='flex w-1/2 flex-col'>
+                    <label className='text-[18px] font-bold text-custom-color-dark-blue'>
+                      Fecha Estimada de finalización:
+                    </label>
+                    <label className='text-[14px] font-normal text-custom-color-dark-blue'>
+                      {formatDate(projectInfo[0].estimated_date)}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            }
             {
               countTask.length > 0 && projectInfoAdmin &&
               <HeaderCards
@@ -310,9 +369,13 @@ const CreateProject = () => {
           <div className='flex flex-col space-y-6 px-[60px] pt-[45px]'>
             <label className='text-[20px] font-[700]'>Filtro</label>
             <div className='w-[400px]'>
-              <CustomSelect
-                onChange={handleFilter}
-              />
+              {
+                usersFilter.length > 0 &&
+                <CustomSelect
+                  onChange={handleFilter}
+                  users={usersFilter}
+                />
+              }
             </div>
           </div>
           <div className='flex flex-col space-y-6 px-[60px] pt-[45px]'>
@@ -348,16 +411,16 @@ const CreateProject = () => {
             <CreateTask />
           </ModalComponent>
         }
-        {/* {
+        {
           isAddUserProject && infoUser !== null &&
           < ModalComponent onClose={onAddUserProject} maxWidth='max-w-[45.8125rem]'>
-           
+
           </ModalComponent>
-        } */}
+        }
         {
           isOpenModalTask && infoUser && infoTask !== null &&
           <ModalComponent onClose={openTask} maxWidth='max-w-[45.8125rem]'>
-            <TaskModal task={infoTask} onClose={openTask} />
+            <TaskModal task={infoTask} onClose={openTask} user_id={infoUser.user_id!} />
           </ModalComponent>
         }
       </Layout >

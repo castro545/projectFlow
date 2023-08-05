@@ -20,7 +20,5 @@ export async function login(email: string, password: string): Promise<string | n
     return null; // Contraseña incorrecta.
   }
   const token = jwt.sign({ user }, JWT_SECRET.toString(), { expiresIn: '1h' });
-
-  console.log(token);
   return token;
 }

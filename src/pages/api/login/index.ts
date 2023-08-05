@@ -44,9 +44,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
           renewTokenExpiration(res, token);
 
-          // para eliminar este console.primero hay que registrar el token en LocalStorage
-          console.log({ token });
-
           return res.status(200).json({ token, message: 'Login successful' });
         } else {
           return res.status(401).json({ message: ErrorMessages.InvalidCredentials });

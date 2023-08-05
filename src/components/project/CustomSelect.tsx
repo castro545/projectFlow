@@ -5,27 +5,33 @@ import makeAnimated from 'react-select/animated';
 
 const animatedComponents = makeAnimated();
 
-const optionsBySection: { [key: string]: OptionType[] } = {
-  'Por prioridad': [
-    { value: 1, label: 'Alta', id: 1, type: 'priority' },
-    { value: 2, label: 'Media', id: 2, type: 'priority' },
-    { value: 3, label: 'Baja', id: 3, type: 'priority' },
-  ],
-  'Por estado': [
-    { value: 4, label: 'Nueva', id: 1, type: 'state' },
-    { value: 5, label: 'En proceso', id: 2, type: 'state' },
-    { value: 6, label: 'Resuelta', id: 3, type: 'state' },
-    { value: 7, label: 'En espera', id: 4, type: 'state' },
-    { value: 8, label: 'Cancelada', id: 5, type: 'state' },
-  ],
-  'Por colaborador': [
-    { value: 9, label: 'Helmer Torres', id: 17, type: 'user' },
-    { value: 10, label: 'Cesar Fernandez', id: 13, type: 'user' },
-  ],
-};
 
-const CustomSelect = ({ onChange }: any) => {
+const CustomSelect = ({ onChange, users }: any) => {
   const [selectedOptions, setSelectedOptions] = useState<MultiValue<OptionType>>([]);
+
+
+  const optionsBySection: { [key: string]: OptionType[] } = {
+    'Por prioridad': [
+      { value: 1, label: 'Alta', id: 1, type: 'priority' },
+      { value: 2, label: 'Media', id: 2, type: 'priority' },
+      { value: 3, label: 'Baja', id: 3, type: 'priority' },
+    ],
+    'Por estado': [
+      { value: 4, label: 'Nueva', id: 1, type: 'state' },
+      { value: 5, label: 'En proceso', id: 2, type: 'state' },
+      { value: 6, label: 'Resuelta', id: 3, type: 'state' },
+      { value: 7, label: 'En espera', id: 4, type: 'state' },
+      { value: 8, label: 'Cancelada', id: 5, type: 'state' },
+    ],
+    'Por colaborador': users?.map((user: { user_id: any; user_full_name: any; }) => {
+      return {
+        value: user.user_id,
+        label: user.user_full_name,
+        id: user.user_id,
+        type: 'user',
+      };
+    }),
+  };
 
   const options = Object.entries(optionsBySection).map(([section, values]) => {
     return {
@@ -37,6 +43,7 @@ const CustomSelect = ({ onChange }: any) => {
   const noOptionsMessage = () => 'No hay opciones disponibles';
 
   const onSubmit = () => {
+
     onChange(selectedOptions);
   };
 

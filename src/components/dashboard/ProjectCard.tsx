@@ -26,19 +26,21 @@ const ProjectCard = ({ projectData }: ProjectCardProps) => {
         className='flex h-[250px] w-auto cursor-pointer flex-row items-center justify-center rounded-lg bg-[#FFFFFC] px-10 shadow-card'
         onClick={openProject}
       >
-        <div className='w-full space-y-10'>
-          <label className='text-[24px] font-normal text-custom-color-dark-blue'>
-            {capitalize(projectData.name)}
-          </label> <br />
-          <label className='text-[16px] font-normal text-custom-color-dark-blue'>
-            {capitalize(projectData.role_name)}
-          </label>
+        <div className='w-full cursor-pointer space-y-10'>
+          <div className='flex cursor-pointer flex-col space-y-2'>
+            <label className='cursor-pointer text-[24px] font-normal text-custom-color-dark-blue'>
+              {capitalize(projectData.name)}
+            </label>
+            <label className='cursor-pointer text-[16px] font-normal text-custom-color-dark-blue'>
+              {capitalize(projectData.role_name)}
+            </label>
+          </div>
           <div className='flex flex-row items-center space-x-3'>
             <CalendarIcon
               className='h-[1.5rem] w-[1.5rem] cursor-pointer text-custom-color-gold text-opacity-50'
             />
             <h4 className='flex items-center text-[14x]'>Iniciado el {formatDate(projectData.start_date.toString())}</h4>
-          </div>
+            d</div>
           <div className='flex flex-row items-center space-x-3'>
             <CalendarIcon
               className='h-[1.5rem] w-[1.5rem] cursor-pointer text-custom-color-gold text-opacity-50'

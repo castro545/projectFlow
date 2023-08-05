@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { PlusIcon } from '@heroicons/react/24/solid';
+import { PlusIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import CreateProjectImage from '../../../public/images/png/create_project.png';
 import { ToastUtils } from '@/src/utils/ToastUtils';
 import CircularProgressIndicator from '../CircularProgressIndicator';
@@ -138,7 +138,16 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
     setValue('colaborator', '');
   };
 
-  useEffect(() => { }, []);
+  const onDeleteColaborator = (emailToDelete: string) => {
+    const updatedColaborators = colaborators.filter(
+      (colaborator) => colaborator.email !== emailToDelete
+    );
+    setColaborators(updatedColaborators);
+  };
+
+  useEffect(() => {
+
+  }, []);
 
   return (
     <>
@@ -178,6 +187,7 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
                   className='mt-1 block w-full rounded-lg border bg-[#E9E9E9] px-4 py-3 text-[14px] text-gray-900 outline-none focus:border-custom-color-light-gray focus:ring focus:ring-custom-color-light-gray'
                   placeholder='Selecciona una fecha'
                   required={true}
+                  min={new Date().toISOString().split('T')[0]}
                   {...register('startDate')}
                 />
               </div>
@@ -189,6 +199,7 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
                   className='mt-1 block w-full rounded-lg border bg-[#E9E9E9] px-4 py-3 text-[14px] text-gray-900 outline-none focus:border-custom-color-light-gray focus:ring focus:ring-custom-color-light-gray'
                   placeholder='Selecciona una fecha'
                   required={true}
+                  min={new Date().toISOString().split('T')[0]}
                   {...register('estimatedDate')}
                 />
               </div>
@@ -230,7 +241,13 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
                 {
                   colaborators.length > 0 &&
                   colaborators.map((colaborator, index) => (
-                    <h1 key={index}>{colaborator.email}</h1>
+                    <div key={index} className='flex flex-row'>
+                      <h1>{colaborator.email}</h1>
+                      <XMarkIcon
+                        className='h-6 w-6 cursor-pointer stroke-1 text-red-500'
+                        onClick={() => onDeleteColaborator(colaborator.email)}
+                      />
+                    </div>
                   ))
                 }
               </div>

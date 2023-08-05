@@ -8,6 +8,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import {
+  UserPlusIcon,
   PlusCircleIcon,
   DocumentTextIcon
 } from '@heroicons/react/24/solid';
@@ -23,12 +24,14 @@ import { useFetchAdminInfo } from '@/src/components/hooks/project/useFetchAdminI
 import Storage from '@/src/utils/storage';
 import { InfoUserLogin } from '@/src/types/Login';
 import TaskModal from '@/src/components/tasks/TaskModal';
+import styles from '@/src/styles/Home.module.css';
 
 const CreateProject = () => {
   const [tasksResult, setTaskResult] = useState<TaskType[]>([]);
   const [countTask, setCountTask] = useState<CountTaskInfo[]>([]);
   const [projectInfo, setProjectInfo] = useState<ProjectType[] | null>(null);
   const [isOpenCreateTask, setIsOpenCreateTask] = useState<boolean>(false);
+  const [isAddUserProject, setIsAddUserProject] = useState<boolean>(false);
   const [projectInfoAdmin, setProjectInfoAdmin] = useState<ProjectIsAdminInfo | null>(null);
   const [infoUser, setInfoUser] = useState<InfoUserLogin | null>(null);
   const [isOpenModalTask, setIsOpenModalTask] = useState<boolean>(false);
@@ -46,6 +49,12 @@ const CreateProject = () => {
   const onCreatedTask = () => {
 
     setIsOpenCreateTask(!isOpenCreateTask);
+
+  };
+
+  const onAddUserProject = () => {
+
+    setIsAddUserProject(!isAddUserProject);
 
   };
 
@@ -247,14 +256,24 @@ const CreateProject = () => {
                 }
               </label>
               <div className='flex flex-row space-x-6'>
-                <PlusCircleIcon
-                  className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
-                  onClick={onCreatedTask}
-                />
-                <DocumentTextIcon
-                  className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
-                  onClick={onViewChart}
-                />
+                <span className={styles.tooltip} title='Añadir contribuidor'>
+                  <UserPlusIcon
+                    className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
+                    onClick={onAddUserProject}
+                  />
+                </span>
+                <span className={styles.tooltip} title='Crear nueva tarea'>
+                  <PlusCircleIcon
+                    className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
+                    onClick={onCreatedTask}
+                  />
+                </span>
+                <span className={styles.tooltip} title='Ver reporte'>
+                  <DocumentTextIcon
+                    className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
+                    onClick={onViewChart}
+                  />
+                </span>              
               </div>
             </div>
             {
@@ -302,6 +321,12 @@ const CreateProject = () => {
             <CreateTask />
           </ModalComponent>
         }
+        {/* {
+          isAddUserProject && infoUser !== null &&
+          < ModalComponent onClose={onAddUserProject} maxWidth='max-w-[45.8125rem]'>
+           
+          </ModalComponent>
+        } */}
         {
           isOpenModalTask && infoUser && infoTask !== null &&
           <ModalComponent onClose={openTask} maxWidth='max-w-[45.8125rem]'>

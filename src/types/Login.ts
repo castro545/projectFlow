@@ -4,9 +4,9 @@ export type LoginType = {
 }
 
 export type InfoUserLogin = {
-  user_id: number;
-  full_name: string;
-  email: string;
+  user_id?: number;
+  full_name?: string;
+  email?: string;
   password?: string;
-  is_active: string;
+  is_active?: string;
 }

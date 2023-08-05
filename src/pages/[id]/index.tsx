@@ -98,7 +98,7 @@ const CreateProject = () => {
   const getFilterTask = async () => {
     try {
       const bodyFilter: BodyType = {
-        'users': [17],
+        'users': [],
         'project_id': +id!,
         'priorities': [],
         'status': []

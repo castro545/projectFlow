@@ -21,6 +21,7 @@ const HomePage = () => {
 
   const [countTask, setCountTask] = useState<CountTaskInfo[]>([]);
   const [projects, setProjects] = useState<ProjectType[]>([]);
+  const [infoUser, setInfoUser] = useState<InfoUserLogin | null>(null);
   const [isOpenCreateProject, setIsOpenCreateProject] = useState<boolean>(false);
 
   const fethProjectByUser = useGetCountTaskUser();
@@ -29,7 +30,7 @@ const HomePage = () => {
   const getCountTask = async () => {
     try {
       const bodyCount = {
-        'user_code': 17
+        'user_code': infoUser!.user_id
       };
       const reqdata: CountTaskInfo[] = await fethProjectByUser(bodyCount);
 
@@ -51,8 +52,8 @@ const HomePage = () => {
 
   const getProjects = async () => {
     try {
-      const user_id = 17;
-      const reqdata: ProjectType[] = await fetchProjectByUser(user_id);
+      const user_id = infoUser!.user_id;
+      const reqdata: ProjectType[] = await fetchProjectByUser(user_id!);
 
       if (reqdata) {
         setProjects(reqdata);
@@ -69,33 +70,39 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    const user_id = Storage.getItem(Storage.USER_ID);
-    const full_name = Storage.getItem(Storage.FULL_NAME);
-    const email = Storage.getItem(Storage.EMAIL);
-    const is_active = Storage.getItem(Storage.IS_ACTIVE);
+    const getUserInfo = () => {
 
-    if (user_id !== '' || full_name !== '' || email !== '' || is_active !== '') {
-      const infoUser: InfoUserLogin = {
-        user_id: parseInt(user_id!),
-        full_name: full_name!,
-        email: email!,
-        is_active: is_active!
-      };
-    } else {
-      window.location.href = '/login';
-    }
+      const user_id = Storage.getItem(Storage.USER_ID);
+      const full_name = Storage.getItem(Storage.FULL_NAME);
+      const email = Storage.getItem(Storage.EMAIL);
+      const is_active = Storage.getItem(Storage.IS_ACTIVE);
+
+      if (user_id !== '' || full_name !== '' || email !== '' || is_active !== '') {
+        const infoUser: InfoUserLogin = {
+          user_id: parseInt(user_id!),
+          full_name: full_name!,
+          email: email!,
+          is_active: is_active!
+        };
+        setInfoUser(infoUser);
+      } else {
+        window.location.href = '/login';
+      }
+
+    };
+    getUserInfo();
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
-
-      await getProjects();
-
+      if (infoUser) {
+        await getProjects();
+      }
     };
 
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpenCreateProject]);
+  }, [isOpenCreateProject, infoUser]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -108,6 +115,19 @@ const HomePage = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (infoUser) {
+        await getCountTask();
+      }
+    };
+
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpenCreateProject, infoUser]);
+
+
   return (
     <Layout>
       <Head>
@@ -134,17 +154,20 @@ const HomePage = () => {
         </div>
         <div className='space-y-3 px-[60px] pt-[45px]'>
           <label className='text-[20px] font-[700]'>Proyectos</label>
-          <Projects
-            onCreateProject={onCreatedProject}
-            projects={projects}
-            user_code={17}
-          />
+          {
+            infoUser &&
+            <Projects
+              onCreateProject={onCreatedProject}
+              projects={projects}
+              user_code={infoUser!.user_id}
+            />
+          }
         </div>
       </div>
       {
-        isOpenCreateProject &&
+        isOpenCreateProject && infoUser &&
         < ModalComponent onClose={onCreatedProject} maxWidth='max-w-[45.8125rem]'>
-          <CreateProject onClose={onCreatedProject} owner_id={17} />
+          <CreateProject onClose={onCreatedProject} owner_id={infoUser!.user_id} />
         </ModalComponent>
       }
     </Layout>

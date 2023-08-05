@@ -1,10 +1,13 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Bars3Icon } from '@heroicons/react/24/solid';
 import classNames from 'classnames';
 import Image from 'next/image';
 import Logo from '../../../public/images/png/Logo_Ola.png';
 import Avatar from '../../../public/images/png/avatar_default.png';
 import { useOnClickOutside } from 'usehooks-ts';
+import Storage from '@/src/utils/storage';
+import { InfoUserLogin } from '@/src/types/Login';
+import { capitalize } from 'lodash';
 
 type Props = {
   onMenuButtonClick(): void;
@@ -12,6 +15,7 @@ type Props = {
 
 const Navbar = ({ onMenuButtonClick }: Props) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [infoUser, setInfoUser] = useState<InfoUserLogin>({});
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -22,6 +26,29 @@ const Navbar = ({ onMenuButtonClick }: Props) => {
   const handleMenuButtonClick = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  useEffect(() => {
+    const getUserInfo = () => {
+
+      const user_id = Storage.getItem(Storage.USER_ID);
+      const full_name = Storage.getItem(Storage.FULL_NAME);
+      const email = Storage.getItem(Storage.EMAIL);
+      const is_active = Storage.getItem(Storage.IS_ACTIVE);
+
+      if (user_id !== '' || full_name !== '' || email !== '' || is_active !== '') {
+        const infoUser: InfoUserLogin = {
+          user_id: parseInt(user_id!),
+          full_name: full_name!,
+          email: email!,
+          is_active: is_active!
+        };
+        setInfoUser(infoUser);
+      }
+
+    };
+
+    getUserInfo();
+  }, []);
 
   return (
     <nav
@@ -39,7 +66,7 @@ const Navbar = ({ onMenuButtonClick }: Props) => {
         </div>
         <div className='hidden flex-row items-center md:flex'>
           <div className='flex-col'>
-            <p className='text-right text-[16px] font-semibold'>Helmer Torres</p>
+            <p className='text-right text-[16px] font-semibold'>{capitalize(infoUser.full_name)}</p>
           </div>
           <div className='p-4'>
             <Image

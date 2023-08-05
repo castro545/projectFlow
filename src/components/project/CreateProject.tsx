@@ -154,7 +154,7 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
                 <label className='text-[16px] font-[300] text-custom-color-dark-blue'>Nombre Proyecto</label>
                 <input
                   type='text'
-                  className='m-0 h-[35px] rounded-[10px] border-[#D9D9D9] bg-[#D9D9D9] p-3 text-[14px] text-gray-400 placeholder-gray-400 outline-none focus:ring focus:ring-custom-color-light-gold'
+                  className='m-0 h-[35px] rounded-[10px] border-[#D9D9D9] bg-[#E9E9E9] p-3 text-[14px] text-gray-400 placeholder-gray-400 outline-none focus:ring focus:ring-custom-color-light-gray'
                   required={true}
                   autoComplete='company'
                   {...register('projectName')}
@@ -163,7 +163,7 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
               <div className='flex flex-col space-y-3'>
                 <label className='text-[16px] font-[300] text-custom-color-dark-blue'>Descripción</label>
                 <textarea
-                  className='m-0 h-[80px] w-full resize-none rounded-[10px] border-[#D9D9D9] bg-[#D9D9D9] p-3 text-[14px] text-gray-400 placeholder-gray-400 outline-none focus:ring focus:ring-custom-color-light-gold'
+                  className='m-0 h-[80px] w-full resize-none rounded-[10px] border-[#D9D9D9] bg-[#E9E9E9] p-3 text-[14px] text-gray-400 placeholder-gray-400 outline-none focus:ring focus:ring-custom-color-light-gray'
                   rows={5}
                   required={true}
                   {...register('description')}
@@ -174,7 +174,7 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
                 <input
                   type='date'
                   defaultValue={getValues('startDate') || ''}
-                  className='mt-1 block w-full rounded-lg border bg-[#D9D9D9] px-4 py-3 text-[14px] text-gray-900 outline-none focus:border-custom-color-light-gold focus:ring focus:ring-custom-color-light-gold'
+                  className='mt-1 block w-full rounded-lg border bg-[#E9E9E9] px-4 py-3 text-[14px] text-gray-900 outline-none focus:border-custom-color-light-gray focus:ring focus:ring-custom-color-light-gray'
                   placeholder='Selecciona una fecha'
                   required={true}
                   {...register('startDate')}
@@ -185,7 +185,7 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
                 <input
                   type='date'
                   defaultValue={getValues('estimatedDate') || ''}
-                  className='mt-1 block w-full rounded-lg border bg-[#D9D9D9] px-4 py-3 text-[14px] text-gray-900 outline-none focus:border-custom-color-light-gold focus:ring focus:ring-custom-color-light-gold'
+                  className='mt-1 block w-full rounded-lg border bg-[#E9E9E9] px-4 py-3 text-[14px] text-gray-900 outline-none focus:border-custom-color-light-gray focus:ring focus:ring-custom-color-light-gray'
                   placeholder='Selecciona una fecha'
                   required={true}
                   {...register('estimatedDate')}
@@ -197,13 +197,13 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
                   <div className='flex flex-row justify-between space-x-2'>
                     <input
                       type='text'
-                      className='m-0 h-[35px] w-full rounded-[10px] border-[#D9D9D9] bg-[#D9D9D9] p-3 text-[14px] text-gray-400 placeholder-gray-400 outline-none focus:ring focus:ring-custom-color-light-gold'
+                      className='m-0 h-[35px] w-full rounded-[10px] border-[#D9D9D9] bg-[#E9E9E9] p-3 text-[14px] text-gray-400 placeholder-gray-400 outline-none focus:ring focus:ring-custom-color-light-gray'
                       autoComplete='email'
                       {...register('colaborator')}
                     />
                     <button
                       type='button'
-                      className='middle none center font-sans rounded-lg border border-custom-color-gold px-6 py-1.5 text-xs font-bold text-custom-color-gold transition-all hover:opacity-75 focus:ring focus:ring-custom-color-light-gold active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+                      className='middle none center font-sans rounded-lg border-2 border-custom-color-gold px-6 py-1.5 text-sm font-bold text-custom-color-gold transition-all hover:opacity-75 focus:ring focus:ring-custom-color-light-gray active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
                       onClick={() => addColaborator(getValues('colaborator'))}
                     >
                       <PlusIcon
@@ -238,7 +238,7 @@ const CreateProject = ({ onClose, owner_id }: CreateProjectProps) => {
           </div>
           <button
             type='submit'
-            className='middle none center font-sans mr-3 rounded-lg border border-custom-color-gold bg-custom-color-gold px-6 py-3 text-xs font-bold uppercase text-white transition-all hover:opacity-75 focus:ring focus:ring-custom-color-light-gold active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+            className='middle none center font-sans mr-3 rounded-lg border border-custom-color-gold bg-custom-color-gold px-6 py-3 text-xs font-bold uppercase text-white transition-all hover:opacity-75 focus:ring focus:ring-custom-color-light-gray active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
           >
             {loading ? <CircularProgressIndicator /> : <h1>Crear proyecto</h1>}
           </button>

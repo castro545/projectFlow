@@ -5,19 +5,26 @@ import {
   ClockIcon,
   ArrowPathIcon,
   CalendarIcon,
-  TrashIcon
+  TrashIcon,
+  CheckIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/solid';
 import { capitalize } from 'lodash';
 import { formatDate } from '@/src/utils/formatDate';
 
 type TaskModalProps = {
   task: TaskType;
-  onClose: () => void;
+  _onClose: () => void;
 }
 
-const TaskModal = ({ task, onClose }: TaskModalProps) => {
+const TaskModal = ({ task, _onClose }: TaskModalProps) => {
   const [colorsPriority, setColorPriority] = useState<TaskColorPriority | null>(null);
   const [colorsState, setColorsStates] = useState<TaskColorState | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
   useEffect(() => {
     console.log(task.task_id);
@@ -91,7 +98,7 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
   let stateBgColor = '';
   let stateTextColor = '';
 
-  switch ('Baja') {
+  switch (task.task_priority) {
     case 'Alta':
       borderColor = colorsPriority?.alta?.borde || '';
       bgColor = colorsPriority?.alta?.bg || '';
@@ -111,7 +118,7 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
       break;
   }
 
-  switch ('Resuelta') {
+  switch (task.task_status_name) {
     case 'Nueva':
       stateBorderColor = colorsState?.nueva?.borde || '';
       stateBgColor = colorsState?.nueva?.bg || '';
@@ -152,10 +159,41 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
             <div className={`w-auto rounded-[10px] border-[2px] ${borderColor} ${bgColor} flex items-center justify-center p-2 text-[12px] font-normal ${textColor}`}>
               Prioridad {task.task_priority}
             </div>
-            <div className={'w-auto rounded-[10px] border-[2px] border-red-300 bg-red-200 p-2 text-[12px] font-normal text-red-600'}>
-              <TrashIcon
-                className='h-[1.5rem] w-[1.5rem] cursor-pointer text-red-700'
-              />
+            <div className='relative'>
+              <div
+                className={'w-auto cursor-pointer rounded-[10px] border-[2px] border-red-300 bg-red-200 p-2 text-[12px] font-normal text-red-600'}
+                onClick={toggleDropdown}
+              >
+                <TrashIcon
+                  className='h-[1.5rem] w-[1.5rem] text-red-700'
+                />
+                {isDropdownOpen && (
+                  <div className='absolute right-0 mt-2 w-auto cursor-auto rounded-lg border border-gray-300 bg-white shadow'>
+                    <div className='flex flex-row'>
+                      <div className='w-20 p-5'>
+                        <div
+                          className='cursor-pointer rounded-lg bg-red-200 p-2'
+                          onClick={() => console.log('se elimina')}
+                        >
+                          <XMarkIcon
+                            className='h-[1.5rem] w-[1.5rem] text-red-700'
+                          />
+                        </div>
+                      </div>
+                      <div className='w-20 p-5'>
+                        <div
+                          className='cursor-pointer rounded-lg bg-green-200 p-2'
+                          onClick={() => console.log('no se elimina')}
+                        >
+                          <CheckIcon
+                            className='h-[1.5rem] w-[1.5rem] text-green-700'
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

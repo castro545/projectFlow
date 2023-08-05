@@ -118,7 +118,7 @@ const CreateChartInfo = () => {
           <div className='mx-5 my-5 h-auto w-[90%] rounded-lg bg-white p-5 pt-7 shadow-lg md:mx-0 md:my-5 md:h-auto md:w-[80%] md:p-6 '>
             <form className='px-4 py-6'>
               <div className='flex flex-row justify-between'>
-                <h1 className='text-[16px] font-bold text-custom-color-dark-blue md:text-[26px]'>Vista para ver graficos y resumen del proyecto</h1>
+                <h1 className='text-[16px] font-bold text-custom-color-dark-blue md:text-[26px]'>Vista de gráficos y resumen del proyecto</h1>
                 <div className='flex flex-row justify-center space-x-6'>
                   <button
                     type='button'

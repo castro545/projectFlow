@@ -44,6 +44,8 @@ const CreateTask = ({ onClose, owner_id, project_id }: CreateTaskProps) => {
       data.startDate = new Date(startDate).toISOString();
     }
 
+    console.log(project_id, data.colaborator, data.task_name, data.description, owner_id);
+
     const response = await createTask(project_id, data.colaborator, data.task_name, data.description, owner_id);
 
     console.log(response);

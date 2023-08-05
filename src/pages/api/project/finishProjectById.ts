@@ -11,20 +11,14 @@ export default async function handler(
 ) {
   const {
     method,
-    body,
+    query: { id },
   } = req;
   switch (method) {
-    case 'POST':
+    case 'GET':
       try {
-        const { project_id } = body;
+        const finishd = await projectDAO.finishProject(id);
 
-        const finishd = await projectDAO.finishProject(project_id);
-
-        if (finishd) {
-          return res.status(200).json({ message: 'Project finishd successfully' });
-        } else {
-          return res.status(404).json({ message: 'Project not found' });
-        }
+        res.status(200).json(finishd);
       } catch (error) {
         return res.status(500).json({ message: 'Error deleting project', error });
       }

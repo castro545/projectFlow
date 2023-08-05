@@ -8,9 +8,9 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import {
-  //UserPlusIcon,
   PlusCircleIcon,
-  DocumentTextIcon
+  DocumentTextIcon,
+  LockClosedIcon
 } from '@heroicons/react/24/solid';
 import { BodyType, CountTaskInfo, OptionType, TaskType, UsersFilter } from '@/src/types/Task';
 import { MultiValue } from 'react-select';
@@ -26,7 +26,11 @@ import TaskModal from '@/src/components/tasks/TaskModal';
 import styles from '@/src/styles/Home.module.css';
 import { formatDate } from '@/src/utils/formatDate';
 import { useUserFilter } from '@/src/components/hooks/task/useUserFilter';
+import { useFinishProject } from '../../components/hooks/project/useFinishProject';
+import { ToastUtils } from '@/src/utils/ToastUtils';
 import CreateTask from '@/src/components/tasks/CreatedTask';
+
+let globalID: any = '';
 
 const CreateProject = () => {
   const [tasksResult, setTaskResult] = useState<TaskType[]>([]);
@@ -47,6 +51,7 @@ const CreateProject = () => {
   const fetchProject = useFetchInfoProject();
   const fetchisAdmin = useFetchAdminInfo();
   const fetchUsersFilter = useUserFilter();
+  const fetchFinishProject = useFinishProject();
 
   const router = useRouter();
   const { id } = router.query;
@@ -61,6 +66,16 @@ const CreateProject = () => {
 
     setIsAddUserProject(!isAddUserProject);
 
+  };
+
+  const onFinishProject = async () => {
+    const finishedCode = await fetchFinishProject(id);
+
+    if (finishedCode > 0) {
+      ToastUtils.successMessage('¡Proyecto finalizado!');
+    } else {
+      ToastUtils.errorMessage('¡Error! El proyecto tiene tareas en proceso');
+    }
   };
 
   const onViewChart = () => {
@@ -201,6 +216,7 @@ const CreateProject = () => {
           email: email!,
           is_active: is_active!
         };
+        globalID = parseInt(user_id!);
         setInfoUser(infoUser);
       } else {
         window.location.href = '/login';
@@ -285,12 +301,15 @@ const CreateProject = () => {
                 }
               </label>
               <div className='flex flex-row space-x-6'>
-                {/* <span className={styles.tooltip} title='Añadir contribuidor'>
-                  <UserPlusIcon
-                    className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
-                    onClick={onAddUserProject}
-                  />
-                </span> */}
+                {
+                  projectInfoAdmin?.role_name === 'Administrador' &&
+                  <span className={styles.tooltip} title='Finalizar proyecto'>
+                    <LockClosedIcon
+                      className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
+                      onClick={() => onFinishProject()}
+                    />
+                  </span>
+                }
                 <span className={styles.tooltip} title='Crear nueva tarea'>
                   <PlusCircleIcon
                     className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold'
@@ -316,10 +335,10 @@ const CreateProject = () => {
                     {capitalize(projectInfo[0].description)}
                   </label>
                 </div>
-                <div className='flex w-1/2 flex-row space-y-3'>
+                <div className='flex w-1/2 flex-row space-x-3'>
                   <div className='flex w-1/2 flex-col'>
                     <label className='text-[18px] font-bold text-custom-color-dark-blue'>
-                      Fecha Creación:
+                      Fecha creación:
                     </label>
                     <label className='text-[14px] font-normal text-custom-color-dark-blue'>
                       {formatDate(projectInfo[0].start_date)}
@@ -327,12 +346,23 @@ const CreateProject = () => {
                   </div>
                   <div className='flex w-1/2 flex-col'>
                     <label className='text-[18px] font-bold text-custom-color-dark-blue'>
-                      Fecha Estimada de finalización:
+                      Fecha estimada de finalización:
                     </label>
                     <label className='text-[14px] font-normal text-custom-color-dark-blue'>
                       {formatDate(projectInfo[0].estimated_date)}
                     </label>
                   </div>
+                  {projectInfo &&
+                    (projectInfo[0]?.end_date !== null && projectInfo[0]?.end_date !== undefined) &&
+                    <div className='flex w-1/2 flex-col'>
+                      <label className='text-[18px] font-bold text-custom-color-dark-blue'>
+                        Fecha de finalización:
+                      </label>
+                      <label className='text-[14px] font-normal text-custom-color-dark-blue'>
+                        {formatDate(projectInfo[0].end_date)}
+                      </label>
+                    </div>
+                  }
                 </div>
               </div>
             }
@@ -365,6 +395,10 @@ const CreateProject = () => {
                   <TaskCard
                     key={index}
                     task={task}
+                    isFinishedProject={
+                      projectInfo &&
+                      (projectInfo[0]?.end_date !== null && projectInfo[0]?.end_date !== undefined)
+                    }
                     openTask={openTask}
                     setIinfoTask={setIinfoTask}
                   />
@@ -417,14 +451,14 @@ export const getServerSideProps = async ({ query }: any) => {
   let countTask: CountTaskInfo[] = [];
 
   const bodyFilter = {
-    'users': [17],
+    'users': [globalID],
     'project_id': id,
     'priorities': [],
     'status': []
   };
 
   const bodyCount = {
-    'user_code': 17,
+    'user_code': globalID,
     'project_id': id,
   };
 

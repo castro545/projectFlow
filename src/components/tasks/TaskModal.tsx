@@ -23,11 +23,21 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
   const [colorsPriority, setColorPriority] = useState<TaskColorPriority | null>(null);
   const [colorsState, setColorsStates] = useState<TaskColorState | null>(null);
   const [isDropdownOpenTrash, setIsDropdownOpenTrash] = useState<boolean>(false);
+  const [isDropdownOpenPriority, setIsDropdownOpenPriority] = useState<boolean>(false);
+  const [isDropdownOpenState, setIsDropdownOpenState] = useState<boolean>(false);
   const [isEdditingDesc, setIsEdditingDesc] = useState<boolean>(false);
 
 
   const toggleDropdownTrash = () => {
     setIsDropdownOpenTrash(!isDropdownOpenTrash);
+  };
+
+  const toggleDropdownPriority = () => {
+    setIsDropdownOpenPriority(!isDropdownOpenPriority);
+  };
+
+  const toggleDropdownState = () => {
+    setIsDropdownOpenState(!isDropdownOpenState);
   };
 
   useEffect(() => {
@@ -172,12 +182,73 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
         <div className='flex w-full flex-row justify-between'>
           <label className='flex items-center text-[20px] font-semibold text-custom-color-dark-blue'>{capitalize(task.task_name)}</label>
           <div className='flex flex-row space-x-2'>
-            <div className={`w-auto rounded-[10px] border-[2px] ${borderColor} ${bgColor} flex items-center justify-center p-2 text-[12px] font-normal ${textColor}`}>
-              Prioridad {task.task_priority}
+            <div className='relative'>
+              <div
+                className={`h-[43.62px] w-auto rounded-[10px] border-[2px] ${borderColor} ${bgColor} flex cursor-pointer select-none items-center justify-center p-2 text-[12px] font-normal ${textColor} hover:${borderColor}'`}
+                onClick={toggleDropdownPriority}
+              >
+                Prioridad {task.task_priority}
+              </div>
+              {isDropdownOpenPriority && (
+                <div className='absolute right-0 mt-2 w-auto cursor-auto rounded-lg bg-transparent'>
+                  <div className='flex flex-row'>
+                    <div className='w-[92px] space-y-2 p-0'>
+                      <div
+                        className='flex cursor-pointer justify-center rounded-lg bg-red-200 p-2 hover:bg-red-300'
+                        onClick={() => {
+                          console.log('Alta');
+                          toggleDropdownPriority();
+                        }}
+                      >
+                        <label className='cursor-pointer text-[10px] font-normal text-red-800'
+                          onClick={() => {
+                            console.log('Alta');
+                            toggleDropdownPriority();
+                          }}
+                        >
+                          Prioridad Alta
+                        </label>
+                      </div>
+                      <div
+                        className='flex cursor-pointer justify-center rounded-lg bg-yellow-200 p-2 hover:bg-yellow-300'
+                        onClick={() => {
+                          console.log('Media');
+                          toggleDropdownPriority();
+                        }}
+                      >
+                        <label className='cursor-pointer text-[10px] font-normal text-red-800'
+                          onClick={() => {
+                            console.log('Alta');
+                            toggleDropdownPriority();
+                          }}
+                        >
+                          Prioridad Media
+                        </label>
+                      </div>
+                      <div
+                        className='flex cursor-pointer justify-center rounded-lg bg-green-200 p-2 hover:bg-green-300'
+                        onClick={() => {
+                          console.log('Baja');
+                          toggleDropdownPriority();
+                        }}
+                      >
+                        <label className='cursor-pointer text-[10px] font-normal text-red-800'
+                          onClick={() => {
+                            console.log('Alta');
+                            toggleDropdownPriority();
+                          }}
+                        >
+                          Prioridad Baja
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             <div className='relative'>
               <div
-                className={'w-auto cursor-pointer rounded-[10px] border-[2px] border-red-400 bg-red-100 p-2 text-[12px] font-normal text-red-800'}
+                className={'w-auto cursor-pointer rounded-[10px] border-[2px] border-red-400 bg-red-100 p-2 text-[12px] font-normal text-red-800 hover:bg-red-200'}
                 onClick={toggleDropdownTrash}
               >
                 <TrashIcon
@@ -222,7 +293,7 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
               </div>
               <div className='flex w-1/12 justify-end'>
                 <PencilSquareIcon
-                  className='h-[1.5rem] w-[1.5rem] cursor-pointer text-[#3f3f3f]'
+                  className='h-[1.5rem] w-[1.5rem] cursor-pointer text-[#3f3f3f] hover:text-[#242424]'
                   onClick={() => setIsEdditingDesc(!isEdditingDesc)}
                 />
               </div>
@@ -241,13 +312,13 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
             />
             <div className='flex w-full flex-row space-x-2'>
               <div
-                className='flex w-full cursor-pointer flex-row justify-center rounded-lg bg-slate-300 p-2'
+                className='flex w-full cursor-pointer select-none flex-row justify-center rounded-lg bg-slate-200 p-2 text-slate-500 hover:bg-slate-300'
                 onClick={onClose}
               >
                 Guardar
               </div>
               <div
-                className='flex w-full cursor-pointer flex-row justify-center rounded-lg bg-slate-300 p-2'
+                className='flex w-full cursor-pointer select-none flex-row justify-center rounded-lg bg-slate-200 p-2 text-slate-500 hover:bg-slate-300'
                 onClick={() => setIsEdditingDesc(!isEdditingDesc)}
               >
                 Cancelar
@@ -260,15 +331,107 @@ const TaskModal = ({ task, onClose }: TaskModalProps) => {
             className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold text-opacity-50'
           />
           <h4 className='flex items-center text-[14px]'><b>{capitalize(task.user_full_name)}&nbsp;</b>{'es el responsable de esta tarea'}</h4>
-          d</div>
+        </div>
         <div className='flex w-full flex-row space-x-3'>
           <ClockIcon
             className='h-[1.875rem] w-[1.875rem] cursor-pointer text-custom-color-gold text-opacity-50'
           />
           <h4 className='flex items-center text-[14px]'>Terminará el {formatDate(task.task_estimated_date)}</h4>
         </div>
-        <div className={`flex w-full flex-col rounded-[10px] border ${stateBorderColor} ${stateBgColor} p-2 text-center ${stateTextColor}`}>
-          {task.task_status_name}
+        <div className='relative w-full'>
+          <div className={`flex w-full cursor-pointer flex-col rounded-[10px] border ${stateBorderColor} ${stateBgColor} p-2 text-center ${stateTextColor} select-none`}
+            onClick={toggleDropdownState}
+          >
+            {task.task_status_name}
+          </div>
+          {isDropdownOpenState && (
+            <div className='absolute right-[42.5%] mt-2 w-auto cursor-auto rounded-lg bg-transparent'>
+              <div className='flex flex-row'>
+                <div className='w-[92px] space-y-2 p-0'>
+                  <div
+                    className='flex cursor-pointer justify-center rounded-lg bg-yellow-100 p-2 hover:bg-yellow-200'
+                    onClick={() => {
+                      console.log('Alta');
+                      toggleDropdownState();
+                    }}
+                  >
+                    <label className='cursor-pointer select-none text-[10px] font-normal text-yellow-800'
+                      onClick={() => {
+                        console.log('Alta');
+                        toggleDropdownState();
+                      }}
+                    >
+                      Nueva
+                    </label>
+                  </div>
+                  <div
+                    className='flex cursor-pointer justify-center rounded-lg bg-blue-100 p-2 hover:bg-blue-200'
+                    onClick={() => {
+                      console.log('Media');
+                      toggleDropdownState();
+                    }}
+                  >
+                    <label className='cursor-pointer select-none text-[10px] font-normal text-blue-800'
+                      onClick={() => {
+                        console.log('Alta');
+                        toggleDropdownState();
+                      }}
+                    >
+                      En Proceso
+                    </label>
+                  </div>
+                  <div
+                    className='flex cursor-pointer justify-center rounded-lg bg-green-100 p-2 hover:bg-green-200'
+                    onClick={() => {
+                      console.log('Baja');
+                      toggleDropdownState();
+                    }}
+                  >
+                    <label className='cursor-pointer select-none text-[10px] font-normal text-green-800'
+                      onClick={() => {
+                        console.log('Alta');
+                        toggleDropdownState();
+                      }}
+                    >
+                      Resuelta
+                    </label>
+                  </div>
+                  <div
+                    className='flex cursor-pointer justify-center rounded-lg bg-pink-100 p-2 hover:bg-pink-200'
+                    onClick={() => {
+                      console.log('Baja');
+                      toggleDropdownState();
+                    }}
+                  >
+                    <label className='cursor-pointer select-none text-[10px] font-normal text-red-800'
+                      onClick={() => {
+                        console.log('Alta');
+                        toggleDropdownState();
+                      }}
+                    >
+                      En Espera
+                    </label>
+                  </div>
+                  <div
+                    className='flex cursor-pointer justify-center rounded-lg bg-red-100 p-2 hover:bg-red-200'
+                    onClick={() => {
+                      console.log('Baja');
+                      toggleDropdownState();
+                    }}
+                  >
+                    <label className='cursor-pointer select-none text-[10px] font-normal text-red-800'
+                      onClick={() => {
+                        console.log('Alta');
+                        toggleDropdownState();
+                      }}
+                    >
+                      Cancelada
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         <div className='flex w-full flex-row justify-between'>
           <div className='flex flex-row items-center space-x-3'>
